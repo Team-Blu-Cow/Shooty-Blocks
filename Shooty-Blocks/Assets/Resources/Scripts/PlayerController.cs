@@ -5,9 +5,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [HideInInspector] public MasterInput m_inputManager;
-    [SerializeField] private bool clicked = false;
-    [SerializeField] private int firingPower;
-    [SerializeField] private float firingSpeed;
+    [HideInInspector] private bool m_clicked = false;
+    [HideInInspector] private float m_timer;
+
+    [Header ("Player Upgrade Variables")]
+    [SerializeField][Range(1, 100)] private int m_firingPower = 1;
+    [SerializeField][Range(1,100)] private float m_firingSpeed = 10.0f;
+
+    [SerializeField] private GameObject m_bullet;
+
 
     void Awake()
     {
@@ -31,13 +37,21 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        transform.position = new Vector3(transform.position.x, -4.0f, transform.position.z);
+        float fireTime = 1 / m_firingSpeed;
+        m_timer += Time.deltaTime;
+
+        if (m_timer > fireTime)
+        {
+            Instantiate(m_bullet, new Vector3(transform.position.x, (transform.position.y + 0.75f), 0), Quaternion.identity);
+            m_timer = 0.0f;
+        }
     }
 
     private Queue<Vector2> m_mousePos = new Queue<Vector2>();
@@ -54,11 +68,10 @@ public class PlayerController : MonoBehaviour
             pastPos = m_mousePos.Dequeue();
         }
 
-        if(clicked == true)
+        if(m_clicked == true)
         {
             Vector2 diff = pastPos - recentPos;
-            transform.position += new Vector3(diff.x * Time.deltaTime, 0, 0);
-            Debug.Log("Difference in movement " + diff);
+            GetComponent<Rigidbody2D>().velocity = new Vector2(diff.x / 2, 0);
             Debug.Log("Squeek Squeek");
         }
     }
@@ -66,11 +79,12 @@ public class PlayerController : MonoBehaviour
     void OnMouseLeftClick()
     {
         Debug.Log("Clickety Clack");
-        clicked = true;
+        m_clicked = true;
     }
 
     void StopMouseLeftClick()
     {
-        clicked = false;
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        m_clicked = false;
     }
 }
