@@ -12,15 +12,18 @@ namespace Blocks
 
     // BLOCK TYPE ENUM ******************************************************************************************************************************
     // when adding to this, make sure all values are below NumberOfTypes. it is simply used as a length function.
-    // LARGE_SUB is used to mark blocks that would be in the space of a large block and works as a flag to prevent them
-    // from being rendered and interacted with in the editor.
+    // DontRenderInInspector is used to mark blocks that would be in the space of a large block and works as a 
+    // flag to prevent them from being rendered and interacted with in the editor.
     public enum BlockType : int
     {
-        NONE            = 0,
-        DEFAULT         = 1,
-        LARGE           = 2,
-        LARGE_SUB       = 3,
-        NumberOfTypes   = 4
+        // Block states
+        NONE                    = 0,
+        DEFAULT                 = 1,
+        LARGE                   = 2,
+
+        // Inspector flags
+        DontRenderInInspector   = 3,
+        NumberOfTypes           = 4
     }
 
     // BLOCK GRID ARRAY *****************************************************************************************************************************
@@ -184,13 +187,13 @@ namespace Blocks
                     button = blockLarge_Type;
                     break;
 
-                case (int)BlockType.LARGE_SUB:
+                case (int)BlockType.DontRenderInInspector:
                     renderButton = false;
                     break;
 
             }
 
-            // render button if appropriate
+            // render button if appropriate.
             // if button is pressed cycle through available enum states
             // until valid state is found
             if (renderButton && GUI.Button(button, property.enumDisplayNames[property.enumValueIndex], BlockColour))
@@ -216,9 +219,9 @@ namespace Blocks
                         SetLargeBlock(true, list, offset, height);
                 }
 
-                // skip the LARGE_SUB state as it should only
+                // skip the DontRenderInInspector state as it should only
                 // be set to this if another Block covers it.
-                if (value == (int)BlockType.LARGE_SUB)
+                if (value == (int)BlockType.DontRenderInInspector)
                    value++;
 
                 // if state has reached the end of list, cycle
@@ -235,16 +238,16 @@ namespace Blocks
         }
 
         // A method to check if other large blocks are within
-        // a large block zone from inputted Block.
+        // a large block's reach from inputted Block.
         // returns true if there are.
         private bool CheckRadiusForLarge(SerializedProperty list, int i, int j)
         {
             if (list.FindPropertyRelative("blocks").GetArrayElementAtIndex((j + 1) * BlockData.Columns + i).enumValueIndex == (int)BlockType.LARGE
-                || list.FindPropertyRelative("blocks").GetArrayElementAtIndex((j + 1) * BlockData.Columns + i).enumValueIndex == (int)BlockType.LARGE_SUB) return true;
+                || list.FindPropertyRelative("blocks").GetArrayElementAtIndex((j + 1) * BlockData.Columns + i).enumValueIndex == (int)BlockType.DontRenderInInspector) return true;
             if (list.FindPropertyRelative("blocks").GetArrayElementAtIndex(j * BlockData.Columns + (i + 1)).enumValueIndex == (int)BlockType.LARGE
-                || list.FindPropertyRelative("blocks").GetArrayElementAtIndex(j * BlockData.Columns + (i + 1)).enumValueIndex == (int)BlockType.LARGE_SUB) return true;
+                || list.FindPropertyRelative("blocks").GetArrayElementAtIndex(j * BlockData.Columns + (i + 1)).enumValueIndex == (int)BlockType.DontRenderInInspector) return true;
             if (list.FindPropertyRelative("blocks").GetArrayElementAtIndex((j + 1) * BlockData.Columns + (i + 1)).enumValueIndex == (int)BlockType.LARGE
-                || list.FindPropertyRelative("blocks").GetArrayElementAtIndex((j + 1) * BlockData.Columns + (i + 1)).enumValueIndex == (int)BlockType.LARGE_SUB) return true;
+                || list.FindPropertyRelative("blocks").GetArrayElementAtIndex((j + 1) * BlockData.Columns + (i + 1)).enumValueIndex == (int)BlockType.DontRenderInInspector) return true;
             return false;
         }
 
@@ -253,9 +256,9 @@ namespace Blocks
         {
             if(isLarge)
             {
-                list.FindPropertyRelative("blocks").GetArrayElementAtIndex((j+1) * BlockData.Columns + i).enumValueIndex = (int)BlockType.LARGE_SUB;
-                list.FindPropertyRelative("blocks").GetArrayElementAtIndex(j * BlockData.Columns + (i+1)).enumValueIndex = (int)BlockType.LARGE_SUB;
-                list.FindPropertyRelative("blocks").GetArrayElementAtIndex((j+1) * BlockData.Columns + (i+1)).enumValueIndex = (int)BlockType.LARGE_SUB;
+                list.FindPropertyRelative("blocks").GetArrayElementAtIndex((j+1) * BlockData.Columns + i).enumValueIndex = (int)BlockType.DontRenderInInspector;
+                list.FindPropertyRelative("blocks").GetArrayElementAtIndex(j * BlockData.Columns + (i+1)).enumValueIndex = (int)BlockType.DontRenderInInspector;
+                list.FindPropertyRelative("blocks").GetArrayElementAtIndex((j+1) * BlockData.Columns + (i+1)).enumValueIndex = (int)BlockType.DontRenderInInspector;
             }
             else
             {

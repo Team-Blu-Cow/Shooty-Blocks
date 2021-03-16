@@ -21,8 +21,6 @@ public class BlockGroupEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        //base.OnInspectorGUI();
-
         serializedObject.Update();
 
         EditorGUILayout.PropertyField(m_height);
