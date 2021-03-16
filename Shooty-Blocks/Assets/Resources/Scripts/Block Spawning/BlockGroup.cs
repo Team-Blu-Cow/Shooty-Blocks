@@ -141,27 +141,27 @@ namespace Blocks
             // Calculate rects used for rendering.
             var block = new Rect(
                 position.x + 1 + ((position.width / BlockData.Columns) * offset),
-                position.y + ((position.height / totalHeight) * height),
+                position.y + 1 + ((position.height / totalHeight) * height),
                 (position.width / BlockData.Columns) - 2,
-                (position.height / totalHeight) - 4);
+                (position.height / totalHeight) - 2);
 
             var blockLarge = new Rect(
                 position.x + 1 + ((position.width / BlockData.Columns) * offset),
-                position.y + ((position.height / totalHeight) * height),
-                ((position.width / BlockData.Columns) - 2)*2,
-                ((position.height / totalHeight) - 4)*2);
+                position.y + 1 + ((position.height / totalHeight) * height),
+                ((position.width / BlockData.Columns) * 2)-2,
+                ((position.height / totalHeight) * 2)-2);
 
             var block_Type = new Rect(
-                position.x + 5 + ((position.width / BlockData.Columns) * offset),
+                position.x + 2 + ((position.width / BlockData.Columns) * offset),
                 position.y + 2 + ((position.height / totalHeight) * height),
-                (position.width / BlockData.Columns) - 10,
+                (position.width / BlockData.Columns) - 4,
                 (position.height / totalHeight) - 4);
 
             var blockLarge_Type = new Rect(
-                position.x + 5 + ((position.width / BlockData.Columns) * offset),
+                position.x + 2 + ((position.width / BlockData.Columns) * offset),
                 position.y + 2 + ((position.height / totalHeight) * height),
-                ((position.width / BlockData.Columns) - 10)*2,
-                ((position.height / totalHeight) - 4)*2);
+                ((position.width / BlockData.Columns) * 2)-4,
+                ((position.height / totalHeight) * 2)-4);
 
             // initialize scoped members
             Rect button = block_Type;
