@@ -196,33 +196,6 @@ public class @MasterInput : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
-        },
-        {
-            ""name"": ""Touch"",
-            ""id"": ""3efa0dc5-e92c-495a-9773-d58584d89c38"",
-            ""actions"": [
-                {
-                    ""name"": ""FingerPos"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""84c11e1d-28fd-468d-986e-ae6ceee68e64"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""8bf7e1fc-30cd-422d-901a-918bb284fe40"",
-                    ""path"": ""<Touchscreen>/primaryTouch/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""FingerPos"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
         }
     ],
     ""controlSchemes"": [
@@ -250,9 +223,6 @@ public class @MasterInput : IInputActionCollection, IDisposable
         m_BasicKBM_LClick = m_BasicKBM.FindAction("LClick", throwIfNotFound: true);
         m_BasicKBM_RClick = m_BasicKBM.FindAction("RClick", throwIfNotFound: true);
         m_BasicKBM_Directions = m_BasicKBM.FindAction("Directions", throwIfNotFound: true);
-        // Touch
-        m_Touch = asset.FindActionMap("Touch", throwIfNotFound: true);
-        m_Touch_FingerPos = m_Touch.FindAction("FingerPos", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -355,39 +325,6 @@ public class @MasterInput : IInputActionCollection, IDisposable
         }
     }
     public BasicKBMActions @BasicKBM => new BasicKBMActions(this);
-
-    // Touch
-    private readonly InputActionMap m_Touch;
-    private ITouchActions m_TouchActionsCallbackInterface;
-    private readonly InputAction m_Touch_FingerPos;
-    public struct TouchActions
-    {
-        private @MasterInput m_Wrapper;
-        public TouchActions(@MasterInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @FingerPos => m_Wrapper.m_Touch_FingerPos;
-        public InputActionMap Get() { return m_Wrapper.m_Touch; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(TouchActions set) { return set.Get(); }
-        public void SetCallbacks(ITouchActions instance)
-        {
-            if (m_Wrapper.m_TouchActionsCallbackInterface != null)
-            {
-                @FingerPos.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnFingerPos;
-                @FingerPos.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnFingerPos;
-                @FingerPos.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnFingerPos;
-            }
-            m_Wrapper.m_TouchActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @FingerPos.started += instance.OnFingerPos;
-                @FingerPos.performed += instance.OnFingerPos;
-                @FingerPos.canceled += instance.OnFingerPos;
-            }
-        }
-    }
-    public TouchActions @Touch => new TouchActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -403,9 +340,5 @@ public class @MasterInput : IInputActionCollection, IDisposable
         void OnLClick(InputAction.CallbackContext context);
         void OnRClick(InputAction.CallbackContext context);
         void OnDirections(InputAction.CallbackContext context);
-    }
-    public interface ITouchActions
-    {
-        void OnFingerPos(InputAction.CallbackContext context);
     }
 }
