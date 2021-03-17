@@ -3,13 +3,6 @@ using UnityEditor;
 
 namespace Blocks
 {
-    // STATIC BLOCK DATA ****************************************************************************************************************************
-    public static class BlockData
-    {
-        public const int Columns = 5;
-        public const int MaxRows = 4;
-    }
-
     // BLOCK TYPE ENUM ******************************************************************************************************************************
     // when adding to this, make sure all values are below NumberOfTypes. it is simply used as a length function.
     // DontRenderInInspector is used to mark blocks that would be in the space of a large block and works as a 
@@ -46,9 +39,20 @@ namespace Blocks
 
             int range = (blocks.Length > temp.Length) ? temp.Length : blocks.Length;
 
+            // Keep any values that still fit within grid
             for (int i = 0; i < range; i++)
             {
                 blocks[i] = temp[i];
+            }
+
+            // remove Large blocks that would "hang" of the bottom of the grid
+            for (int i = blocks.Length - BlockData.Columns; i < blocks.Length; i++)
+            {
+                if(blocks[i] == BlockType.LARGE)
+                {
+                    blocks[i] = BlockType.NONE;
+                    if (i + 1 < blocks.Length) blocks[i + 1] = BlockType.NONE;
+                }
             }
         }
     }
