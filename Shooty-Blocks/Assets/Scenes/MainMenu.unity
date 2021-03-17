@@ -2003,7 +2003,7 @@ MonoBehaviour:
   m_Horizontal: 1
   m_Vertical: 0
   m_MovementType: 1
-  m_Elasticity: 0.1
+  m_Elasticity: 0.01
   m_Inertia: 1
   m_DecelerationRate: 0.135
   m_ScrollSensitivity: 1
@@ -2185,10 +2185,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26fe76ab8decbc14789aa9fcb1e6ae7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  in_options: {fileID: 0}
-  in_upgrades: {fileID: 0}
-  in_menu: {fileID: 0}
-  in_menuSelect: {fileID: 0}
+  in_options: {fileID: 491931281}
+  in_upgrades: {fileID: 1897202524}
+  in_menu: {fileID: 1265769142}
+  in_menuSelect: {fileID: 773218617}
 --- !u!1 &1742785121
 GameObject:
   m_ObjectHideFlags: 0
