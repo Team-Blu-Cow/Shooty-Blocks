@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [Header ("Player Upgrade Variables")]
     [SerializeField][Range(1, 100)] private int m_firingPower = 1; // How strong each bullet is
     [SerializeField][Range(1,100)] private float m_firingSpeed = 10.0f; // How often a bullet is fired per second
+    [SerializeField][Range(1, 3)] private float m_movementSpeed = 1.5f;
 
     [Header("Projectile Prefab")]
     [SerializeField] private GameObject m_bullet; // Unfortunately, this is click and drag for inspector, This tells what projectile should be fired
@@ -45,7 +46,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(transform.position.x, -4.0f, transform.position.z); // This makes sure that the ship can't glitch through the walls, thus making the y value different
+        transform.position = new Vector3(transform.position.x, -4.5f, transform.position.z); // This makes sure that the ship can't glitch through the walls, thus making the y value different
         float fireTime = 1 / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
         m_timer += Time.deltaTime; // Time since last bullet was fired
 
@@ -58,7 +59,7 @@ public class PlayerController : MonoBehaviour
         if(Input.touchCount > 0) // If there is a finger touching the screen
         {
             Touch touch = Input.GetTouch(0); // Get the touch of the first finger
-            rb.velocity = new Vector2(touch.deltaPosition.x / 2, 0); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
+            rb.velocity = new Vector2((touch.deltaPosition.x / 2) * m_movementSpeed, 0); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
         }
         else if (m_clicked == false) // If there is no finger movement or pc movement then
         {
@@ -83,7 +84,7 @@ public class PlayerController : MonoBehaviour
         if(m_clicked == true) // If player is clicking right now 
         {
             Vector2 diff = pastPos - recentPos; // Calculate difference in positions
-            rb.velocity = new Vector2(diff.x / 2, 0); // Set velocity to what the difference was in positions (divided by a half to slow down movement)
+            rb.velocity = new Vector2((diff.x / 2) * m_movementSpeed, 0); // Set velocity to what the difference was in positions (divided by a half to slow down movement)
         }
     }
 
