@@ -9,7 +9,7 @@ public class UserData
         public bool m_controlGroup = false;
     }
 
-    public System.Int64 userIdd
+    public System.Int64 userId
     { get { return m_data.m_userId; } }
 
     public bool controlGroup
