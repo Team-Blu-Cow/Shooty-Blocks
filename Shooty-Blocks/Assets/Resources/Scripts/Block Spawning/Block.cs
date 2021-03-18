@@ -7,7 +7,7 @@ public class Block : MonoBehaviour
 {
     public bool test = false;
 
-    private float m_fallSpeed = 0.01f;
+    private float m_fallSpeed = 1f;
     private int m_hp = 0;
 
     private TMPro.TextMeshPro m_text;
@@ -55,7 +55,8 @@ public class Block : MonoBehaviour
 
     void Update()
     {
-        transform.position -= new Vector3(0, m_fallSpeed, 0);
+        if(!test)
+            transform.position -= new Vector3(0, m_fallSpeed*Time.deltaTime, 0);
     }
 
     void OnBecameInvisible()
