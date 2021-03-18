@@ -7,8 +7,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public MasterInput m_inputManager;
 
     [Header ("Player Upgrade Variables")]
-    [SerializeField][Range(1, 100)] private int m_firingPower = 1; // How strong each bullet is
-    [SerializeField][Range(10,100)] private int m_firingSpeed = 10; // How often a bullet is fired per second
+    [SerializeField][Range(1, 10)] private int m_firingPower = 1; // How strong each bullet is
+    [SerializeField][Range(5,15)] private float m_firingSpeed = 1; // How often a bullet is fired per second
     [SerializeField][Range(1, 3)] private float m_movementSpeed = 1.5f;
 
     [Header("Projectile Prefab")]
@@ -46,8 +46,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(transform.position.x, -4.5f, transform.position.z); // This makes sure that the ship can't glitch through the walls, thus making the y value different
-        float fireTime = 1.0f / (float)m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
+        transform.position = new Vector3(transform.position.x, -3.0f, transform.position.z); // This makes sure that the ship can't glitch through the walls, thus making the y value different
+        float fireTime = 1.0f / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
         m_timer += Time.deltaTime; // Time since last bullet was fired
 
         if (m_timer > fireTime) // If it is time to fire
@@ -58,12 +58,18 @@ public class PlayerController : MonoBehaviour
 
         if(Input.touchCount > 0) // If there is a finger touching the screen
         {
+            
             Touch touch = Input.GetTouch(0); // Get the touch of the first finger
             rb.velocity = new Vector2((touch.deltaPosition.x / 2) * m_movementSpeed, 0); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
         }
         else if (m_clicked == false) // If there is no finger movement or pc movement then
         {
             rb.velocity = Vector2.zero; // Set the velocity to be zero
+        }
+
+        if (m_clicked == true)
+        {
+            rb.velocity -= (rb.velocity / 2);
         }
     }
 
@@ -84,8 +90,8 @@ public class PlayerController : MonoBehaviour
         if(m_clicked == true) // If player is clicking right now 
         {
             Vector2 diff = pastPos - recentPos; // Calculate difference in positions
-            rb.velocity = new Vector2((diff.x / 2) * m_movementSpeed, 0); // Set velocity to what the difference was in positions (divided by a half to slow down movement)
-        }
+            rb.velocity = new Vector2(diff.x * m_movementSpeed, 0); // Set velocity to what the difference was in positions (divided by a half to slow down movement)
+        }       
     }
 
     // Don't think this is needed anymore. Discuss with team

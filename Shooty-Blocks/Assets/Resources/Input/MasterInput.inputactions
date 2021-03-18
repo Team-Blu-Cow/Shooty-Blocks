@@ -36,6 +36,14 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "FingerTouch",
+                    "type": "PassThrough",
+                    "id": "eea460ac-2550-4b3d-8a42-c48888338393",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [

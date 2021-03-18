@@ -8,10 +8,12 @@ public class Block : MonoBehaviour
     public bool test = false;
 
     private float m_fallSpeed = 0.01f;
-    private int m_hp = 4;
+    private int m_hp = 0;
 
     private TMPro.TextMeshPro m_text;
     private Transform renderTransform;
+
+    [SerializeField] private GameObject m_particleExplosion;
 
     public int hp
     {
@@ -45,6 +47,7 @@ public class Block : MonoBehaviour
         hp -= damage;
         if(hp <= 0)
         {
+            Instantiate(m_particleExplosion, new Vector3(transform.position.x + 0.5f, transform.position.y - 0.5f, transform.position.z), Quaternion.identity);
             Destroy(gameObject);
         }
         return (hp <= 0) ? true : false;
@@ -54,6 +57,7 @@ public class Block : MonoBehaviour
     {
         m_text = GetComponentInChildren<TMPro.TextMeshPro>();
         renderTransform = GetComponentInChildren<SpriteRenderer>().transform;
+        m_hp = Random.Range(2, 5);
         m_text.text = m_hp.ToString();
     }
 

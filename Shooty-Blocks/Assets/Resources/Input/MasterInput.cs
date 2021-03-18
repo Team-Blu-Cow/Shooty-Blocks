@@ -49,6 +49,14 @@ public class @MasterInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""FingerTouch"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""eea460ac-2550-4b3d-8a42-c48888338393"",
+                    ""expectedControlType"": ""Touch"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -223,6 +231,7 @@ public class @MasterInput : IInputActionCollection, IDisposable
         m_BasicKBM_LClick = m_BasicKBM.FindAction("LClick", throwIfNotFound: true);
         m_BasicKBM_RClick = m_BasicKBM.FindAction("RClick", throwIfNotFound: true);
         m_BasicKBM_Directions = m_BasicKBM.FindAction("Directions", throwIfNotFound: true);
+        m_BasicKBM_FingerTouch = m_BasicKBM.FindAction("FingerTouch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -276,6 +285,7 @@ public class @MasterInput : IInputActionCollection, IDisposable
     private readonly InputAction m_BasicKBM_LClick;
     private readonly InputAction m_BasicKBM_RClick;
     private readonly InputAction m_BasicKBM_Directions;
+    private readonly InputAction m_BasicKBM_FingerTouch;
     public struct BasicKBMActions
     {
         private @MasterInput m_Wrapper;
@@ -284,6 +294,7 @@ public class @MasterInput : IInputActionCollection, IDisposable
         public InputAction @LClick => m_Wrapper.m_BasicKBM_LClick;
         public InputAction @RClick => m_Wrapper.m_BasicKBM_RClick;
         public InputAction @Directions => m_Wrapper.m_BasicKBM_Directions;
+        public InputAction @FingerTouch => m_Wrapper.m_BasicKBM_FingerTouch;
         public InputActionMap Get() { return m_Wrapper.m_BasicKBM; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -305,6 +316,9 @@ public class @MasterInput : IInputActionCollection, IDisposable
                 @Directions.started -= m_Wrapper.m_BasicKBMActionsCallbackInterface.OnDirections;
                 @Directions.performed -= m_Wrapper.m_BasicKBMActionsCallbackInterface.OnDirections;
                 @Directions.canceled -= m_Wrapper.m_BasicKBMActionsCallbackInterface.OnDirections;
+                @FingerTouch.started -= m_Wrapper.m_BasicKBMActionsCallbackInterface.OnFingerTouch;
+                @FingerTouch.performed -= m_Wrapper.m_BasicKBMActionsCallbackInterface.OnFingerTouch;
+                @FingerTouch.canceled -= m_Wrapper.m_BasicKBMActionsCallbackInterface.OnFingerTouch;
             }
             m_Wrapper.m_BasicKBMActionsCallbackInterface = instance;
             if (instance != null)
@@ -321,6 +335,9 @@ public class @MasterInput : IInputActionCollection, IDisposable
                 @Directions.started += instance.OnDirections;
                 @Directions.performed += instance.OnDirections;
                 @Directions.canceled += instance.OnDirections;
+                @FingerTouch.started += instance.OnFingerTouch;
+                @FingerTouch.performed += instance.OnFingerTouch;
+                @FingerTouch.canceled += instance.OnFingerTouch;
             }
         }
     }
@@ -340,5 +357,6 @@ public class @MasterInput : IInputActionCollection, IDisposable
         void OnLClick(InputAction.CallbackContext context);
         void OnRClick(InputAction.CallbackContext context);
         void OnDirections(InputAction.CallbackContext context);
+        void OnFingerTouch(InputAction.CallbackContext context);
     }
 }
