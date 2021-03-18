@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameAnalyticsSDK;
 
 // Class to swap between the canvases that are active
 public class CanvasManager : MonoBehaviour
@@ -10,6 +11,11 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] Canvas in_upgrades;
     [SerializeField] Canvas in_menu;
     [SerializeField] Canvas in_menuSelect;
+
+    private void Awake()
+    {
+        GameAnalytics.Initialize();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +31,8 @@ public class CanvasManager : MonoBehaviour
     public void StartGame()
     {       
         Debug.Log("Game Start " + GetComponentInChildren<Scrolling>().m_level);
+
+        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "Level" + GetComponentInChildren<Scrolling>().m_level);
     }
 
     public void OpenMenu()

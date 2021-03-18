@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.gameanalytics.sdk": {
+      "version": "https://github.com/GameAnalytics/GA-SDK-UNITY.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "0301a1f1fa5a89fe0136ca293078870ed0d7c007"
+    },
     "com.unity.2d.animation": {
       "version": "5.0.4",
       "depth": 0,
