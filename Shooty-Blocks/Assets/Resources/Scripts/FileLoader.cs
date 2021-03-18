@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class FileLoader<T> where T : class
 {
-    private static string m_applicationPath = Application.persistentDataPath;
     private string m_path = null;
 
+    // takes full file path from root directory
     public FileLoader(string in_path)
     {
-        m_path = m_applicationPath + in_path;
+        m_path = in_path;
+        Debug.Log("creating file handle [" + in_path + "]");
     }
 
     public bool FileExists()
@@ -51,5 +52,14 @@ public class FileLoader<T> where T : class
     public bool DeleteFile()
     {
         return true; // TODO
+    }
+
+    public static bool CreateDirectory(string dir)
+    {
+        if (!System.IO.Directory.Exists(dir))
+        {
+            System.IO.Directory.CreateDirectory(dir);
+        }
+        return true; // TODO - check return value of System.IO.Directory.CreateDirectory(dir)
     }
 }
