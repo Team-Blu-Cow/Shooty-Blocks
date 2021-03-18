@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,7 +8,7 @@ public class PlayerController : MonoBehaviour
 
     [Header ("Player Upgrade Variables")]
     [SerializeField][Range(1, 100)] private int m_firingPower = 1; // How strong each bullet is
-    [SerializeField][Range(1,100)] private float m_firingSpeed = 10.0f; // How often a bullet is fired per second
+    [SerializeField][Range(10,100)] private int m_firingSpeed = 10; // How often a bullet is fired per second
     [SerializeField][Range(1, 3)] private float m_movementSpeed = 1.5f;
 
     [Header("Projectile Prefab")]
@@ -26,6 +25,7 @@ public class PlayerController : MonoBehaviour
         m_inputManager.BasicKBM.LClick.performed += ctx => OnMouseLeftClick();
         m_inputManager.BasicKBM.LClick.canceled += ctx => StopMouseLeftClick();
         m_inputManager.BasicKBM.MousePos.performed += ctx => OnMousePos(ctx.ReadValue<Vector2>());
+        m_inputManager.BasicKBM.FingerTouch.performed += ctx => OnFingerPos(Vector2.zero);
     }
 
     void OnEnable()
@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         transform.position = new Vector3(transform.position.x, -4.5f, transform.position.z); // This makes sure that the ship can't glitch through the walls, thus making the y value different
-        float fireTime = 1 / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
+        float fireTime = 1.0f / (float)m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
         m_timer += Time.deltaTime; // Time since last bullet was fired
 
         if (m_timer > fireTime) // If it is time to fire
@@ -90,19 +90,20 @@ public class PlayerController : MonoBehaviour
 
     // Don't think this is needed anymore. Discuss with team
     // TODO @Sandy Reduce function size by using delta in input manager editor
-    //private Queue<Vector2> m_fingerPos = new Queue<Vector2>(); // Queue for recent and last pointer position (Touch)
-    //void OnFingerPos(Vector2 in_fingerPos) // This function is same as above, but for touch controls. 
-    //{
-    //    //m_fingerPos.Enqueue(in_fingerPos);
-    //    //if (m_fingerPos.Count > 1)
-    //    //{
-    //    //    recentPos = m_fingerPos.Dequeue();
-    //    //    pastPos = m_fingerPos.Dequeue();
-    //    //}
+    private Queue<Vector2> m_fingerPos = new Queue<Vector2>(); // Queue for recent and last pointer position (Touch)
+    void OnFingerPos(Vector2 in_fingerPos) // This function is same as above, but for touch controls. 
+    {
+        Debug.Log("Finger Touch");
+        //m_fingerPos.Enqueue(in_fingerPos);
+        //if (m_fingerPos.Count > 1)
+        //{
+        //    recentPos = m_fingerPos.Dequeue();
+        //    pastPos = m_fingerPos.Dequeue();
+        //}
 
-    //    //Vector2 diff = pastPos - recentPos;
-    //    //rb.velocity = new Vector2(diff.x / 2, 0);
-    //}
+        //Vector2 diff = pastPos - recentPos;
+        //rb.velocity = new Vector2(diff.x / 2, 0);
+    }
 
     void OnMouseLeftClick()
     {

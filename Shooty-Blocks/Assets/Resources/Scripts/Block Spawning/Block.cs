@@ -8,7 +8,7 @@ public class Block : MonoBehaviour
     public bool test = false;
 
     private float m_fallSpeed = 0.01f;
-    private int m_hp = 0;
+    private int m_hp = 4;
 
     private TMPro.TextMeshPro m_text;
     private Transform renderTransform;
@@ -43,6 +43,10 @@ public class Block : MonoBehaviour
     public bool Damage(int damage)
     {
         hp -= damage;
+        if(hp <= 0)
+        {
+            Destroy(gameObject);
+        }
         return (hp <= 0) ? true : false;
     }
 
