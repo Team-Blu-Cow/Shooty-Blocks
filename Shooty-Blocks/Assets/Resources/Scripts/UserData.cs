@@ -3,11 +3,15 @@ using UnityEngine;
 public class UserData
 {
     // container that will be serialised and written to disk
+    [System.Serializable]
     protected class DiskSaveData
     {
         public System.Int64 m_userId = 0;
         public bool m_controlGroup = false;
     }
+
+    private DiskSaveData m_data = null;
+    private FileLoader<DiskSaveData> m_file;// = new FileLoader<DiskSaveData>("/savedata/userdata.sbl");
 
     public System.Int64 userId
     { get { return m_data.m_userId; } }
@@ -15,25 +19,28 @@ public class UserData
     public bool controlGroup
     { get { return m_data.m_controlGroup; } }
 
-    private DiskSaveData m_data = null;
-    private FileLoader<DiskSaveData> m_file = new FileLoader<DiskSaveData>("/savedata/userdata.sbl");
-
     // read data from disk if avalible
     // otherwise generate new data
-    public UserData()
+    public UserData(string in_path)
     {
+        CreateDirectoryIfRequired(in_path + "/savedata/");
+        m_file = new FileLoader<DiskSaveData>(in_path + "/savedata/userdata.sbl");
+
         if (m_file.FileExists())
         {
             if (!ReadFromDisk())
             {
-                Debug.Log("failed to load data from disk");
+                Debug.Log("failed to read userdata from disk");
+                return;
             }
         }
         else
         {
-            Debug.Log("cound not locate user data, generating new data");
             GenerateNewData();
         }
+
+        // write user id to console in hexadecimal
+        Debug.Log("user_id = " + m_data.m_userId.ToString("X"));
     }
 
     private bool ReadFromDisk()
@@ -48,8 +55,13 @@ public class UserData
 
     private bool GenerateNewData()
     {
+        m_data = new DiskSaveData();
+
         // generate a sudo random user id
-        m_data.m_userId = (System.Int64)Random.Range(System.Int64.MinValue, System.Int64.MaxValue);
+        System.Random rnd = new System.Random();
+        System.Int64 r1 = rnd.Next(System.Int32.MinValue, System.Int32.MaxValue);
+        System.Int64 r2 = rnd.Next(System.Int32.MinValue, System.Int32.MaxValue);
+        m_data.m_userId = (r1 << 32) | r2;
 
         // decide if user is in the control or test group
         if (m_data.m_userId % 2 == 0)
@@ -57,5 +69,13 @@ public class UserData
             m_data.m_controlGroup = true;
         }
         return WriteToDisk();
+    }
+
+    private void CreateDirectoryIfRequired(string dir)
+    {
+        if (!System.IO.Directory.Exists(dir))
+        {
+            System.IO.Directory.CreateDirectory(dir);
+        }
     }
 }
