@@ -18,6 +18,18 @@ public class PlayerController : MonoBehaviour
     private bool m_clicked = false; // This varuable tracks PC controls, to move left click and drag
     private float m_timer; // Timer for firing bullets
 
+    public int firePower
+    {
+        set { m_firingPower = value; }
+        get { return m_firingPower; }
+    }
+
+    public float fireSpeed
+    {
+        set { m_firingSpeed = value; }
+        get { return m_firingSpeed; }
+    }
+
     void Awake()
     {
         m_inputManager = new MasterInput();
@@ -56,9 +68,9 @@ public class PlayerController : MonoBehaviour
             m_timer = 0.0f; // Make timer back to 0 for next bullet to be fired
         }
 
-        if(Input.touchCount > 0) // If there is a finger touching the screen
+        if (Input.touchCount > 0) // If there is a finger touching the screen
         {
-            
+
             Touch touch = Input.GetTouch(0); // Get the touch of the first finger
             rb.velocity = new Vector2((touch.deltaPosition.x / 2) * m_movementSpeed, 0); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
         }
@@ -67,9 +79,9 @@ public class PlayerController : MonoBehaviour
             rb.velocity = Vector2.zero; // Set the velocity to be zero
         }
 
-        if (m_clicked == true)
+        if (m_clicked == true) // If left mouse is held down
         {
-            rb.velocity -= (rb.velocity / 2);
+            rb.velocity -= (rb.velocity / 2); // Slow down the velocity. This is so that the player doesn't slide about the place
         }
     }
 
