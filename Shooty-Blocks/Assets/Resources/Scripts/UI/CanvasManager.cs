@@ -12,6 +12,8 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] Canvas in_menu;
     [SerializeField] Canvas in_menuSelect;
 
+    [SerializeField] LevelLoader m_levelLoad;
+
     private void Awake()
     {
         // Init game analytics has to be done before any event calls
@@ -37,6 +39,7 @@ public class CanvasManager : MonoBehaviour
 
         // Send hook to game analytics
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "Level" + GetComponentInChildren<Scrolling>().m_level);
+        m_levelLoad.SwitchScene("Level");
     }
 
     public void OpenMenu()
