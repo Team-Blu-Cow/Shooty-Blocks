@@ -19,17 +19,18 @@ public class GameController : MonoBehaviour
             _Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-            
     }
 
     private string m_applicationPath;
+    public string applicationPath { get { return m_applicationPath; } }
+
     private UserData m_userData;
 
     // Start is called before the first frame update
     private void Start()
     {
         m_applicationPath = Application.persistentDataPath;
-        m_userData = new UserData(m_applicationPath);
+        m_userData = new UserData();
     }
 
     // Update is called once per frame

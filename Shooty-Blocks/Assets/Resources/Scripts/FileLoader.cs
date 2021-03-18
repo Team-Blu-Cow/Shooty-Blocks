@@ -54,7 +54,7 @@ public class FileLoader<T> where T : class
         return true; // TODO
     }
 
-    public static bool CreateDirectory(string dir)
+    public bool CreateDirectory(string dir)
     {
         if (!System.IO.Directory.Exists(dir))
         {
