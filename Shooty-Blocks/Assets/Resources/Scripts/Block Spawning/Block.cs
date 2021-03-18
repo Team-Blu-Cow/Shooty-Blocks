@@ -9,6 +9,7 @@ public class Block : MonoBehaviour
 
     private float m_fallSpeed = 1f;
     private int m_hp = 0;
+    private float m_screenHeight;
 
     private TMPro.TextMeshPro m_text;
     private Transform renderTransform;
@@ -32,6 +33,12 @@ public class Block : MonoBehaviour
         set { m_fallSpeed = value; }
     }
 
+    public float screenHeight
+    {
+        set { m_screenHeight = value; }
+    }
+
+
     private void Resize(float in_scale)
     {
         renderTransform.localScale = new Vector3(in_scale, in_scale, in_scale);
@@ -49,8 +56,9 @@ public class Block : MonoBehaviour
         {
             Instantiate(m_particleExplosion, new Vector3(transform.position.x + 0.5f, transform.position.y - 0.5f, transform.position.z), Quaternion.identity);
             Destroy(gameObject);
+            return true;
         }
-        return (hp <= 0) ? true : false;
+        return false;
     }
 
     public void Awake()
@@ -65,6 +73,9 @@ public class Block : MonoBehaviour
     {
         if(!test)
             transform.position -= new Vector3(0, m_fallSpeed*Time.deltaTime, 0);
+
+        if (transform.position.y < m_screenHeight)
+            OnReachBottom();
     }
 
     void OnBecameInvisible()

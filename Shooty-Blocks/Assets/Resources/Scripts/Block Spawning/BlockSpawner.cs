@@ -137,6 +137,7 @@ namespace Blocks
                             GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
                             block.GetComponent<Block>().hp = Random.Range(5, 15); // TODO @Jay change this to work with difficulty scaling
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
+                            block.GetComponent<Block>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                         }
                         break;
 
@@ -146,6 +147,7 @@ namespace Blocks
                             block.GetComponent<Block>().hp = Random.Range(5, 15); // TODO @Jay change this to work with difficulty scaling
                             block.GetComponent<Block>().size = 2.15f;
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
+                            block.GetComponent<Block>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                         }
                         break;
                 }
