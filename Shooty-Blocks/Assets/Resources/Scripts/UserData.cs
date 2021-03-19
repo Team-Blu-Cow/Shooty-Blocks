@@ -8,6 +8,7 @@ public class UserData
     {
         public System.Int64 m_userId = 0;
         public bool m_controlGroup = false;
+        public int money = 0;
     }
 
     private DiskUserData m_data = null;
@@ -18,6 +19,12 @@ public class UserData
 
     public bool controlGroup
     { get { return m_data.m_controlGroup; } }
+
+    public int money
+    {
+        get { return m_data.money; }
+        set { m_data.money = value; }
+    }
 
     // read data from disk if avalible
     // otherwise generate new data
