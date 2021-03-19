@@ -36,7 +36,11 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 m_level++; 
                 SetLevels();
             }
-                
+            else
+            {
+                m_rectTransform.localPosition = new Vector3(-250, 0, 0);
+            }
+
         }
         else if (m_rectTransform.localPosition.x > 250)
         {
