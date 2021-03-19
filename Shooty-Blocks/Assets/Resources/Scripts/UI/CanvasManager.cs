@@ -56,13 +56,17 @@ public class CanvasManager : MonoBehaviour
 
     public void SetLevelCurrency()
     {
-        int coinsCollected = m_collectedCurrencyList[GameController.Instance.m_level];
+        if(m_collectedCurrencyList != null)
+        {
+            int coinsCollected = m_collectedCurrencyList[GameController.Instance.m_level];
 
-        Blocks.Level level = Blocks.BlockSpawner.LoadLevel(GameController.Instance.m_level);
+            Blocks.Level level = Blocks.BlockSpawner.LoadLevel(GameController.Instance.m_level);
 
-        string text = (level != null && coinsCollected >= 0) ? coinsCollected.ToString() + "/" + level.currencyCount.ToString() : "???";
+            string text = (level != null && coinsCollected >= 0) ? coinsCollected.ToString() + "/" + level.currencyCount.ToString() : "???";
 
-        in_levelcurrencyCounter.text = text;
+            in_levelcurrencyCounter.text = text;
+        }
+        
     }
 
     public void StartGame()

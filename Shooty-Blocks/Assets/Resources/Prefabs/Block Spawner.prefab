@@ -47,5 +47,6 @@ MonoBehaviour:
   m_currencyPositions: 
   m_camera: {fileID: 0}
   m_fallSpeed: 0.9
-  m_groupSpacing: 3
+  m_groupSpacing: 4
   m_blockSpacing: 1.15
+  difficulty: 0

@@ -237,11 +237,12 @@ namespace Blocks
                             GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
                             block.tag = "Enemy";
                             block.transform.SetParent(m_spawnedInstanceContainer.transform);
-                            SetHealth(block);
+                            block.GetComponent<Block>().type = BlockType.DEFAULT;
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
                             block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                             block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
                             block.GetComponentInChildren<Collider2D>().enabled = false;
+                            SetHealth(block);
                             m_spawnedInstances.Add(block);
                         }
                         break;
@@ -251,12 +252,13 @@ namespace Blocks
                             GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
                             block.tag = "Enemy";
                             block.transform.SetParent(m_spawnedInstanceContainer.transform);
-                            SetHealth(block);
+                            block.GetComponent<Block>().type = BlockType.LARGE;
                             block.GetComponent<Block>().size = 0.8f;
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
                             block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                             block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
                             block.GetComponentInChildren<Collider2D>().enabled = false;
+                            SetHealth(block);
                             m_spawnedInstances.Add(block);
                         }
                         break;
@@ -294,11 +296,11 @@ namespace Blocks
         {
             if (Random.Range(0, 5) != 0)
             {
-                block.GetComponent<Block>().hp = Random.Range(5 * (difficulty+1), (5 * (difficulty+1)) * 2);
+                block.GetComponent<Block>().hp = Random.Range(5 * (difficulty+1), (5 * (difficulty+1)) * 2) * ((block.GetComponent<Block>().type == BlockType.LARGE)?2:1);
             }
             else
             {
-                block.GetComponent<Block>().hp = Random.Range((5 * (difficulty+1)) * 2, ((5 * (difficulty+1) * 2) * 2));
+                block.GetComponent<Block>().hp = Random.Range((5 * (difficulty+1)) * 2, ((5 * (difficulty+1) * 2) * 2)) * ((block.GetComponent<Block>().type == BlockType.LARGE) ? 2 : 1);
             }
 
         }

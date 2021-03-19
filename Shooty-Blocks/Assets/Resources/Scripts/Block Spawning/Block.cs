@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Block : MonoBehaviour
 {
-    public bool test = false;
+    public Blocks.BlockType type;
 
     private float m_fallSpeed = 1f;
     private int m_hp = 0;
@@ -48,10 +48,10 @@ public class Block : MonoBehaviour
     private void Resize(float in_scale)
     {
         m_renderTransform.localScale = new Vector3(in_scale, in_scale, in_scale);
-        m_renderTransform.localPosition = new Vector3(0.5f * in_scale, -0.5f * in_scale, 0);
+        m_renderTransform.localPosition = new Vector3(1, -1, 0);
 
         RectTransform textTransform = m_text.rectTransform;
-        textTransform.localPosition = new Vector3(0.5f * in_scale, -0.5f * in_scale, 0);
+        textTransform.localPosition = new Vector3(1, -0.8f, 0);
     }
 
     // returns true when block is dead
@@ -81,13 +81,12 @@ public class Block : MonoBehaviour
 
     private void Update()
     {
-        if (m_collider.enabled == false && transform.position.y < m_screenTop + m_collider.bounds.size.y)
+        if (m_collider.enabled == false && transform.position.y < m_screenTop + ((type == Blocks.BlockType.LARGE)? 2 : 1))
         {
             m_collider.enabled = true;
         }
 
-        if (!test)
-            transform.position -= new Vector3(0, m_fallSpeed * Time.deltaTime, 0);
+        transform.position -= new Vector3(0, m_fallSpeed * Time.deltaTime, 0);
 
         if (transform.position.y < m_screenBottom)
             OnReachBottom();
