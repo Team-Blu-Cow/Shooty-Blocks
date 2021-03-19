@@ -16,6 +16,7 @@ public class CanvasManager : MonoBehaviour
     [Header("Misc")]
     [SerializeField] TMPro.TextMeshProUGUI[] in_currencyCounter;
     [SerializeField] TMPro.TextMeshProUGUI[] in_upgradeCounter;
+    [SerializeField] TMPro.TextMeshProUGUI[] in_upgradeCosts;
     [SerializeField] TMPro.TextMeshProUGUI in_levelcurrencyCounter;
 
     [SerializeField] LevelLoader in_levelLoad;
@@ -43,6 +44,9 @@ public class CanvasManager : MonoBehaviour
 
         in_upgradeCounter[0].text = GameController.Instance.userData.speedUpgrade.ToString();
         in_upgradeCounter[1].text = GameController.Instance.userData.powerUpgrade.ToString();
+
+        in_upgradeCosts[0].text = GameController.Instance.m_upgradeCost.ToString();
+        in_upgradeCosts[1].text = GameController.Instance.m_upgradeCost.ToString();
 
     CloseAll();
         OpenMenu();
