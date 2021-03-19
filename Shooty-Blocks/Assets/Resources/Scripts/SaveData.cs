@@ -17,7 +17,7 @@ public class SaveData
     // out_wasInitialised - if this level has been previously played
     public SaveData(string in_levelName, out bool out_wasInitialised)
     {
-        m_file = new FileLoader<DiskSaveData>(GameController.Instance.applicationPath + "/savedata/leveldata/" + in_levelName);
+        m_file = new FileLoader<DiskSaveData>(GameController.Instance.applicationPath + "/savedata/leveldata/" + in_levelName + ".sbl");
         if (m_file.FileExists())
         {
             out_wasInitialised = true;
