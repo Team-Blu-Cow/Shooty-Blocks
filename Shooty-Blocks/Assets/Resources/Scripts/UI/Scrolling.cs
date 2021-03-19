@@ -74,7 +74,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             count++;   
         }
 
-        FindObjectOfType<GameController>().m_level = m_level;
+        GameController.Instance.m_level = m_level;
     }
 
     public void OnPointerDown(PointerEventData eventData)
