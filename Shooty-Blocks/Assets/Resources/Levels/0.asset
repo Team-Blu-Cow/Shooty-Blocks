@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 137e2b49ba4c821479844a4087258c76, type: 3}
   m_Name: 0
   m_EditorClassIdentifier: 
-  level: []
+  level:
+  - {fileID: 11400000, guid: 263803c31d92ee74ab5c04f081c5db66, type: 2}
+  - {fileID: 11400000, guid: 240bb15faee133d4c939fac151acac50, type: 2}
   currencyCount: 1

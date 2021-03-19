@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameAnalyticsSDK;
 
 public class GameController : MonoBehaviour
 {
@@ -21,8 +22,18 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private string m_applicationPath;
-    public string applicationPath { get { return m_applicationPath; } }
+    private string m_applicationPath = null;
+    public string applicationPath
+    {
+        get
+        {
+            if (m_applicationPath == null)
+            {
+                m_applicationPath = Application.persistentDataPath;
+            }
+            return m_applicationPath;
+        }
+    }
 
     private UserData m_userData;
    
@@ -49,10 +60,14 @@ public class GameController : MonoBehaviour
         get { return m_playerSpeed; }
     }
 
+    public int m_level;
+    public LevelLoader m_levelLoad;
+
     // Start is called before the first frame update
     private void Start()
     {
-        m_applicationPath = Application.persistentDataPath;
+        //m_applicationPath = Application.persistentDataPath;
+        m_levelLoad = FindObjectOfType<LevelLoader>();
         m_userData = new UserData();
     }
 
@@ -72,4 +87,14 @@ public class GameController : MonoBehaviour
         m_playerPower += 1;
         m_powerUpgrades++; // Increment the ammount of power upgrades the ship has       
     }
+
+    public void ChangeScene()
+    {
+        m_level = FindObjectOfType<Scrolling>().m_level;
+
+        // Send hook to game analytics
+        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "Level" + m_level);
+        m_levelLoad.SwitchScene("Level");
+    }
 }
+
