@@ -100,6 +100,7 @@ public class GameController : MonoBehaviour
     {
         Blocks.BlockSpawner spawner = FindObjectOfType<Blocks.BlockSpawner>();
 
+        spawner.SaveLevelData();
         spawner.DestroyAllLevelObjects();
     }
 }
