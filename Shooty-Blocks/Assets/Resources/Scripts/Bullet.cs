@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour
     {
         if(collision.gameObject.tag == "Enemy") // If the bullet has hit an enemy
         {
-            collision.gameObject.GetComponentInParent<Block>().Damage(player.GetComponent<PlayerController>().firePower); // Damage the block by the player's firing power
+            collision.gameObject.GetComponentInParent<Block>().Damage(GameController.Instance.firePower); // Damage the block by the player's firing power
             Destroy(gameObject); // Destroy the bullet
         }        
     }

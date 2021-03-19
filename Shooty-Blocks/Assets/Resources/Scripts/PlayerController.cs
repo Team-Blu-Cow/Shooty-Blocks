@@ -7,9 +7,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public MasterInput m_inputManager;
 
     [Header("Player Upgrade Variables")]
-    [SerializeField] [Range(10, 110)] private int m_firingPower = 10; // How strong each bullet is
-
-    [SerializeField] [Range(5, 15)] private float m_firingSpeed = 1; // How often a bullet is fired per second
+    private int m_firingPower = 0; // How strong each bullet is
+    private float m_firingSpeed = 0; // How often a bullet is fired per second
     [SerializeField] [Range(1, 3)] private float m_movementSpeed = 1.5f;
 
     [Header("Projectile Prefab")]
@@ -20,18 +19,6 @@ public class PlayerController : MonoBehaviour
     private float m_timer; // Timer for firing bullets
 
     private TMPro.TextMeshPro m_text;
-
-    public int firePower
-    {
-        set { m_firingPower = value; }
-        get { return m_firingPower; }
-    }
-
-    public float fireSpeed
-    {
-        set { m_firingSpeed = value; }
-        get { return m_firingSpeed; }
-    }
 
     private void Awake()
     {
@@ -58,8 +45,8 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        m_firingPower += GameController.Instance.m_powerUpgrades;
-        m_firingSpeed += (GameController.Instance.m_speedUpgrades / 2.0f);
+        m_firingPower = GameController.Instance.firePower;
+        m_firingSpeed = GameController.Instance.fireSpeed;
         //m_text.text = (m_gameManager.GetComponent<GameController>().m_speedUpgrades + m_gameManager.GetComponent<GameController>().m_powerUpgrades).ToString();
         m_text.text = m_firingPower.ToString();
     }

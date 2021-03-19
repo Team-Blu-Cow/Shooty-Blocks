@@ -34,7 +34,21 @@ public class GameController : MonoBehaviour
     
     public int m_speedUpgrades = 0; // Variable to display to player how many times firing speed has been upgraded
     public int m_powerUpgrades = 0; // Variable to display to player how many times firing power has been upgraded
-    
+    [SerializeField] [Range(10, 110)] private int m_playerPower = 10; // How strong each bullet is
+    [SerializeField] [Range(5, 15)] private float m_playerSpeed = 1; // How often a bullet is fired per second
+
+    public int firePower
+    {
+        set { m_playerPower = value; }
+        get { return m_playerPower; }
+    }
+
+    public float fireSpeed
+    {
+        set { m_playerSpeed = value; }
+        get { return m_playerSpeed; }
+    }
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -49,11 +63,13 @@ public class GameController : MonoBehaviour
 
     public void UpgradeBulletSpeed()
     {
+        m_playerSpeed += 0.5f;
         m_speedUpgrades++; // Increment the ammount of speed upgrades the ship has
     }
 
     public void UpgradeBulletPower()
     {
+        m_playerPower += 1;
         m_powerUpgrades++; // Increment the ammount of power upgrades the ship has       
     }
 }
