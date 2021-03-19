@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameAnalyticsSDK;
 
 public class GameController : MonoBehaviour
 {
@@ -34,10 +35,15 @@ public class GameController : MonoBehaviour
     
     public int m_speedUpgrades = 0; // Variable to display to player how many times firing speed has been upgraded
     public int m_powerUpgrades = 0; // Variable to display to player how many times firing power has been upgraded
-    
+
+    public int m_level;
+    public LevelLoader m_levelLoad;
+
     // Start is called before the first frame update
     private void Start()
     {
+        m_levelLoad = FindObjectOfType<LevelLoader>();
+        
         m_applicationPath = Application.persistentDataPath;
         m_userData = new UserData();
     }
@@ -56,4 +62,14 @@ public class GameController : MonoBehaviour
     {
         m_powerUpgrades++; // Increment the ammount of power upgrades the ship has       
     }
+
+    public void ChangeScene()
+    {
+        m_level = FindObjectOfType<Scrolling>().m_level;
+
+        // Send hook to game analytics
+        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "Level" + m_level);
+        m_levelLoad.SwitchScene("Level");
+    }
 }
+
