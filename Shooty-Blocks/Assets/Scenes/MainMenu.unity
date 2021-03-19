@@ -596,7 +596,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -699,7 +699,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -1233,7 +1233,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -5256,7 +5256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 219437412321519212, guid: 492cfa2318daf3340b8e72a33724a1b9, type: 3}
       propertyPath: m_margin.z
-      value: 143.29633
+      value: 6.032776
       objectReference: {fileID: 0}
     - target: {fileID: 219437412321519212, guid: 492cfa2318daf3340b8e72a33724a1b9, type: 3}
       propertyPath: m_fontColor.b
