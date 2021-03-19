@@ -9,6 +9,8 @@ using TMPro;
 public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {       
     public int m_level;
+    public int m_maxLevel;
+
     RectTransform m_rectTransform;
     bool pointerDown = false;
 
@@ -29,8 +31,12 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {        
         if (m_rectTransform.localPosition.x < -250)
         {
-            m_level++; 
-            SetLevels();           
+            if (m_level < m_maxLevel)
+            {
+                m_level++; 
+                SetLevels();
+            }
+                
         }
         else if (m_rectTransform.localPosition.x > 250)
         {

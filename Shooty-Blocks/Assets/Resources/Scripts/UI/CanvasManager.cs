@@ -7,10 +7,13 @@ using GameAnalyticsSDK;
 public class CanvasManager : MonoBehaviour
 {
     // Canvases in the main menu
+    [Header("Canvases")]
     [SerializeField] Canvas in_options;
     [SerializeField] Canvas in_upgrades;
     [SerializeField] Canvas in_menu;
     [SerializeField] Canvas in_menuSelect;
+
+    [Header("Misc")]
     [SerializeField] TMPro.TextMeshProUGUI in_currencyCounter;
 
     [SerializeField] LevelLoader in_levelLoad;

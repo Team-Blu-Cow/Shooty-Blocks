@@ -2648,6 +2648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_level: 1
+  m_maxLevel: 10
 --- !u!114 &1410129026
 MonoBehaviour:
   m_ObjectHideFlags: 0
