@@ -78,11 +78,6 @@ public class Block : MonoBehaviour
             OnReachBottom();
     }
 
-    void OnBecameInvisible()
-    {
-        OnReachBottom();
-    }
-
     void OnReachBottom()
     {
         Destroy(gameObject);

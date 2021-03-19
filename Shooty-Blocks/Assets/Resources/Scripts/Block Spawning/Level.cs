@@ -9,5 +9,8 @@ namespace Blocks
     {
         [Tooltip("all the block groups to be spawned. groups are spawned in order of array list from the bottom row of each group to the top.")]
         [SerializeField] public List<BlockGroup> level;
+
+        [Tooltip("the number of collectible coins are available in the level")]
+        [SerializeField, Range(1,63)] public int currencyCount = 1;
     }
 }

@@ -27,6 +27,12 @@ namespace Blocks
 
         // prefab for the block object 
         private GameObject in_blockPrefab;
+        private GameObject in_currencyPrefab;
+
+        private int m_seed;
+        private int m_rowNum;
+        [SerializeField]private int m_currencyCount;
+        [SerializeField]private List<int> m_currencyPositions;
 
         [SerializeField] private Camera m_camera;
 
@@ -41,9 +47,10 @@ namespace Blocks
         private void Start()
         {
             in_blockPrefab = Resources.Load<GameObject>("Prefabs/Block");
+            in_currencyPrefab = Resources.Load<GameObject>("Prefabs/Currency Pickup");
 
             BuildLevel(1);
-            SpawnRow();
+            StartSpawning();
         }
 
         // load level data from Assets\Resources\Levels\[levelID]
@@ -63,6 +70,8 @@ namespace Blocks
             // load level from disk
             Level level = LoadLevel(levelID);
 
+            m_seed = levelID;
+
             // initialize queue
             m_level = new Queue<BlockRow>();
 
@@ -74,7 +83,6 @@ namespace Blocks
                 {
                     // create new row struct
                     BlockRow row = new BlockRow(BlockData.Columns);
-
                     // assign the appropriate data to each block
                     for (int j = 0; j < BlockData.Columns; j++)
                         row.blocks[j] = group.m_layout.blocks[i * BlockData.Columns + j];
@@ -88,6 +96,8 @@ namespace Blocks
                     m_level.Enqueue(row);
                 }
             }
+
+            GenerateCurrencyPositions(level);
         }
 
         // start spawning the blocks.
@@ -96,13 +106,59 @@ namespace Blocks
             if (m_level.Count <= 0)
                 return;
 
-            SpawnRow();
+            m_rowNum = 0;
 
+            SpawnRow();
+        }
+
+        private void GenerateCurrencyPositions(Level level)
+        {
+            m_currencyCount = level.currencyCount;
+
+            Random.InitState(m_seed);
+
+            m_currencyPositions = new List<int>(m_currencyCount);
+
+            for (int j = 0; j < m_currencyCount; j++)
+            {
+                m_currencyPositions.Add(-1);
+            }
+
+            List<int> usedPositions = new List<int>();
+
+            int totalCount = 0;
+            foreach (BlockGroup group in level.level)
+            {
+                for (int i = group.height - 1; i >= 0; i--)
+                {
+                    if (!group.HasFreeSpace(i))
+                        usedPositions.Add(totalCount + i);
+                }
+
+                totalCount += group.height;
+            }
+
+            
+            for (int i = 0; i < m_currencyCount; i++)
+            {
+                int currencyLocation = Random.RandomRange(0, m_level.Count);
+
+                while (usedPositions.Contains(currencyLocation))
+                {
+                    currencyLocation = Random.RandomRange(0, m_level.Count);
+                }
+               
+
+                m_currencyPositions[i] = currencyLocation;
+                usedPositions.Add(currencyLocation);
+
+            }
         }
 
         IEnumerator WaitToSpawnNextRow(float time)
         {
             yield return new WaitForSeconds(time);
+            m_rowNum++;
             SpawnRow();
         }
         
@@ -148,6 +204,17 @@ namespace Blocks
                             block.GetComponent<Block>().size = 2.15f;
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
                             block.GetComponent<Block>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
+                        }
+                        break;
+
+                    case BlockType.NONE:
+                        {
+                            if (m_currencyPositions.Contains(m_rowNum))
+                            {
+                                GameObject currency = Instantiate(in_currencyPrefab, pos, Quaternion.identity);
+                                currency.GetComponent<CurrencyPickup>().fallSpeed = m_fallSpeed;
+                                currency.GetComponent<CurrencyPickup>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
+                            }
                         }
                         break;
                 }
