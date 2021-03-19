@@ -95,4 +95,11 @@ public class GameController : MonoBehaviour
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "Level" + m_level);
         m_levelLoad.SwitchScene("Level");
     }
+
+    public void ExitLevel()
+    {
+        Blocks.BlockSpawner spawner = FindObjectOfType<Blocks.BlockSpawner>();
+
+        spawner.DestroyAllLevelObjects();
+    }
 }

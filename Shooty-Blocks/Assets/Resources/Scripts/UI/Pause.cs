@@ -21,8 +21,6 @@ public class Pause : MonoBehaviour
 
     public void ExitLevel()
     {
-        Blocks.BlockSpawner spawner = FindObjectOfType<Blocks.BlockSpawner>();
-
-        spawner.DestroyAllLevelObjects();
+        GameController.Instance.ExitLevel();
     }
 }
