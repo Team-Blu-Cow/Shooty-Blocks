@@ -65,7 +65,6 @@ public class Block : MonoBehaviour
     {
         m_text = GetComponentInChildren<TMPro.TextMeshPro>();
         renderTransform = GetComponentInChildren<SpriteRenderer>().transform;
-        m_hp = Random.Range(2, 5);
         m_text.text = m_hp.ToString();
     }
 

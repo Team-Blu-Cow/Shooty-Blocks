@@ -38,11 +38,15 @@ namespace Blocks
         [Tooltip("The Vertical Space between each row of blocks")]
         [SerializeField, Min(1.15f)] private float m_blockSpacing;
 
+        [Tooltip("The difficulty of the level")]
+        [SerializeField] [Range(0, 10)] private int difficulty;
+        private GameObject player;
+
         private void Start()
         {
             in_blockPrefab = Resources.Load<GameObject>("Prefabs/Block");
-
-            BuildLevel(1);
+            player = GameObject.FindGameObjectWithTag("Player");
+            BuildLevel(2);
             SpawnRow();
         }
 
@@ -60,6 +64,7 @@ namespace Blocks
         // append level data to queue of rows
         public void BuildLevel(int levelID)
         {
+            difficulty = levelID;
             // load level from disk
             Level level = LoadLevel(levelID);
 
@@ -135,7 +140,7 @@ namespace Blocks
                     case BlockType.DEFAULT:
                         {
                             GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
-                            block.GetComponent<Block>().hp = Random.Range(5, 15); // TODO @Jay change this to work with difficulty scaling
+                            SetHealth(block);
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
                             block.GetComponent<Block>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                         }
@@ -144,7 +149,7 @@ namespace Blocks
                     case BlockType.LARGE:
                         {
                             GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
-                            block.GetComponent<Block>().hp = Random.Range(5, 15); // TODO @Jay change this to work with difficulty scaling
+                            SetHealth(block);
                             block.GetComponent<Block>().size = 2.15f;
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
                             block.GetComponent<Block>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
@@ -163,5 +168,16 @@ namespace Blocks
             
         }
 
+        private void SetHealth(GameObject block)
+        {
+            if (Random.Range(0, 5) != 0)
+            {
+                block.GetComponent<Block>().hp = Random.Range(5 * (difficulty * 10), (5 * (difficulty * 10)) + (player.GetComponent<PlayerController>().firePower * 5)); // TODO @Jay change this to work with difficulty scaling
+            }
+            else
+            {
+                block.GetComponent<Block>().hp = Random.Range((5 * (difficulty * 10)) * 2, ((5 * (difficulty * 10)) + (player.GetComponent<PlayerController>().firePower * 5)) * 2);
+            }
+        }
     }
 }

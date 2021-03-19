@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public MasterInput m_inputManager;
 
     [Header ("Player Upgrade Variables")]
-    [SerializeField][Range(1, 10)] private int m_firingPower = 1; // How strong each bullet is
+    [SerializeField][Range(10, 110)] private int m_firingPower = 10; // How strong each bullet is
     [SerializeField][Range(5,15)] private float m_firingSpeed = 1; // How often a bullet is fired per second
     [SerializeField][Range(1, 3)] private float m_movementSpeed = 1.5f;
 
@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private bool m_clicked = false; // This varuable tracks PC controls, to move left click and drag
     private float m_timer; // Timer for firing bullets
+
+    private GameObject m_gameManager;
 
     public int firePower
     {
@@ -53,12 +55,16 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        m_gameManager = GameObject.Find("Game Manager");
+        m_firingPower += m_gameManager.GetComponent<GameController>().m_powerUpgrades;
+        m_firingSpeed += (m_gameManager.GetComponent<GameController>().m_speedUpgrades / 2.0f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(transform.position.x, -3.0f, transform.position.z); // This makes sure that the ship can't glitch through the walls, thus making the y value different
+        Debug.Log("Firing speed: " + m_firingSpeed);
+        Debug.Log("Firing power: " + m_firingPower);
         float fireTime = 1.0f / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
         m_timer += Time.deltaTime; // Time since last bullet was fired
 
@@ -84,6 +90,16 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity -= (rb.velocity / 2); // Slow down the velocity. This is so that the player doesn't slide about the place
         }
+
+        if (transform.position.x < -3)
+        {
+            transform.position = new Vector3(-2.25f, transform.position.y, transform.position.z);
+        }
+        else if(transform.position.x > 3)
+        {
+            transform.position = new Vector3(2.25f, transform.position.y, transform.position.z);
+        }
+
     }
 
     private Queue<Vector2> m_mousePos = new Queue<Vector2>(); // Queue for recent and last pointer positions (Mouse)
@@ -134,4 +150,13 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector2.zero; // Set velocity to 0 as mouse is not dragging across screen
         m_clicked = false; // Set clicking to false
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Enemy")
+        {
+            // This is where we see the player messed up
+            Debug.Log("You Died");
+        }
+    }    
 }
