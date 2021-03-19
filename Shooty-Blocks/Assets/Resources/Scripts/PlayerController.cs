@@ -147,8 +147,9 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            // This is where we see the player messed up
-            Debug.Log("You Died");
+            
+            GameController.Instance.ExitLevel();
+            GameController.Instance.m_levelLoad.SwitchScene("MainMenu");
         }
     }
 }

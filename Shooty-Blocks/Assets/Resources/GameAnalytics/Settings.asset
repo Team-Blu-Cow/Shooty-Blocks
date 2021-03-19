@@ -50,8 +50,8 @@ MonoBehaviour:
   OrganizationIdentifier: 
   EmailGA: jackleslie4@gmail.com
   IntroScreen: 0
-  InfoLogEditor: 1
-  InfoLogBuild: 1
+  InfoLogEditor: 0
+  InfoLogBuild: 0
   VerboseLogBuild: 0
   UseManualSessionHandling: 0
   SendExampleGameDataToMyGame: 0
@@ -84,10 +84,10 @@ MonoBehaviour:
   macIcon: {fileID: 0}
   windowsPhoneIcon: {fileID: 0}
   UsePlayerSettingsBuildNumber: 0
-  SubmitErrors: 1
+  SubmitErrors: 0
   MaxErrorCount: 10
-  SubmitFpsAverage: 1
-  SubmitFpsCritical: 1
+  SubmitFpsAverage: 0
+  SubmitFpsCritical: 0
   IncludeGooglePlay: 1
   FpsCriticalThreshold: 20
   FpsCirticalSubmitInterval: 1
@@ -96,4 +96,4 @@ MonoBehaviour:
   CustomDimensions02FoldOut: 0
   CustomDimensions03FoldOut: 0
   ResourceItemTypesFoldOut: 0
-  ResourceCurrenciesFoldOut: 1
+  ResourceCurrenciesFoldOut: 0
