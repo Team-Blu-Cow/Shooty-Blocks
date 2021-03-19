@@ -11,6 +11,7 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] Canvas in_upgrades;
     [SerializeField] Canvas in_menu;
     [SerializeField] Canvas in_menuSelect;
+    [SerializeField] TMPro.TextMeshProUGUI in_currencyCounter;
 
     [SerializeField] LevelLoader in_levelLoad;
 
@@ -26,6 +27,11 @@ public class CanvasManager : MonoBehaviour
     {
         CloseAll();
         OpenMenu();
+    }
+
+    public void SetDisplayMoney(int money)
+    {
+        in_currencyCounter.text = money.ToString();
     }
 
     public void StartGame()
