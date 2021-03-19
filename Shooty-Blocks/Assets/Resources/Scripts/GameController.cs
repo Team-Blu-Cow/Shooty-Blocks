@@ -90,8 +90,6 @@ public class GameController : MonoBehaviour
 
     public void ChangeScene()
     {
-        m_level = FindObjectOfType<Scrolling>().m_level;
-
         // Send hook to game analytics
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "Level" + m_level);
         m_levelLoad.SwitchScene("Level");
