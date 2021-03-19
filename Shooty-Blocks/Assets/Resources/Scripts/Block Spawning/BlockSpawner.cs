@@ -38,6 +38,11 @@ namespace Blocks
         private int m_seed;
         private int m_rowNum;
         [SerializeField] private int m_currencyCount;
+        public int CurrencyCount
+        {
+            get { return m_currencyCount; }
+        }
+
         [SerializeField] private List<int> m_currencyPositions;
 
         [SerializeField] private Camera m_camera;
@@ -63,6 +68,7 @@ namespace Blocks
 
         [Tooltip("The colors of the enemies")]
         [SerializeField] private Sprite[] colors;
+        [SerializeField] public Color[] textColors;
 
         private void Start()
         {
@@ -127,7 +133,10 @@ namespace Blocks
                 }
             }
 
-            GenerateCurrencyPositions(level);
+            m_currencyCount = level.currencyCount;
+
+            if (GameController.Instance.userData.controlGroup)
+                GenerateCurrencyPositions(level);
         }
 
         // start spawning the blocks.
@@ -143,8 +152,6 @@ namespace Blocks
 
         private void GenerateCurrencyPositions(Level level)
         {
-            m_currencyCount = level.currencyCount;
-
             Random.InitState(m_seed);
 
             m_currencyPositions = new List<int>(m_currencyCount);
