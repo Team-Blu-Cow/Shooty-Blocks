@@ -11,11 +11,15 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] Canvas in_upgrades;
     [SerializeField] Canvas in_menu;
     [SerializeField] Canvas in_menuSelect;
+    [SerializeField] TMPro.TextMeshProUGUI in_currencyCounter;
+
+    [SerializeField] LevelLoader in_levelLoad;
 
     private void Awake()
     {
         // Init game analytics has to be done before any event calls
         GameAnalytics.Initialize();
+        GameController.Instance.m_levelLoad = in_levelLoad;
     }
 
     // Start is called before the first frame update
@@ -25,10 +29,14 @@ public class CanvasManager : MonoBehaviour
         OpenMenu();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetDisplayMoney(int money)
     {
-        
+        in_currencyCounter.text = money.ToString();
+    }
+
+    public void StartGame()
+    {
+        GameController.Instance.ChangeScene();
     }
 
     public void OpenMenu()

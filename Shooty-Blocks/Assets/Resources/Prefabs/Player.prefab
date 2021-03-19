@@ -182,6 +182,7 @@ GameObject:
   - component: {fileID: 8776258853734759636}
   - component: {fileID: 8776258853734759658}
   - component: {fileID: 8776258853734759659}
+  - component: {fileID: 1984855837677655905}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -267,8 +268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 279a859c48e280c489a9a5c9a317c500, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_firingPower: 10
-  m_firingSpeed: 5
   m_movementSpeed: 1.5
   m_bullet: {fileID: 7402477979582793022, guid: ef133e770a6a61543a0651d980f79843, type: 3}
 --- !u!50 &8776258853734759658
@@ -316,5 +315,17 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
+--- !u!114 &1984855837677655905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8776258853734759639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cf0cc4271cce784ba46e5b4d781f30e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

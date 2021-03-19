@@ -66,7 +66,7 @@ public class GameController : MonoBehaviour
         get { return m_playerSpeed; }
     }
 
-    public int m_level;
+    public int m_level = 1;
     public LevelLoader m_levelLoad;
 
     // Start is called before the first frame update
@@ -103,5 +103,13 @@ public class GameController : MonoBehaviour
         // Send hook to game analytics
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "Level" + m_level);
         m_levelLoad.SwitchScene("Level");
+    }
+
+    public void ExitLevel()
+    {
+        Blocks.BlockSpawner spawner = FindObjectOfType<Blocks.BlockSpawner>();
+
+        spawner.SaveLevelData();
+        spawner.DestroyAllLevelObjects();
     }
 }
