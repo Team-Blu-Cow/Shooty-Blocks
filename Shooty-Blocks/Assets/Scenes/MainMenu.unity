@@ -3350,6 +3350,7 @@ MonoBehaviour:
   in_menu: {fileID: 1265769142}
   in_menuSelect: {fileID: 773218617}
   in_currencyCounter: {fileID: 1883588669}
+  in_levelcurrencyCounter: {fileID: 1573472849}
   in_levelLoad: {fileID: 909311237}
 --- !u!1 &1742785121
 GameObject:

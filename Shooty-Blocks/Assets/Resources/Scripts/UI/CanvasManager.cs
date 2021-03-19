@@ -12,8 +12,11 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] Canvas in_menu;
     [SerializeField] Canvas in_menuSelect;
     [SerializeField] TMPro.TextMeshProUGUI in_currencyCounter;
+    [SerializeField] TMPro.TextMeshProUGUI in_levelcurrencyCounter;
 
     [SerializeField] LevelLoader in_levelLoad;
+
+    private List<int> m_collectedCurrencyList;
 
     private void Awake()
     {
@@ -25,6 +28,8 @@ public class CanvasManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+
         CloseAll();
         OpenMenu();
     }
@@ -37,6 +42,15 @@ public class CanvasManager : MonoBehaviour
     public void SetDisplayMoney(int money)
     {
         in_currencyCounter.text = money.ToString();
+    }
+
+    public void SetLevelCurrency()
+    {
+        int coinsCollected = GameController.Instance.CoinsCollectedInLevel();
+
+        string text = coinsCollected.ToString() + "/" + Blocks.BlockSpawner.LoadLevel(GameController.Instance.m_level).currencyCount.ToString();
+
+        in_levelcurrencyCounter.text = text;
     }
 
     public void StartGame()

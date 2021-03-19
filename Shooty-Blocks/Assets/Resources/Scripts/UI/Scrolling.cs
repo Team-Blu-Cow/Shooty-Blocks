@@ -76,6 +76,8 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
 
         GameController.Instance.m_level = m_level;
+
+        FindObjectOfType<CanvasManager>().SetLevelCurrency();
     }
 
     public void OnPointerDown(PointerEventData eventData)

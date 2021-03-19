@@ -111,4 +111,24 @@ public class GameController : MonoBehaviour
         spawner.SaveLevelData();
         spawner.DestroyAllLevelObjects();
     }
+
+    public int CoinsCollectedInLevel()
+    {
+        bool output;
+        SaveData levelData = new SaveData(GameController.Instance.m_level.ToString(), out output);
+
+        Blocks.Level level = Blocks.BlockSpawner.LoadLevel(GameController.Instance.m_level);
+
+        int coinsCollected = 0;
+
+        for(int i = 0; i < level.currencyCount; i++)
+        {
+            if(levelData.IsCoinCollected(i))
+            {
+                coinsCollected++;
+            }
+        }
+
+        return coinsCollected;
+    }
 }
