@@ -46,6 +46,7 @@ public class CurrencyPickup : MonoBehaviour
             in_saveData.SetCoinCollected(in_coinId, true);
             GameController.Instance.userData.money += in_value;
             DestroyFamily();
+            AudioManager.instance.Play("pickup");
         }
     }
 }
