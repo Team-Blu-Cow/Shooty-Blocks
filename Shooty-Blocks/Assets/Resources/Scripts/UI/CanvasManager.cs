@@ -84,4 +84,14 @@ public class CanvasManager : MonoBehaviour
         in_upgrades.gameObject.SetActive(false);
         in_menu.gameObject.SetActive(false);
     }
+
+    public void OnSpeedUpgrade()
+    {
+        GameController.Instance.UpgradeBulletSpeed();
+    }
+
+    public void OnPowerUpgrade()
+    {
+        GameController.Instance.UpgradeBulletPower();
+    }
 }
