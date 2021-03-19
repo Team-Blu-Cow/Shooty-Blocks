@@ -90,7 +90,7 @@ public class GameController : MonoBehaviour
     {
         if (userData.money > m_upgradeCost)
         {        
-            m_playerSpeed += 0.5f;
+            m_playerSpeed += 0.25f;
             userData.speedUpgrade++; // Increment the amount of speed upgrades the ship has
             userData.money -= 10;
             userData.WriteToDisk();
