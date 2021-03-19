@@ -35,9 +35,6 @@ public class GameController : MonoBehaviour
     
     public int m_speedUpgrades = 0; // Variable to display to player how many times firing speed has been upgraded
     public int m_powerUpgrades = 0; // Variable to display to player how many times firing power has been upgraded
-    
-    [SerializeField] private int m_speedUpgrades = 1; // Variable to display to player how many times firing speed has been upgraded
-    [SerializeField] private int m_powerUpgrades = 1; // Variable to display to player how many times firing power has been upgraded
 
     int m_level;
     LevelLoader m_levelLoad;
