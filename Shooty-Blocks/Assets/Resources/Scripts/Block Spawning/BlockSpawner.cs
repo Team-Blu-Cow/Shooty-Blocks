@@ -68,8 +68,8 @@ namespace Blocks
             in_currencyPrefab = Resources.Load<GameObject>("Prefabs/Currency Pickup");
             in_levelEndPrefab = Resources.Load<GameObject>("Prefabs/Level End Trigger");
 
-            // BuildLevel(1);
-            // StartSpawning();
+            //BuildLevel(1);
+            //StartSpawning();
         }
 
         // load level data from Assets\Resources\Levels\[levelID]
@@ -291,12 +291,13 @@ namespace Blocks
         {
             if (Random.Range(0, 5) != 0)
             {
-                block.GetComponent<Block>().hp = Random.Range(5 * (difficulty * 10), (5 * (difficulty * 10))); // TODO @Jay change this to work with difficulty scaling
+                block.GetComponent<Block>().hp = Random.Range(5 * (difficulty * 10), (5 * (difficulty * 10)) * 2); // TODO @Jay change this to work with difficulty scaling
             }
             else
             {
-                block.GetComponent<Block>().hp = Random.Range((5 * (difficulty * 10)) * 2, ((5 * (difficulty * 10))) * 2);
+                block.GetComponent<Block>().hp = Random.Range((5 * (difficulty * 10)) * 2, ((5 * (difficulty * 10)) * 2) * 2);
             }
+
         }
 
         private void SpawnLevelEnd()
