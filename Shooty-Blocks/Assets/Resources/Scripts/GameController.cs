@@ -69,6 +69,7 @@ public class GameController : MonoBehaviour
     public float m_upgradeCost;
 
     public int m_level = 1;
+    public int m_maxLevel;
     public LevelLoader m_levelLoad;
 
     // Start is called before the first frame update
@@ -124,12 +125,18 @@ public class GameController : MonoBehaviour
         spawner.DestroyAllLevelObjects();
     }
 
-    public int CoinsCollectedInLevel()
+    public int CoinsCollectedInLevel(int levelID)
     {
         bool output;
-        SaveData levelData = new SaveData(GameController.Instance.m_level.ToString(), out output);
+        SaveData levelData = new SaveData(levelID.ToString(), out output);
 
-        Blocks.Level level = Blocks.BlockSpawner.LoadLevel(GameController.Instance.m_level);
+        //if (!output)
+        //    return -1;
+
+        Blocks.Level level = Blocks.BlockSpawner.LoadLevel(levelID);
+
+        if (level == null)
+            return -1;
 
         int coinsCollected = 0;
 

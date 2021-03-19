@@ -8,8 +8,7 @@ using TMPro;
 // Class to create the levels for selecting
 public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {       
-    public int m_level;
-    public int m_maxLevel;
+    private int m_level;
 
     RectTransform m_rectTransform;
     bool pointerDown = false;
@@ -31,7 +30,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {        
         if (m_rectTransform.localPosition.x < -250)
         {
-            if (m_level < m_maxLevel)
+            if (m_level < GameController.Instance.m_maxLevel)
             {
                 m_level++; 
                 SetLevels();
@@ -39,6 +38,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             else
             {
                 m_rectTransform.localPosition = new Vector3(-250, 0, 0);
+                GetComponent<ScrollRect>().velocity = Vector2.zero;
             }
 
         }
@@ -52,6 +52,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             else
             {
                 m_rectTransform.localPosition = new Vector3(250, 0, 0);
+                GetComponent<ScrollRect>().velocity = Vector2.zero;
             }
         }
 
@@ -72,7 +73,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             text.transform.parent.GetComponent<Image>().enabled = true;
             text.enabled = true;
 
-            if (m_level + count > 0)
+            if (m_level + count > 0 && m_level+count <= GameController.Instance.m_maxLevel)
             {                
                 text.text = (m_level + count).ToString();
             }

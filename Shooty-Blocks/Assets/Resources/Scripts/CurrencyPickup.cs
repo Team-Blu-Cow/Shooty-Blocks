@@ -48,7 +48,7 @@ public class CurrencyPickup : MonoBehaviour
             GameController.Instance.userData.money += in_value;
             DestroyFamily();
             AudioManager.instance.Play("pickup");
-            GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Coins", 1, "IngameCoins", "Coin");
+            GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Coins", 1, "InGameCoins", "Coin");
         }
     }
 }

@@ -78,7 +78,7 @@ namespace Blocks
             Level level = Resources.Load<Level>("Levels/" + levelID);
 
             if (level == null)
-                Debug.LogError("Failed to load level: " + levelID);
+                Debug.LogWarning("Failed to load level: " + levelID);
 
             return level;
         }

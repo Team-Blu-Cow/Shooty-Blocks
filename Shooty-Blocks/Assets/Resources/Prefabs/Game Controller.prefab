@@ -48,6 +48,7 @@ MonoBehaviour:
   m_playerSpeed: 1
   m_upgradeCost: 10
   m_level: 1
+  m_maxLevel: 10
   m_levelLoad: {fileID: 0}
 --- !u!114 &5654258001881256261
 MonoBehaviour:

@@ -31,7 +31,14 @@ public class CanvasManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_collectedCurrencyList = new List<int>();
+
+        for(int i = 0; i <= GameController.Instance.m_maxLevel; i++)
+        {
+            int coinsCollected = GameController.Instance.CoinsCollectedInLevel(i);
+
+            m_collectedCurrencyList.Add(coinsCollected);
+        }
 
         CloseAll();
         OpenMenu();
@@ -49,9 +56,11 @@ public class CanvasManager : MonoBehaviour
 
     public void SetLevelCurrency()
     {
-        int coinsCollected = GameController.Instance.CoinsCollectedInLevel();
+        int coinsCollected = m_collectedCurrencyList[GameController.Instance.m_level];
 
-        string text = coinsCollected.ToString() + "/" + Blocks.BlockSpawner.LoadLevel(GameController.Instance.m_level).currencyCount.ToString();
+        Blocks.Level level = Blocks.BlockSpawner.LoadLevel(GameController.Instance.m_level);
+
+        string text = (level != null && coinsCollected >= 0) ? coinsCollected.ToString() + "/" + level.currencyCount.ToString() : "???";
 
         in_levelcurrencyCounter.text = text;
     }
