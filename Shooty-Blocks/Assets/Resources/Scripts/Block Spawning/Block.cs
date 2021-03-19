@@ -9,10 +9,12 @@ public class Block : MonoBehaviour
 
     private float m_fallSpeed = 1f;
     private int m_hp = 0;
-    private float m_screenHeight;
+    private float m_screenBottom;
+    private float m_screenTop;
 
     private TMPro.TextMeshPro m_text;
-    private Transform renderTransform;
+    private Transform m_renderTransform;
+    private BoxCollider2D m_collider;
 
     [SerializeField] private GameObject m_particleExplosion;
 
@@ -25,7 +27,7 @@ public class Block : MonoBehaviour
     public float size
     {
         set { Resize(value); }
-        get { return renderTransform.localScale.x; }
+        get { return m_renderTransform.localScale.x; }
     }
 
     public float fallSpeed
@@ -33,16 +35,21 @@ public class Block : MonoBehaviour
         set { m_fallSpeed = value; }
     }
 
-    public float screenHeight
+    public float screenBottom
     {
-        set { m_screenHeight = value; }
+        set { m_screenBottom = value; }
+    }
+
+    public float screenTop
+    {
+        set { m_screenTop = value; }
     }
 
 
     private void Resize(float in_scale)
     {
-        renderTransform.localScale = new Vector3(in_scale, in_scale, in_scale);
-        renderTransform.localPosition = new Vector3(0.5f * in_scale, -0.5f * in_scale, 0);
+        m_renderTransform.localScale = new Vector3(in_scale, in_scale, in_scale);
+        m_renderTransform.localPosition = new Vector3(0.5f * in_scale, -0.5f * in_scale, 0);
 
         RectTransform textTransform = m_text.rectTransform;
         textTransform.localPosition = new Vector3(0.5f * in_scale, -0.5f * in_scale, 0);
@@ -64,17 +71,24 @@ public class Block : MonoBehaviour
     public void Awake()
     {
         m_text = GetComponentInChildren<TMPro.TextMeshPro>();
-        renderTransform = GetComponentInChildren<SpriteRenderer>().transform;
+        m_renderTransform = GetComponentInChildren<SpriteRenderer>().transform;
+        m_collider = GetComponentInChildren<BoxCollider2D>();
+        m_collider.enabled = false;
         m_hp = Random.Range(2, 5);
         m_text.text = m_hp.ToString();
     }
 
     void Update()
     {
+        if(m_collider.enabled == false && transform.position.y < m_screenTop+m_collider.size.y)
+        {
+            m_collider.enabled = true;
+        }
+
         if(!test)
             transform.position -= new Vector3(0, m_fallSpeed*Time.deltaTime, 0);
 
-        if (transform.position.y < m_screenHeight)
+        if (transform.position.y < m_screenBottom)
             OnReachBottom();
     }
 

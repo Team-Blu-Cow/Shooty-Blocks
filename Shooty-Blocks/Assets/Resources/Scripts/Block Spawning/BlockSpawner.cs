@@ -172,6 +172,15 @@ namespace Blocks
             // get latest row from the queue
             BlockRow row = m_level.Dequeue();
 
+            List<int> availableSpaces = new List<int>();
+            for(int i = 0; i < BlockData.Columns; i++)
+            {
+                if (row.blocks[i] == BlockType.NONE)
+                    availableSpaces.Add(i);
+            }
+
+            int currencySpace = Random.Range(0, availableSpaces.Count);
+
             // loop through each block
             for(int i = 0; i < BlockData.Columns; i++)
             {
@@ -193,7 +202,9 @@ namespace Blocks
                             GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
                             block.GetComponent<Block>().hp = Random.Range(5, 15); // TODO @Jay change this to work with difficulty scaling
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
-                            block.GetComponent<Block>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
+                            block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
+                            block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
+                            block.GetComponentInChildren<BoxCollider2D>().enabled = false;
                         }
                         break;
 
@@ -203,13 +214,15 @@ namespace Blocks
                             block.GetComponent<Block>().hp = Random.Range(5, 15); // TODO @Jay change this to work with difficulty scaling
                             block.GetComponent<Block>().size = 2.15f;
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
-                            block.GetComponent<Block>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
+                            block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
+                            block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
+                            block.GetComponentInChildren<BoxCollider2D>().enabled = false;
                         }
                         break;
 
                     case BlockType.NONE:
                         {
-                            if (m_currencyPositions.Contains(m_rowNum))
+                            if (m_currencyPositions.Contains(m_rowNum)&&i == currencySpace)
                             {
                                 GameObject currency = Instantiate(in_currencyPrefab, pos, Quaternion.identity);
                                 currency.GetComponent<CurrencyPickup>().fallSpeed = m_fallSpeed;
