@@ -50,17 +50,8 @@ namespace Blocks
             in_blockPrefab = Resources.Load<GameObject>("Prefabs/Block");
             in_currencyPrefab = Resources.Load<GameObject>("Prefabs/Currency Pickup");
 
-            bool levelHasBeenPlayed = false;
-            in_levelSaveData = new SaveData("1", out levelHasBeenPlayed);
-
-            in_levelSaveData.SetCoinCollected(1, true);
-
-            in_levelSaveData.WriteToDisk();
-
-            in_levelSaveData = null;
-
-            BuildLevel(1);
-            StartSpawning();
+            //BuildLevel(1);
+            //StartSpawning();
         }
 
         // load level data from Assets\Resources\Levels\[levelID]
