@@ -24,4 +24,9 @@ public class CurrencyPickup : MonoBehaviour
         if (transform.position.y < m_screenHeight)
             Destroy(gameObject);
     }
+
+    public void DestroyFamily()
+    {
+
+    }
 }

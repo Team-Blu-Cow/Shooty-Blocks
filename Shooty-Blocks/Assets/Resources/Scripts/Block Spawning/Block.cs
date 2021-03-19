@@ -95,6 +95,13 @@ public class Block : MonoBehaviour
 
     void OnReachBottom()
     {
+        DestroyFamily();
+    }
+
+    public void DestroyFamily()
+    {
+        Destroy(m_renderTransform.gameObject);
+        Destroy(m_text.gameObject);
         Destroy(gameObject);
     }
 

@@ -22,8 +22,18 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private string m_applicationPath;
-    public string applicationPath { get { return m_applicationPath; } }
+    private string m_applicationPath = null;
+    public string applicationPath
+    {
+        get
+        {
+            if (m_applicationPath == null)
+            {
+                m_applicationPath = Application.persistentDataPath;
+            }
+            return m_applicationPath;
+        }
+    }
 
     private UserData m_userData;
 
@@ -37,7 +47,7 @@ public class GameController : MonoBehaviour
     private void Start()
     {
 
-        m_applicationPath = Application.persistentDataPath;
+        //m_applicationPath = Application.persistentDataPath;
         m_userData = new UserData();
 
         if(GameObject.FindGameObjectWithTag("Player") != null) // If it can find the player

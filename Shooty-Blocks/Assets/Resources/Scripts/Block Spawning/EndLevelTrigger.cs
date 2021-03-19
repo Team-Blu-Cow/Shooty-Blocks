@@ -7,6 +7,9 @@ public class EndLevelTrigger : MonoBehaviour
     private float m_fallSpeed = 1f;
     private float m_screenHeight = -5;
 
+    public SaveData levelSaveData;
+    public Blocks.BlockSpawner blockSpawner;
+
     public float fallSpeed
     {
         set { m_fallSpeed = value; }
@@ -23,5 +26,21 @@ public class EndLevelTrigger : MonoBehaviour
 
         if (transform.position.y < m_screenHeight)
             Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Player"))
+        {
+            if(levelSaveData != null)
+            {
+                levelSaveData.WriteToDisk();
+            }
+
+            blockSpawner.DestroyAllLevelObjects();
+
+            //TODO transition back to level select
+
+        }
     }
 }

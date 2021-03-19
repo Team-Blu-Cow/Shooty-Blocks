@@ -32,6 +32,7 @@ namespace Blocks
         private SaveData in_levelSaveData;
 
         private GameObject m_spawnedInstanceContainer;
+        private List<GameObject> m_spawnedInstances;
 
         private int m_seed;
         private int m_rowNum;
@@ -54,8 +55,8 @@ namespace Blocks
             in_currencyPrefab = Resources.Load<GameObject>("Prefabs/Currency Pickup");
             in_levelEndPrefab = Resources.Load<GameObject>("Prefabs/Level End Trigger");
 
-            BuildLevel(0);
-            StartSpawning();
+            //BuildLevel(0);
+            //StartSpawning();
         }
 
         // load level data from Assets\Resources\Levels\[levelID]
@@ -76,6 +77,7 @@ namespace Blocks
             Level level = LoadLevel(levelID);
 
             m_spawnedInstanceContainer = Instantiate(new GameObject(), Vector3.zero, Quaternion.identity);
+            m_spawnedInstances = new List<GameObject>();
 
             bool levelHasBeenPlayed = false;
             in_levelSaveData = new SaveData(levelID.ToString(), out levelHasBeenPlayed); 
@@ -219,18 +221,21 @@ namespace Blocks
                     case BlockType.DEFAULT:
                         {
                             GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
+                            block.tag = "Enemy";
                             block.transform.SetParent(m_spawnedInstanceContainer.transform);
                             block.GetComponent<Block>().hp = Random.Range(5, 15); // TODO @Jay change this to work with difficulty scaling
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
                             block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                             block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
                             block.GetComponentInChildren<BoxCollider2D>().enabled = false;
+                            m_spawnedInstances.Add(block);
                         }
                         break;
 
                     case BlockType.LARGE:
                         {
                             GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
+                            block.tag = "Enemy";
                             block.transform.SetParent(m_spawnedInstanceContainer.transform);
                             block.GetComponent<Block>().hp = Random.Range(5, 15); // TODO @Jay change this to work with difficulty scaling
                             block.GetComponent<Block>().size = 2.15f;
@@ -238,6 +243,7 @@ namespace Blocks
                             block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                             block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
                             block.GetComponentInChildren<BoxCollider2D>().enabled = false;
+                            m_spawnedInstances.Add(block);
                         }
                         break;
 
@@ -251,6 +257,7 @@ namespace Blocks
                                     currency.transform.SetParent(m_spawnedInstanceContainer.transform);
                                     currency.GetComponent<CurrencyPickup>().fallSpeed = m_fallSpeed;
                                     currency.GetComponent<CurrencyPickup>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
+                                    m_spawnedInstances.Add(currency);
                                 }
                             }
                         }
@@ -271,12 +278,35 @@ namespace Blocks
         private void SpawnLevelEnd()
         {
             // convert the screen space coordinate to world space
-            Vector3 pos = m_camera.ViewportToWorldPoint(new Vector3(0.5f, 1.1f, 0));
+            Vector3 pos = m_camera.ViewportToWorldPoint(new Vector3(0.5f,1.1f, 0));
             pos = new Vector3(pos.x, pos.y, 0);
 
             GameObject endLevelTrigger = Instantiate(in_levelEndPrefab, pos, Quaternion.identity);
             endLevelTrigger.GetComponent<EndLevelTrigger>().fallSpeed = m_fallSpeed;
             endLevelTrigger.GetComponent<EndLevelTrigger>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
+            endLevelTrigger.GetComponent<EndLevelTrigger>().blockSpawner = this;
+            endLevelTrigger.GetComponent<EndLevelTrigger>().levelSaveData = in_levelSaveData; 
+        }
+
+        public void DestroyAllLevelObjects()
+        {
+            foreach(GameObject obj in m_spawnedInstances)
+            {
+                if (obj != null)
+                {
+                    switch (obj.tag)
+                    {
+                        case "Enemy":
+                            obj.GetComponent<Block>().DestroyFamily();
+                            break;
+
+                        case "Currency":
+                            obj.GetComponent<CurrencyPickup>().DestroyFamily();
+                            break;
+                    }
+                }
+
+            }
         }
 
     }
