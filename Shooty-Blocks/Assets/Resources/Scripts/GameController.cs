@@ -36,8 +36,8 @@ public class GameController : MonoBehaviour
     public int m_speedUpgrades = 0; // Variable to display to player how many times firing speed has been upgraded
     public int m_powerUpgrades = 0; // Variable to display to player how many times firing power has been upgraded
 
-    int m_level;
-    LevelLoader m_levelLoad;
+    public int m_level;
+    public LevelLoader m_levelLoad;
 
     // Start is called before the first frame update
     private void Start()
@@ -65,12 +65,11 @@ public class GameController : MonoBehaviour
 
     public void ChangeScene()
     {
-        // Send hook to game analytics
-        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "Level" + GetComponentInChildren<Scrolling>().m_level);
-        m_levelLoad.SwitchScene("Level");
+        m_level = FindObjectOfType<Scrolling>().m_level;
 
-        GetComponent<Blocks.BlockSpawner>().cameraBounds = FindObjectOfType<Camera>();
-        m_levelLoad = FindObjectOfType<LevelLoader>();
+        // Send hook to game analytics
+        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "Level" + m_level);
+        m_levelLoad.SwitchScene("Level");
     }
 }
 
