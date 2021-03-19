@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameAnalyticsSDK;
 
 public class GameController : MonoBehaviour
 {
@@ -32,10 +33,13 @@ public class GameController : MonoBehaviour
     [SerializeField] private int m_speedUpgrades = 1; // Variable to display to player how many times firing speed has been upgraded
     [SerializeField] private int m_powerUpgrades = 1; // Variable to display to player how many times firing power has been upgraded
 
+    int m_level;
+    LevelLoader m_levelLoad;
 
     // Start is called before the first frame update
     private void Start()
     {
+        m_levelLoad = FindObjectOfType<LevelLoader>();
 
         m_applicationPath = Application.persistentDataPath;
         m_userData = new UserData();
@@ -50,9 +54,6 @@ public class GameController : MonoBehaviour
     private void Update()
     {
     }
-
-
-
 
     public void UpgradeBulletSpeed()
     {
@@ -70,6 +71,16 @@ public class GameController : MonoBehaviour
             player.GetComponent<PlayerController>().firePower += 1; // Upgrade the players shooting power
             m_powerUpgrades++; // Increment the ammount of power upgrades the ship has
         }
+    }
+
+    public void ChangeScene()
+    {
+        // Send hook to game analytics
+        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "Level" + GetComponentInChildren<Scrolling>().m_level);
+        m_levelLoad.SwitchScene("Level");
+
+        GetComponent<Blocks.BlockSpawner>().cameraBounds = FindObjectOfType<Camera>();
+        m_levelLoad = FindObjectOfType<LevelLoader>();
     }
 }
 

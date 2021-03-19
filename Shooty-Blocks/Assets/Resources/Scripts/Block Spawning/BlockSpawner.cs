@@ -36,6 +36,11 @@ namespace Blocks
         [SerializeField]private List<int> m_currencyPositions;
 
         [SerializeField] private Camera m_camera;
+        public Camera cameraBounds
+        {
+            get{return m_camera;}
+            set{m_camera = value;}
+        } 
 
         // public alterable variables
         [Tooltip("The speed at which the blocks fall")]
