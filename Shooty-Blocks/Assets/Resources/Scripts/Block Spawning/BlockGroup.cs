@@ -62,7 +62,7 @@ namespace Blocks
     [CreateAssetMenu(menuName = "My Assets/Block Group")]
     public class BlockGroup : ScriptableObject
     {
-        [SerializeField, Range(1,BlockData.MaxRows)] public int m_height = 3;
+        [SerializeField, Range(1, BlockData.MaxRows)] public int m_height = 3;
         [SerializeField] public BlockGrid m_layout;
 
         public BlockGroup()
@@ -72,10 +72,34 @@ namespace Blocks
 
         // Custom getter and setter for the height parameter to
         // resize layout array
-        public int height 
-        { 
-            get { return m_height; } 
+        public int height
+        {
+            get { return m_height; }
             set { m_height = value; m_layout.Resize(value); }
+        }
+
+        // Function to return whether there is an unoccupied 
+        // space withing grid.
+        public bool HasFreeSpace(int rowIndex)
+        {
+            rowIndex *= BlockData.Columns;
+
+            for(int i = rowIndex; i < rowIndex+BlockData.Columns; i++)
+            {
+                if (m_layout.blocks[i] == BlockType.NONE)
+                    return true;
+            }
+
+            return false;
+        }
+
+        // returns the index to the start of a given row in the grid
+        public int GetRow(int rowIndex)
+        {
+            rowIndex *= BlockData.Columns;
+            if (rowIndex > m_layout.blocks.Length)
+                return -1;
+            return rowIndex;
         }
     }
 

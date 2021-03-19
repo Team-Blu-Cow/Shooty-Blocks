@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-
     // make game controller a singleton
     private static GameController _Instance;
 
@@ -20,21 +19,27 @@ public class GameController : MonoBehaviour
             _Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-            
     }
 
     private string m_applicationPath;
+    public string applicationPath { get { return m_applicationPath; } }
+
     private UserData m_userData;
+   
+    public UserData userData
+    {
+        get { return m_userData; }
+        set { m_userData = value; }
+    }
     
     public int m_speedUpgrades = 0; // Variable to display to player how many times firing speed has been upgraded
     public int m_powerUpgrades = 0; // Variable to display to player how many times firing power has been upgraded
-
-
+    
     // Start is called before the first frame update
     private void Start()
     {
         m_applicationPath = Application.persistentDataPath;
-        m_userData = new UserData(m_applicationPath);
+        m_userData = new UserData();
     }
 
     // Update is called once per frame
@@ -52,4 +57,3 @@ public class GameController : MonoBehaviour
         m_powerUpgrades++; // Increment the ammount of power upgrades the ship has       
     }
 }
-

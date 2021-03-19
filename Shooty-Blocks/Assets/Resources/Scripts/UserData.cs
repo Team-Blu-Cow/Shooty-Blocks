@@ -4,14 +4,15 @@ public class UserData
 {
     // container that will be serialised and written to disk
     [System.Serializable]
-    protected class DiskSaveData
+    protected class DiskUserData
     {
         public System.Int64 m_userId = 0;
         public bool m_controlGroup = false;
+        public int money = 0;
     }
 
-    private DiskSaveData m_data = null;
-    private FileLoader<DiskSaveData> m_file;// = new FileLoader<DiskSaveData>("/savedata/userdata.sbl");
+    private DiskUserData m_data = null;
+    private FileLoader<DiskUserData> m_file;// = new FileLoader<DiskSaveData>("/savedata/userdata.sbl");
 
     public System.Int64 userId
     { get { return m_data.m_userId; } }
@@ -19,12 +20,18 @@ public class UserData
     public bool controlGroup
     { get { return m_data.m_controlGroup; } }
 
+    public int money
+    {
+        get { return m_data.money; }
+        set { m_data.money = value; }
+    }
+
     // read data from disk if avalible
     // otherwise generate new data
-    public UserData(string in_path)
+    public UserData()
     {
-        CreateDirectoryIfRequired(in_path + "/savedata/");
-        m_file = new FileLoader<DiskSaveData>(in_path + "/savedata/userdata.sbl");
+        m_file = new FileLoader<DiskUserData>(GameController.Instance.applicationPath + "/savedata/userdata.sbd");
+        m_file.CreateDirectory(GameController.Instance.applicationPath + "/savedata/");
 
         if (m_file.FileExists())
         {
@@ -55,7 +62,7 @@ public class UserData
 
     private bool GenerateNewData()
     {
-        m_data = new DiskSaveData();
+        m_data = new DiskUserData();
 
         // generate a sudo random user id
         System.Random rnd = new System.Random();
@@ -69,13 +76,5 @@ public class UserData
             m_data.m_controlGroup = true;
         }
         return WriteToDisk();
-    }
-
-    private void CreateDirectoryIfRequired(string dir)
-    {
-        if (!System.IO.Directory.Exists(dir))
-        {
-            System.IO.Directory.CreateDirectory(dir);
-        }
     }
 }

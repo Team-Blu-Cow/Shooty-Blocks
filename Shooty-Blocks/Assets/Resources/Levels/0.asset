@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 137e2b49ba4c821479844a4087258c76, type: 3}
   m_Name: 0
   m_EditorClassIdentifier: 
-  level:
-  - {fileID: 11400000, guid: d3e17072583a9d142af486115ca2c318, type: 2}
-  - {fileID: 11400000, guid: 240bb15faee133d4c939fac151acac50, type: 2}
-  - {fileID: 11400000, guid: 8a4c5164999a22a499b0bc9aa74f7fc2, type: 2}
+  level: []
+  currencyCount: 1

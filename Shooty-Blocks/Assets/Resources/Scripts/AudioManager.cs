@@ -6,16 +6,18 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public Music[] music;
-    public OneShot[] oneShots;
-    private List<string> currentlyPlaying;
-
     public static AudioManager instance;
-    public AudioMixer mixer;
+
+    [SerializeField] private Music[] music;
+    [SerializeField] private OneShot[] oneShots;
+    [SerializeField] private List<string> currentlyPlaying;
+
+    private AudioMixer mixer;
 
     // Start is called before the first frame update
     private void Awake()
     {
+        mixer = Resources.Load<AudioMixer>("SFX/Mixers/Master");
         currentlyPlaying = new List<string>();
 
         if (instance == null)
@@ -30,6 +32,7 @@ public class AudioManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
+        // initialise each music track
         foreach (Music s in music)
         {
             s.startSource = gameObject.AddComponent<AudioSource>();
@@ -50,6 +53,7 @@ public class AudioManager : MonoBehaviour
             s.initAudio();
         }
 
+        // initialise each music track
         foreach (OneShot s in oneShots)
         {
             s.source = gameObject.AddComponent<AudioSource>();
@@ -173,7 +177,14 @@ public class AudioManager : MonoBehaviour
 
     public void setVolume(string in_name, float in_vol)
     {
-        float logValue = Mathf.Log10(in_vol) * 20; // converts linear slider value to decibel log curve
-        mixer.SetFloat(in_name, logValue);
+        if (in_vol != 0)
+        {
+            float logValue = Mathf.Log10(in_vol) * 20; // converts linear slider value to decibel log curve
+            mixer.SetFloat(in_name, logValue);
+        }
+        else
+        {
+            mixer.SetFloat(in_name, -80);
+        }
     }
 }
