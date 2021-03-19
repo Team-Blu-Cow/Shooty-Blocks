@@ -102,7 +102,7 @@ public class Music
     public IEnumerator FadeIn()
     {
         {
-            GameObject.Find("AudioManager").GetComponent<AudioManager>().Play(name);
+            AudioManager.instance.Play(name);
             float currentTime = 0;
             float start = 0f;
 
