@@ -294,7 +294,7 @@ namespace Blocks
         {
             if (Random.Range(0, 5) != 0)
             {
-                block.GetComponent<Block>().hp = Random.Range(5 * (difficulty * 10), (5 * (difficulty * 10)) * 2); // TODO @Jay change this to work with difficulty scaling
+                block.GetComponent<Block>().hp = Random.Range(5 * (difficulty * 10), (5 * (difficulty * 10)) * 2);
             }
             else
             {
@@ -335,6 +335,18 @@ namespace Blocks
                 }
 
             }
+        }
+
+        public void EndLevel()
+        {
+            DestroyAllLevelObjects();
+            in_levelSaveData.WriteToDisk();
+            GameController.Instance.userData.WriteToDisk();
+        }
+
+        public void SaveLevelData()
+        {
+            in_levelSaveData.WriteToDisk();
         }
     }
 }

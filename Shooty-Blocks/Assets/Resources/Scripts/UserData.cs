@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UserData
 {
-    // container that will be serialised and written to disk
+    // container that will be serialized and written to disk
     [System.Serializable]
     protected class DiskUserData
     {
@@ -40,7 +40,7 @@ public class UserData
         set { m_data.m_powerUpgrades = value; }
     }
 
-    // read data from disk if avalible
+    // read data from disk if available
     // otherwise generate new data
     public UserData()
     {
@@ -78,10 +78,9 @@ public class UserData
     {
         m_data = new DiskUserData();
 
-        // generate a sudo random user id
-        System.Random rnd = new System.Random();
-        System.Int64 r1 = rnd.Next(System.Int32.MinValue, System.Int32.MaxValue);
-        System.Int64 r2 = rnd.Next(System.Int32.MinValue, System.Int32.MaxValue);
+        // generate a pseudo random user id
+        System.Int64 r1 = Random.Range(System.Int32.MinValue, System.Int32.MaxValue);
+        System.Int64 r2 = Random.Range(System.Int32.MinValue, System.Int32.MaxValue);
         m_data.m_userId = (r1 << 32) | r2;
 
         // decide if user is in the control or test group
