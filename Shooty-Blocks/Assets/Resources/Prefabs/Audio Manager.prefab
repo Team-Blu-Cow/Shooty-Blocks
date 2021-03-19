@@ -46,7 +46,7 @@ MonoBehaviour:
   music:
   - name: Main Loop
     volume: 1
-    leadInTime: 0
+    leadInTime: 4
     start: {fileID: 0}
     musicLoop: {fileID: 8300000, guid: 3c009913b09e98843b1982a374333b21, type: 3}
     end: {fileID: 0}

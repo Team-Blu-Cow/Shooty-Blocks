@@ -20,7 +20,7 @@ public class Block : MonoBehaviour
 
     public int hp
     {
-        set {m_hp = value; m_text.text = value.ToString();}
+        set { m_hp = value; m_text.text = value.ToString(); }
         get { return m_hp; }
     }
 
@@ -45,7 +45,6 @@ public class Block : MonoBehaviour
         set { m_screenTop = value; }
     }
 
-
     private void Resize(float in_scale)
     {
         m_renderTransform.localScale = new Vector3(in_scale, in_scale, in_scale);
@@ -59,8 +58,9 @@ public class Block : MonoBehaviour
     public bool Damage(int damage)
     {
         hp -= damage;
-        if(hp <= 0)
+        if (hp <= 0)
         {
+            //AudioManager.instance.Play("Block Explosion");
             Instantiate(m_particleExplosion, new Vector3(transform.position.x + 0.5f, transform.position.y - 0.5f, transform.position.z), Quaternion.identity);
             Destroy(gameObject);
             return true;
@@ -78,23 +78,22 @@ public class Block : MonoBehaviour
         m_text.text = m_hp.ToString();
     }
 
-    void Update()
+    private void Update()
     {
-        if(m_collider.enabled == false && transform.position.y < m_screenTop+m_collider.size.y)
+        if (m_collider.enabled == false && transform.position.y < m_screenTop + m_collider.size.y)
         {
             m_collider.enabled = true;
         }
 
-        if(!test)
-            transform.position -= new Vector3(0, m_fallSpeed*Time.deltaTime, 0);
+        if (!test)
+            transform.position -= new Vector3(0, m_fallSpeed * Time.deltaTime, 0);
 
         if (transform.position.y < m_screenBottom)
             OnReachBottom();
     }
 
-    void OnReachBottom()
+    private void OnReachBottom()
     {
         Destroy(gameObject);
     }
-
 }
