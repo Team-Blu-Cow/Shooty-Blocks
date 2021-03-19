@@ -15,6 +15,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void Awake()
     {
         m_rectTransform = GetComponent<RectTransform>();
+        m_level = GameController.Instance.m_level;
     }
 
     // Start is called before the first frame update
@@ -74,7 +75,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             count++;   
         }
 
-        FindObjectOfType<GameController>().m_level = m_level;
+        GameController.Instance.m_level = m_level;
     }
 
     public void OnPointerDown(PointerEventData eventData)

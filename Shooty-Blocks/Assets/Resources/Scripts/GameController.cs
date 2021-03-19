@@ -59,7 +59,7 @@ public class GameController : MonoBehaviour
         get { return m_playerSpeed; }
     }
 
-    public int m_level;
+    public int m_level = 1;
     public LevelLoader m_levelLoad;
 
     // Start is called before the first frame update

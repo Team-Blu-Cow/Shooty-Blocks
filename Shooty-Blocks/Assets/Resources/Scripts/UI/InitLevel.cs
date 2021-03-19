@@ -7,17 +7,12 @@ public class InitLevel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameController gameController = FindObjectOfType<GameController>();
+        // Set to new scenes objects
+        GameController.Instance.m_levelLoad = FindObjectOfType<LevelLoader>();
+        GameController.Instance.GetComponent<Blocks.BlockSpawner>().cameraBounds = Camera.main;
 
-        if (gameController)
-        {
-            // Set to new scenes objects
-            gameController.m_levelLoad = FindObjectOfType<LevelLoader>();
-            gameController.GetComponent<Blocks.BlockSpawner>().cameraBounds = FindObjectOfType<Camera>();
-
-            // Build and start level
-            gameController.GetComponent<Blocks.BlockSpawner>().BuildLevel(gameController.m_level);
-            gameController.GetComponent<Blocks.BlockSpawner>().StartSpawning();
-        }
+        // Build and start level
+        GameController.Instance.GetComponent<Blocks.BlockSpawner>().BuildLevel(GameController.Instance.m_level);
+        GameController.Instance.GetComponent<Blocks.BlockSpawner>().StartSpawning();
     }
 }
