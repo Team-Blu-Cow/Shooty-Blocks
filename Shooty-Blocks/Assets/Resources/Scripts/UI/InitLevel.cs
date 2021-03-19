@@ -9,6 +9,7 @@ public class InitLevel : MonoBehaviour
     {
         // Set to new scenes objects
         GameController.Instance.m_levelLoad = FindObjectOfType<LevelLoader>();
+        GameController.Instance.GetComponent<Blocks.BlockSpawner>().cameraBounds = Camera.main;
 
         // Build and start level
         GameController.Instance.GetComponent<Blocks.BlockSpawner>().BuildLevel(GameController.Instance.m_level);
