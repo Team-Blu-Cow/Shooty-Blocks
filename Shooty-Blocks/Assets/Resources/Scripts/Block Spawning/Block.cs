@@ -62,6 +62,7 @@ public class Block : MonoBehaviour
         if(hp <= 0)
         {
             Instantiate(m_particleExplosion, new Vector3(transform.position.x + 0.5f, transform.position.y - 0.5f, transform.position.z), Quaternion.identity);
+            AudioManager.instance.Play("Block Explosion");
             Destroy(gameObject);
             return true;
         }

@@ -28,7 +28,10 @@ namespace Blocks
         // prefab for the block object 
         private GameObject in_blockPrefab;
         private GameObject in_currencyPrefab;
+        private GameObject in_levelEndPrefab;
         private SaveData in_levelSaveData;
+
+        private GameObject m_spawnedInstanceContainer;
 
         private int m_seed;
         private int m_rowNum;
@@ -49,9 +52,10 @@ namespace Blocks
         {
             in_blockPrefab = Resources.Load<GameObject>("Prefabs/Block");
             in_currencyPrefab = Resources.Load<GameObject>("Prefabs/Currency Pickup");
+            in_levelEndPrefab = Resources.Load<GameObject>("Prefabs/Level End Trigger");
 
-            //BuildLevel(1);
-            //StartSpawning();
+            BuildLevel(0);
+            StartSpawning();
         }
 
         // load level data from Assets\Resources\Levels\[levelID]
@@ -70,6 +74,8 @@ namespace Blocks
         {
             // load level from disk
             Level level = LoadLevel(levelID);
+
+            m_spawnedInstanceContainer = Instantiate(new GameObject(), Vector3.zero, Quaternion.identity);
 
             bool levelHasBeenPlayed = false;
             in_levelSaveData = new SaveData(levelID.ToString(), out levelHasBeenPlayed); 
@@ -162,8 +168,16 @@ namespace Blocks
         IEnumerator WaitToSpawnNextRow(float time)
         {
             yield return new WaitForSeconds(time);
-            m_rowNum++;
-            SpawnRow();
+            if (m_level.Count <= 0)
+            {
+                SpawnLevelEnd();
+            }
+            else
+            {
+                m_rowNum++;
+                SpawnRow();
+            }
+            
         }
 
         // a function to spawn a row of blocks
@@ -205,6 +219,7 @@ namespace Blocks
                     case BlockType.DEFAULT:
                         {
                             GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
+                            block.transform.SetParent(m_spawnedInstanceContainer.transform);
                             block.GetComponent<Block>().hp = Random.Range(5, 15); // TODO @Jay change this to work with difficulty scaling
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
                             block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
@@ -216,6 +231,7 @@ namespace Blocks
                     case BlockType.LARGE:
                         {
                             GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
+                            block.transform.SetParent(m_spawnedInstanceContainer.transform);
                             block.GetComponent<Block>().hp = Random.Range(5, 15); // TODO @Jay change this to work with difficulty scaling
                             block.GetComponent<Block>().size = 2.15f;
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
@@ -232,6 +248,7 @@ namespace Blocks
                                 if(!in_levelSaveData.IsCoinCollected(m_currencyPositions.IndexOf(m_rowNum)))
                                 {
                                     GameObject currency = Instantiate(in_currencyPrefab, pos, Quaternion.identity);
+                                    currency.transform.SetParent(m_spawnedInstanceContainer.transform);
                                     currency.GetComponent<CurrencyPickup>().fallSpeed = m_fallSpeed;
                                     currency.GetComponent<CurrencyPickup>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                                 }
@@ -249,6 +266,17 @@ namespace Blocks
             // calculate the time to wait using the v = dt formula
             StartCoroutine(WaitToSpawnNextRow((m_blockSpacing/m_fallSpeed)*spacer));
             
+        }
+
+        private void SpawnLevelEnd()
+        {
+            // convert the screen space coordinate to world space
+            Vector3 pos = m_camera.ViewportToWorldPoint(new Vector3(0.5f, 1.1f, 0));
+            pos = new Vector3(pos.x, pos.y, 0);
+
+            GameObject endLevelTrigger = Instantiate(in_levelEndPrefab, pos, Quaternion.identity);
+            endLevelTrigger.GetComponent<EndLevelTrigger>().fallSpeed = m_fallSpeed;
+            endLevelTrigger.GetComponent<EndLevelTrigger>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
         }
 
     }

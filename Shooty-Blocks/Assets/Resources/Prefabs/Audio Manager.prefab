@@ -57,19 +57,19 @@ MonoBehaviour:
   oneShots:
   - name: Block Explosion
     loops: 0
-    volume: 0
-    clip: {fileID: 8300000, guid: c4df585b629509b40a9f820d305e3cb4, type: 3}
+    volume: 1
+    clip: {fileID: 8300000, guid: 32c4586fa852c3940945221873c089f8, type: 3}
     source: {fileID: 0}
     group: {fileID: -8029715838587287798, guid: e5e3f74c58d3a6846a2e7322ecc48801, type: 2}
   - name: Shoot
     loops: 0
-    volume: 0
+    volume: 0.25
     clip: {fileID: 8300000, guid: 674973d0049919047b8d6b8e5fa58ec0, type: 3}
     source: {fileID: 0}
     group: {fileID: -8029715838587287798, guid: e5e3f74c58d3a6846a2e7322ecc48801, type: 2}
   - name: pickup
     loops: 0
-    volume: 0
+    volume: 1
     clip: {fileID: 8300000, guid: 9b03071dfb71a6640a6724fb01b414e7, type: 3}
     source: {fileID: 0}
     group: {fileID: -8029715838587287798, guid: e5e3f74c58d3a6846a2e7322ecc48801, type: 2}
