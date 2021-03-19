@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1912234215278683969
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1912234215278683971}
+  - component: {fileID: 1912234215278683968}
+  m_Layer: 0
+  m_Name: Audio Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1912234215278683971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912234215278683969}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1912234215278683968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912234215278683969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f64225f5ecd08144babedd41386d09c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  music:
+  - name: Main Loop
+    volume: 1
+    leadInTime: 0
+    start: {fileID: 0}
+    musicLoop: {fileID: 8300000, guid: 3c009913b09e98843b1982a374333b21, type: 3}
+    end: {fileID: 0}
+    startSource: {fileID: 0}
+    loopSource: {fileID: 0}
+    endSource: {fileID: 0}
+    group: {fileID: -2341753762312717986, guid: e5e3f74c58d3a6846a2e7322ecc48801, type: 2}
+  oneShots:
+  - name: Block Explosion
+    loops: 0
+    volume: 0
+    clip: {fileID: 8300000, guid: c4df585b629509b40a9f820d305e3cb4, type: 3}
+    source: {fileID: 0}
+    group: {fileID: -8029715838587287798, guid: e5e3f74c58d3a6846a2e7322ecc48801, type: 2}
+  - name: Shoot
+    loops: 0
+    volume: 0
+    clip: {fileID: 8300000, guid: 674973d0049919047b8d6b8e5fa58ec0, type: 3}
+    source: {fileID: 0}
+    group: {fileID: -8029715838587287798, guid: e5e3f74c58d3a6846a2e7322ecc48801, type: 2}
+  - name: pickup
+    loops: 0
+    volume: 0
+    clip: {fileID: 8300000, guid: 9b03071dfb71a6640a6724fb01b414e7, type: 3}
+    source: {fileID: 0}
+    group: {fileID: -8029715838587287798, guid: e5e3f74c58d3a6846a2e7322ecc48801, type: 2}
+  currentlyPlaying: []
