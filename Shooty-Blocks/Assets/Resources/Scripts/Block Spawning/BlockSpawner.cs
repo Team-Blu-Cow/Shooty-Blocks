@@ -28,6 +28,7 @@ namespace Blocks
         // prefab for the block object 
         private GameObject in_blockPrefab;
         private GameObject in_currencyPrefab;
+        private SaveData in_levelSaveData;
 
         private int m_seed;
         private int m_rowNum;
@@ -49,6 +50,15 @@ namespace Blocks
             in_blockPrefab = Resources.Load<GameObject>("Prefabs/Block");
             in_currencyPrefab = Resources.Load<GameObject>("Prefabs/Currency Pickup");
 
+            bool levelHasBeenPlayed = false;
+            in_levelSaveData = new SaveData("1", out levelHasBeenPlayed);
+
+            in_levelSaveData.SetCoinCollected(1, true);
+
+            in_levelSaveData.WriteToDisk();
+
+            in_levelSaveData = null;
+
             BuildLevel(1);
             StartSpawning();
         }
@@ -69,6 +79,9 @@ namespace Blocks
         {
             // load level from disk
             Level level = LoadLevel(levelID);
+
+            bool levelHasBeenPlayed = false;
+            in_levelSaveData = new SaveData(levelID.ToString(), out levelHasBeenPlayed); 
 
             m_seed = levelID;
 
@@ -161,25 +174,26 @@ namespace Blocks
             m_rowNum++;
             SpawnRow();
         }
-        
+
         // a function to spawn a row of blocks
         public void SpawnRow()
         {
             // check that there are still blocks to be spawned
-            if(m_level.Count <= 0)
+            if (m_level.Count <= 0)
                 return;
 
             // get latest row from the queue
             BlockRow row = m_level.Dequeue();
 
             List<int> availableSpaces = new List<int>();
-            for(int i = 0; i < BlockData.Columns; i++)
+            for (int i = 0; i < BlockData.Columns; i++)
             {
                 if (row.blocks[i] == BlockType.NONE)
                     availableSpaces.Add(i);
             }
-
-            int currencySpace = Random.Range(0, availableSpaces.Count);
+            int currencySpace = 0;
+            if (availableSpaces.Count > 0)
+                currencySpace = availableSpaces[Random.Range(0, availableSpaces.Count)];
 
             // loop through each block
             for(int i = 0; i < BlockData.Columns; i++)
@@ -224,9 +238,12 @@ namespace Blocks
                         {
                             if (m_currencyPositions.Contains(m_rowNum)&&i == currencySpace)
                             {
-                                GameObject currency = Instantiate(in_currencyPrefab, pos, Quaternion.identity);
-                                currency.GetComponent<CurrencyPickup>().fallSpeed = m_fallSpeed;
-                                currency.GetComponent<CurrencyPickup>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
+                                if(!in_levelSaveData.IsCoinCollected(m_currencyPositions.IndexOf(m_rowNum)))
+                                {
+                                    GameObject currency = Instantiate(in_currencyPrefab, pos, Quaternion.identity);
+                                    currency.GetComponent<CurrencyPickup>().fallSpeed = m_fallSpeed;
+                                    currency.GetComponent<CurrencyPickup>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
+                                }
                             }
                         }
                         break;

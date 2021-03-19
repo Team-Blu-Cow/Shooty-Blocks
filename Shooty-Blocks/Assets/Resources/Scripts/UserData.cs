@@ -23,8 +23,8 @@ public class UserData
     // otherwise generate new data
     public UserData()
     {
-        m_file.CreateDirectory(GameController.Instance.applicationPath + "/savedata/");
         m_file = new FileLoader<DiskUserData>(GameController.Instance.applicationPath + "/savedata/userdata.sbd");
+        m_file.CreateDirectory(GameController.Instance.applicationPath + "/savedata/");
 
         if (m_file.FileExists())
         {

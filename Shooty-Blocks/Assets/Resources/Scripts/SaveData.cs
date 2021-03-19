@@ -58,6 +58,7 @@ public class SaveData
     // saves the contents of m_data to disk
     public bool WriteToDisk()
     {
+        m_file.CreateDirectory(GameController.Instance.applicationPath + "/savedata/leveldata/");
         return m_file.WriteData(m_data);
     }
 }
