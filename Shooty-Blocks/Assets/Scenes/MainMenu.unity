@@ -205,7 +205,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 20317494}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1700358093}
+        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
+        m_MethodName: OnPowerUpgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &20317494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1966,6 +1978,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Controller
       objectReference: {fileID: 0}
+    - target: {fileID: 8035841047959235799, guid: 3c8f8c79fe211af4dbb5cf558773b3c3, type: 3}
+      propertyPath: m_playerSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8035841047959235816, guid: 3c8f8c79fe211af4dbb5cf558773b3c3, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -3404,7 +3420,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1742785124}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1700358093}
+        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
+        m_MethodName: OnSpeedUpgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1742785124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5100,6 +5128,7 @@ GameObject:
   - component: {fileID: 2103516331}
   - component: {fileID: 2103516333}
   - component: {fileID: 2103516332}
+  - component: {fileID: 2103516334}
   m_Layer: 5
   m_Name: Difficulty
   m_TagString: Untagged
@@ -5164,6 +5193,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2103516330}
   m_CullTransparentMesh: 1
+--- !u!114 &2103516334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103516330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe271908dc006fa449e7deab4fb69b78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2126311325
 GameObject:
   m_ObjectHideFlags: 0

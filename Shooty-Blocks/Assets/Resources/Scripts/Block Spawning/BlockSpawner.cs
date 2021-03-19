@@ -294,11 +294,11 @@ namespace Blocks
         {
             if (Random.Range(0, 5) != 0)
             {
-                block.GetComponent<Block>().hp = Random.Range(5 * (difficulty * 10), (5 * (difficulty * 10)) * 2); // TODO @Jay change this to work with difficulty scaling
+                block.GetComponent<Block>().hp = Random.Range(5 * (difficulty), (5 * difficulty) * 2); // TODO @Jay change this to work with difficulty scaling
             }
             else
             {
-                block.GetComponent<Block>().hp = Random.Range((5 * (difficulty * 10)) * 2, ((5 * (difficulty * 10)) * 2) * 2);
+                block.GetComponent<Block>().hp = Random.Range((5 * difficulty) * 2, ((5 * difficulty * 2) * 2));
             }
 
         }

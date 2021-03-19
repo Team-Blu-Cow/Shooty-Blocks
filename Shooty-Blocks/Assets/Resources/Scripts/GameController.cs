@@ -45,7 +45,14 @@ public class GameController : MonoBehaviour
     }
 
     [SerializeField] [Range(10, 110)] private int m_playerPower = 10; // How strong each bullet is
-    [SerializeField] [Range(5, 15)] private float m_playerSpeed = 5; // How often a bullet is fired per second
+    [SerializeField] [Range(1, 10)] private float m_playerSpeed = 1; // How often a bullet is fired per second
+    private int m_overallPower = 0;
+
+    public int overallPower
+    {
+        set { m_overallPower = value; }
+        get { return m_overallPower; }
+    }
 
     public int firePower
     {
@@ -73,6 +80,8 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        Debug.Log(m_overallPower);
+        m_overallPower = (int)(m_playerPower * m_playerSpeed);
     }
 
     public void UpgradeBulletSpeed()
