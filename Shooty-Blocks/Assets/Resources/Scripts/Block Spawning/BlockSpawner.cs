@@ -61,12 +61,16 @@ namespace Blocks
         [SerializeField] [Range(0, 10)] private int difficulty;
         private GameObject player;
 
+        [Tooltip("The colors of the enemies")]
+        [SerializeField] private Sprite[] colors;
+
         private void Start()
         {
             in_blockPrefab = Resources.Load<GameObject>("Prefabs/Block");
             player = GameObject.FindGameObjectWithTag("Player");
             in_currencyPrefab = Resources.Load<GameObject>("Prefabs/Currency Pickup");
             in_levelEndPrefab = Resources.Load<GameObject>("Prefabs/Level End Trigger");
+            colors = Resources.LoadAll<Sprite>("Sprites/Enemies");
 
             //BuildLevel(1);
             //StartSpawning();
@@ -242,6 +246,7 @@ namespace Blocks
                             block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                             block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
                             block.GetComponentInChildren<Collider2D>().enabled = false;
+                            block.GetComponentInChildren<SpriteRenderer>().sprite = colors[Random.Range(0, 5)];
                             SetHealth(block);
                             m_spawnedInstances.Add(block);
                         }
@@ -258,6 +263,7 @@ namespace Blocks
                             block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                             block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
                             block.GetComponentInChildren<Collider2D>().enabled = false;
+                            block.GetComponentInChildren<SpriteRenderer>().sprite = colors[Random.Range(0, 5)];
                             SetHealth(block);
                             m_spawnedInstances.Add(block);
                         }
