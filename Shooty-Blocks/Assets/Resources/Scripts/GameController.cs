@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
     }
 
     private string m_applicationPath = null;
+
     public string applicationPath
     {
         get
@@ -36,17 +37,15 @@ public class GameController : MonoBehaviour
     }
 
     private UserData m_userData;
-   
+
     public UserData userData
     {
         get { return m_userData; }
         set { m_userData = value; }
     }
-    
-    public int m_speedUpgrades = 0; // Variable to display to player how many times firing speed has been upgraded
-    public int m_powerUpgrades = 0; // Variable to display to player how many times firing power has been upgraded
+
     [SerializeField] [Range(10, 110)] private int m_playerPower = 10; // How strong each bullet is
-    [SerializeField] [Range(5, 15)] private float m_playerSpeed = 1; // How often a bullet is fired per second
+    [SerializeField] [Range(5, 15)] private float m_playerSpeed = 5; // How often a bullet is fired per second
 
     public int firePower
     {
@@ -79,13 +78,15 @@ public class GameController : MonoBehaviour
     public void UpgradeBulletSpeed()
     {
         m_playerSpeed += 0.5f;
-        m_speedUpgrades++; // Increment the ammount of speed upgrades the ship has
+        userData.speedUpgrade++; // Increment the ammount of speed upgrades the ship has
+        userData.WriteToDisk();
     }
 
     public void UpgradeBulletPower()
     {
         m_playerPower += 1;
-        m_powerUpgrades++; // Increment the ammount of power upgrades the ship has       
+        userData.powerUpgrade++; // Increment the ammount of power upgrades the ship has
+        userData.WriteToDisk();
     }
 
     public void ChangeScene()
@@ -95,4 +96,3 @@ public class GameController : MonoBehaviour
         m_levelLoad.SwitchScene("Level");
     }
 }
-
