@@ -62,6 +62,7 @@ public class Block : MonoBehaviour
         {
             //AudioManager.instance.Play("Block Explosion");
             Instantiate(m_particleExplosion, new Vector3(transform.position.x + 0.5f, transform.position.y - 0.5f, transform.position.z), Quaternion.identity);
+            AudioManager.instance.Play("Block Explosion");
             Destroy(gameObject);
             return true;
         }
@@ -94,6 +95,13 @@ public class Block : MonoBehaviour
 
     private void OnReachBottom()
     {
+        DestroyFamily();
+    }
+
+    public void DestroyFamily()
+    {
+        Destroy(m_renderTransform.gameObject);
+        Destroy(m_text.gameObject);
         Destroy(gameObject);
     }
 }

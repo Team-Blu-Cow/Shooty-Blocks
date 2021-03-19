@@ -22,8 +22,18 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private string m_applicationPath;
-    public string applicationPath { get { return m_applicationPath; } }
+    private string m_applicationPath = null;
+    public string applicationPath
+    {
+        get
+        {
+            if (m_applicationPath == null)
+            {
+                m_applicationPath = Application.persistentDataPath;
+            }
+            return m_applicationPath;
+        }
+    }
 
     private UserData m_userData;
    
@@ -42,9 +52,8 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        //m_applicationPath = Application.persistentDataPath;
         m_levelLoad = FindObjectOfType<LevelLoader>();
-        
-        m_applicationPath = Application.persistentDataPath;
         m_userData = new UserData();
     }
 

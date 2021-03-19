@@ -74,6 +74,7 @@ public class PlayerController : MonoBehaviour
 
         if (m_timer > fireTime) // If it is time to fire
         {
+            AudioManager.instance.Play("Shoot");
             Instantiate(m_bullet, new Vector3(transform.position.x, (transform.position.y + 0.75f), 0), Quaternion.identity); // Spawn a bullet
             m_timer = 0.0f; // Make timer back to 0 for next bullet to be fired
         }
