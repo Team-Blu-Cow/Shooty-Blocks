@@ -14,7 +14,8 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] Canvas in_menuSelect;
 
     [Header("Misc")]
-    [SerializeField] TMPro.TextMeshProUGUI in_currencyCounter;
+    [SerializeField] TMPro.TextMeshProUGUI[] in_currencyCounter;
+    [SerializeField] TMPro.TextMeshProUGUI[] in_upgradeCounter;
     [SerializeField] TMPro.TextMeshProUGUI in_levelcurrencyCounter;
 
     [SerializeField] LevelLoader in_levelLoad;
@@ -40,7 +41,10 @@ public class CanvasManager : MonoBehaviour
             m_collectedCurrencyList.Add(coinsCollected);
         }
 
-        CloseAll();
+        in_upgradeCounter[0].text = GameController.Instance.userData.speedUpgrade.ToString();
+        in_upgradeCounter[1].text = GameController.Instance.userData.powerUpgrade.ToString();
+
+    CloseAll();
         OpenMenu();
     }
 
@@ -51,7 +55,8 @@ public class CanvasManager : MonoBehaviour
 
     public void SetDisplayMoney(int money)
     {
-        in_currencyCounter.text = money.ToString();
+        in_currencyCounter[0].text = money.ToString();
+        in_currencyCounter[1].text = money.ToString();
     }
 
     public void SetLevelCurrency()
@@ -123,10 +128,12 @@ public class CanvasManager : MonoBehaviour
     public void OnSpeedUpgrade()
     {
         GameController.Instance.UpgradeBulletSpeed();
+        in_upgradeCounter[0].text = GameController.Instance.userData.speedUpgrade.ToString();
     }
 
     public void OnPowerUpgrade()
     {
         GameController.Instance.UpgradeBulletPower();
+        in_upgradeCounter[1].text = GameController.Instance.userData.powerUpgrade.ToString();
     }
 }
