@@ -51,15 +51,28 @@ public class FileLoader<T> where T : class
 
     public bool DeleteFile()
     {
-        return true; // TODO
+        if (FileExists())
+        {
+            System.IO.File.Delete(m_path);
+        }
+        return true;
     }
 
     public bool CreateDirectory(string dir)
     {
         if (!System.IO.Directory.Exists(dir))
         {
-            System.IO.Directory.CreateDirectory(dir);
+            System.IO.DirectoryInfo info = System.IO.Directory.CreateDirectory(dir);
         }
         return true; // TODO - check return value of System.IO.Directory.CreateDirectory(dir)
+    }
+
+    public bool DestroyDirectory(string dir)
+    {
+        if (!System.IO.Directory.Exists(dir))
+        {
+            System.IO.Directory.Delete(dir, true);
+        }
+        return true; // TODO - check return value of System.IO.Directory.Delete(dir, true);
     }
 }
