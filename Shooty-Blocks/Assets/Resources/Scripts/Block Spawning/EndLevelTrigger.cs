@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameAnalyticsSDK;
 
 public class EndLevelTrigger : MonoBehaviour
 {
@@ -41,6 +42,8 @@ public class EndLevelTrigger : MonoBehaviour
 
             GameController.Instance.userData.WriteToDisk();
 
+            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, "Level" + GameController.Instance.m_level);
+            
             FindObjectOfType<LevelLoader>().SwitchScene("MainMenu");
 
         }

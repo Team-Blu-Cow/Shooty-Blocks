@@ -44,9 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddc8247b3379d394b9c63d587f4a26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  m_speedUpgrades: 1
-  m_powerUpgrades: 1
+  m_playerPower: 10
+  m_playerSpeed: 1
+  m_upgradeCost: 10
+  m_level: 1
+  m_levelLoad: {fileID: 0}
 --- !u!114 &5654258001881256261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,3 +67,4 @@ MonoBehaviour:
   m_fallSpeed: 0.9
   m_groupSpacing: 3
   m_blockSpacing: 1.15
+  difficulty: 0

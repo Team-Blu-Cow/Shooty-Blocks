@@ -166,11 +166,11 @@ namespace Blocks
 
             for (int i = 0; i < m_currencyCount; i++)
             {
-                int currencyLocation = Random.RandomRange(0, m_level.Count);
+                int currencyLocation = Random.Range(0, m_level.Count);
 
                 while (usedPositions.Contains(currencyLocation))
                 {
-                    currencyLocation = Random.RandomRange(0, m_level.Count);
+                    currencyLocation = Random.Range(0, m_level.Count);
                 }
 
                 m_currencyPositions[i] = currencyLocation;

@@ -66,6 +66,8 @@ public class GameController : MonoBehaviour
         get { return m_playerSpeed; }
     }
 
+    public float m_upgradeCost;
+
     public int m_level = 1;
     public LevelLoader m_levelLoad;
 
@@ -85,16 +87,25 @@ public class GameController : MonoBehaviour
 
     public void UpgradeBulletSpeed()
     {
-        m_playerSpeed += 0.5f;
-        userData.speedUpgrade++; // Increment the amount of speed upgrades the ship has
-        userData.WriteToDisk();
+        if (userData.money > m_upgradeCost)
+        {        
+            m_playerSpeed += 0.5f;
+            userData.speedUpgrade++; // Increment the amount of speed upgrades the ship has
+            userData.money -= 10;
+            userData.WriteToDisk();
+            
+        }
     }
 
     public void UpgradeBulletPower()
     {
-        m_playerPower += 1;
-        userData.powerUpgrade++; // Increment the amount of power upgrades the ship has
-        userData.WriteToDisk();
+        if (userData.money > m_upgradeCost)
+        {
+            m_playerPower += 1;
+            userData.powerUpgrade++; // Increment the amount of power upgrades the ship has
+            userData.money -= 10;
+            userData.WriteToDisk();
+        }
     }
 
     public void ChangeScene()
@@ -106,6 +117,7 @@ public class GameController : MonoBehaviour
 
     public void ExitLevel()
     {
+        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, "Level" + m_level);
         Blocks.BlockSpawner spawner = FindObjectOfType<Blocks.BlockSpawner>();
 
         spawner.SaveLevelData();
