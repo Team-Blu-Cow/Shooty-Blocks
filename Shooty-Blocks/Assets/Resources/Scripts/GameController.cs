@@ -20,10 +20,11 @@ public class GameController : MonoBehaviour
             _Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-            
     }
 
     private string m_applicationPath;
+    public string applicationPath { get { return m_applicationPath; } }
+
     private UserData m_userData;
 
     [SerializeField] private GameObject player; // Variable for game controller to find player
@@ -37,13 +38,12 @@ public class GameController : MonoBehaviour
     {
 
         m_applicationPath = Application.persistentDataPath;
-        m_userData = new UserData(m_applicationPath);
+        m_userData = new UserData();
 
         if(GameObject.FindGameObjectWithTag("Player") != null) // If it can find the player
         {
             player = GameObject.FindGameObjectWithTag("Player"); // Set player to the object that has "Player" as its tag
         }
-
     }
 
     // Update is called once per frame

@@ -72,7 +72,8 @@ public class PlayerController : MonoBehaviour
         {
 
             Touch touch = Input.GetTouch(0); // Get the touch of the first finger
-            rb.velocity = new Vector2((touch.deltaPosition.x / 2) * m_movementSpeed, 0); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
+            Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+            transform.position = new Vector3(touchPos.x, transform.position.y, transform.position.z); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
         }
         else if (m_clicked == false) // If there is no finger movement or pc movement then
         {
