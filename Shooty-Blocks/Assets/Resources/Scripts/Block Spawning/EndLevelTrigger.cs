@@ -39,7 +39,9 @@ public class EndLevelTrigger : MonoBehaviour
 
             blockSpawner.DestroyAllLevelObjects();
 
-            //TODO transition back to level select
+            GameController.Instance.userData.WriteToDisk();
+
+            FindObjectOfType<LevelLoader>().SwitchScene("MainMenu");
 
         }
     }

@@ -223,6 +223,9 @@ namespace Blocks
                 float anchor = (1.0f / (float)BlockData.Columns) * (float)i;
 
                 // convert the screen space coordinate to world space
+                if (!m_camera)
+                    return;
+
                 Vector3 pos = m_camera.ViewportToWorldPoint(new Vector3(anchor + offset, 1.25f, 0));
                 pos = new Vector3(pos.x, pos.y, 0);
 

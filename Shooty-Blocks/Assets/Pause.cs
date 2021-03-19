@@ -18,4 +18,11 @@ public class Pause : MonoBehaviour
         m_paused = false;
         transform.GetChild(0).gameObject.SetActive(false);
     }
+
+    public void ExitLevel()
+    {
+        Blocks.BlockSpawner spawner = FindObjectOfType<Blocks.BlockSpawner>();
+
+        spawner.DestroyAllLevelObjects();
+    }
 }
