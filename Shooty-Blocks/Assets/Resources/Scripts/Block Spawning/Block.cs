@@ -14,7 +14,7 @@ public class Block : MonoBehaviour
 
     private TMPro.TextMeshPro m_text;
     private Transform m_renderTransform;
-    private BoxCollider2D m_collider;
+    private Collider2D m_collider;
 
     [SerializeField] private GameObject m_particleExplosion;
 
@@ -73,7 +73,7 @@ public class Block : MonoBehaviour
     {
         m_text = GetComponentInChildren<TMPro.TextMeshPro>();
         m_renderTransform = GetComponentInChildren<SpriteRenderer>().transform;
-        m_collider = GetComponentInChildren<BoxCollider2D>();
+        m_collider = GetComponentInChildren<Collider2D>();
         m_collider.enabled = false;
         m_hp = Random.Range(2, 5);
         m_text.text = m_hp.ToString();
@@ -81,7 +81,7 @@ public class Block : MonoBehaviour
 
     private void Update()
     {
-        if (m_collider.enabled == false && transform.position.y < m_screenTop + m_collider.size.y)
+        if (m_collider.enabled == false && transform.position.y < m_screenTop + m_collider.bounds.size.y)
         {
             m_collider.enabled = true;
         }

@@ -241,7 +241,7 @@ namespace Blocks
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
                             block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                             block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
-                            block.GetComponentInChildren<BoxCollider2D>().enabled = false;
+                            block.GetComponentInChildren<Collider2D>().enabled = false;
                             m_spawnedInstances.Add(block);
                         }
                         break;
@@ -252,11 +252,11 @@ namespace Blocks
                             block.tag = "Enemy";
                             block.transform.SetParent(m_spawnedInstanceContainer.transform);
                             SetHealth(block);
-                            block.GetComponent<Block>().size = 2.15f;
+                            block.GetComponent<Block>().size = 0.8f;
                             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
                             block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                             block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
-                            block.GetComponentInChildren<BoxCollider2D>().enabled = false;
+                            block.GetComponentInChildren<Collider2D>().enabled = false;
                             m_spawnedInstances.Add(block);
                         }
                         break;
