@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-
     // make game controller a singleton
     private static GameController _Instance;
 
@@ -27,20 +26,24 @@ public class GameController : MonoBehaviour
 
     private UserData m_userData;
 
+    public UserData userData
+    {
+        get { return m_userData; }
+        set { m_userData = value; }
+    }
+
     [SerializeField] private GameObject player; // Variable for game controller to find player
-    
+
     [SerializeField] private int m_speedUpgrades = 1; // Variable to display to player how many times firing speed has been upgraded
     [SerializeField] private int m_powerUpgrades = 1; // Variable to display to player how many times firing power has been upgraded
-
 
     // Start is called before the first frame update
     private void Start()
     {
-
         m_applicationPath = Application.persistentDataPath;
         m_userData = new UserData();
 
-        if(GameObject.FindGameObjectWithTag("Player") != null) // If it can find the player
+        if (GameObject.FindGameObjectWithTag("Player") != null) // If it can find the player
         {
             player = GameObject.FindGameObjectWithTag("Player"); // Set player to the object that has "Player" as its tag
         }
@@ -50,9 +53,6 @@ public class GameController : MonoBehaviour
     private void Update()
     {
     }
-
-
-
 
     public void UpgradeBulletSpeed()
     {
@@ -72,4 +72,3 @@ public class GameController : MonoBehaviour
         }
     }
 }
-
