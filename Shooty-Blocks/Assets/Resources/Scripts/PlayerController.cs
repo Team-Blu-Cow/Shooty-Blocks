@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private float m_timer; // Timer for firing bullets
 
     private GameObject m_gameManager;
+    private TMPro.TextMeshPro m_text;
 
     public int firePower
     {
@@ -40,6 +41,8 @@ public class PlayerController : MonoBehaviour
         m_inputManager.BasicKBM.LClick.canceled += ctx => StopMouseLeftClick();
         m_inputManager.BasicKBM.MousePos.performed += ctx => OnMousePos(ctx.ReadValue<Vector2>());
         m_inputManager.BasicKBM.FingerTouch.performed += ctx => OnFingerPos(Vector2.zero);
+
+        m_text = GetComponentInChildren<TMPro.TextMeshPro>();
     }
 
     void OnEnable()
@@ -58,6 +61,8 @@ public class PlayerController : MonoBehaviour
         m_gameManager = GameObject.Find("Game Manager");
         m_firingPower += m_gameManager.GetComponent<GameController>().m_powerUpgrades;
         m_firingSpeed += (m_gameManager.GetComponent<GameController>().m_speedUpgrades / 2.0f);
+        //m_text.text = (m_gameManager.GetComponent<GameController>().m_speedUpgrades + m_gameManager.GetComponent<GameController>().m_powerUpgrades).ToString();
+        m_text.text = m_firingPower.ToString();
     }
 
     // Update is called once per frame
@@ -107,20 +112,21 @@ public class PlayerController : MonoBehaviour
     Vector2 pastPos = Vector2.zero;
     void OnMousePos(Vector2 in_mousePos)
     {
- 
 
         m_mousePos.Enqueue(in_mousePos); // Add most recent pos to queue
-        if(m_mousePos.Count > 1) // If the queue's size is greater than 1. This if statement is here so that there is no error in first frame of game
+        if (m_mousePos.Count > 1) // If the queue's size is greater than 1. This if statement is here so that there is no error in first frame of game
         {
-            recentPos = m_mousePos.Dequeue(); // Set recent pos to be first value of queue
-            pastPos = m_mousePos.Dequeue(); // Set past pos to be second value of queue
+            //Camera.main.ScreenToWorldPoint(touch.position);
+            recentPos = Camera.main.ScreenToWorldPoint(m_mousePos.Dequeue()); // Set recent pos to be first value of queue
+            pastPos = Camera.main.ScreenToWorldPoint(m_mousePos.Dequeue()); // Set past pos to be second value of queue
         }
 
-        if(m_clicked == true) // If player is clicking right now 
+        if (m_clicked == true) // If player is clicking right now 
         {
             Vector2 diff = pastPos - recentPos; // Calculate difference in positions
-            rb.velocity = new Vector2(diff.x * m_movementSpeed, 0); // Set velocity to what the difference was in positions (divided by a half to slow down movement)
-        }       
+            //rb.velocity = new Vector2(diff.x * m_movementSpeed, 0); // Set velocity to what the difference was in positions (divided by a half to slow down movement)
+            transform.position = new Vector3(transform.position.x + diff.x, transform.position.y, transform.position.z);
+        }
     }
 
     // Don't think this is needed anymore. Discuss with team
