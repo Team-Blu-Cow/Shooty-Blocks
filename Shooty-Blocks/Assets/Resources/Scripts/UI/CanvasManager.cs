@@ -29,6 +29,11 @@ public class CanvasManager : MonoBehaviour
         OpenMenu();
     }
 
+    private void Update()
+    {
+        SetDisplayMoney(GameController.Instance.userData.money);
+    }
+
     public void SetDisplayMoney(int money)
     {
         in_currencyCounter.text = money.ToString();

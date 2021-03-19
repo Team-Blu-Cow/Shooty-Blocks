@@ -80,21 +80,20 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        Debug.Log(m_overallPower);
         m_overallPower = (int)(m_playerPower * m_playerSpeed);
     }
 
     public void UpgradeBulletSpeed()
     {
         m_playerSpeed += 0.5f;
-        userData.speedUpgrade++; // Increment the ammount of speed upgrades the ship has
+        userData.speedUpgrade++; // Increment the amount of speed upgrades the ship has
         userData.WriteToDisk();
     }
 
     public void UpgradeBulletPower()
     {
         m_playerPower += 1;
-        userData.powerUpgrade++; // Increment the ammount of power upgrades the ship has
+        userData.powerUpgrade++; // Increment the amount of power upgrades the ship has
         userData.WriteToDisk();
     }
 
