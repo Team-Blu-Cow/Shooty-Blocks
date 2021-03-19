@@ -34,6 +34,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             {
                 m_level++; 
                 SetLevels();
+                AudioManager.instance.Play("Scroll Right");
             }
             else
             {
@@ -48,6 +49,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             {
                 m_level--;
                 SetLevels();
+                AudioManager.instance.Play("Scroll Left");
             }
             else
             {

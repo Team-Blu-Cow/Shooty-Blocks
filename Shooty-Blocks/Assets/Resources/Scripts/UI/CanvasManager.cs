@@ -72,6 +72,7 @@ public class CanvasManager : MonoBehaviour
     public void StartGame()
     {
         GameController.Instance.ChangeScene();
+        AudioManager.instance.Play("Select");
     }
 
     public void OpenMenu()
