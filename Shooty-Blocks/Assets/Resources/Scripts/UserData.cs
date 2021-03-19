@@ -8,7 +8,9 @@ public class UserData
     {
         public System.Int64 m_userId = 0;
         public bool m_controlGroup = false;
-        public int money = 0;
+        public int m_money = 0;
+        public int m_speedUpgrades = 0; // Variable to display to player how many times firing speed has been upgraded
+        public int m_powerUpgrades = 0; // Variable to display to player how many times firing power has been upgraded
     }
 
     private DiskUserData m_data = null;
@@ -22,8 +24,20 @@ public class UserData
 
     public int money
     {
-        get { return m_data.money; }
-        set { m_data.money = value; }
+        get { return m_data.m_money; }
+        set { m_data.m_money = value; }
+    }
+
+    public int speedUpgrade
+    {
+        get { return m_data.m_speedUpgrades; }
+        set { m_data.m_speedUpgrades = value; }
+    }
+
+    public int powerUpgrade
+    {
+        get { return m_data.m_powerUpgrades; }
+        set { m_data.m_powerUpgrades = value; }
     }
 
     // read data from disk if avalible
