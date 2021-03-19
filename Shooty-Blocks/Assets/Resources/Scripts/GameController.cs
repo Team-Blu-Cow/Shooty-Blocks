@@ -66,7 +66,11 @@ public class GameController : MonoBehaviour
         get { return m_playerSpeed; }
     }
 
-    public float m_upgradeCost;
+    public int m_upgradeCost;
+    [Tooltip("the amount the player's firing speed increases by every upgrade")]
+    public float m_speedIncrease;
+    [Tooltip("the amount the player's bullet damage increases by every upgrade")]
+    public int m_powerIncrease;
 
     public int m_level = 1;
     public int m_maxLevel;
@@ -78,6 +82,9 @@ public class GameController : MonoBehaviour
         //m_applicationPath = Application.persistentDataPath;
         m_levelLoad = FindObjectOfType<LevelLoader>();
         m_userData = new UserData();
+
+        m_playerPower += userData.powerUpgrade*m_powerIncrease;
+        m_playerSpeed += userData.speedUpgrade*m_speedIncrease;
     }
 
     // Update is called once per frame
@@ -88,11 +95,11 @@ public class GameController : MonoBehaviour
 
     public void UpgradeBulletSpeed()
     {
-        if (userData.money > m_upgradeCost)
+        if (userData.money >= m_upgradeCost)
         {        
-            m_playerSpeed += 0.25f;
+            m_playerSpeed += m_speedIncrease;
             userData.speedUpgrade++; // Increment the amount of speed upgrades the ship has
-            userData.money -= 10;
+            userData.money -= m_upgradeCost;
             userData.WriteToDisk();
             
         }
@@ -100,11 +107,11 @@ public class GameController : MonoBehaviour
 
     public void UpgradeBulletPower()
     {
-        if (userData.money > m_upgradeCost)
+        if (userData.money >= m_upgradeCost)
         {
-            m_playerPower += 1;
+            m_playerPower += m_powerIncrease;
             userData.powerUpgrade++; // Increment the amount of power upgrades the ship has
-            userData.money -= 10;
+            userData.money -= m_upgradeCost;
             userData.WriteToDisk();
         }
     }

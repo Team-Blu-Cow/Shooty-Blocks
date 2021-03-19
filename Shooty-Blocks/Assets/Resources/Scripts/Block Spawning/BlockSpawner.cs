@@ -169,10 +169,11 @@ namespace Blocks
                 for (int i = group.height - 1; i >= 0; i--)
                 {
                     if (!group.HasFreeSpace(i))
-                        usedPositions.Add(totalCount + i);
+                        usedPositions.Add(totalCount);
+                    totalCount++;
                 }
 
-                totalCount += group.height;
+                //totalCount += group.height-1;
             }
 
             for (int i = 0; i < m_currencyCount; i++)
