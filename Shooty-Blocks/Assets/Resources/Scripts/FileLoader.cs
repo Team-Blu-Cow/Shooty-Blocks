@@ -11,7 +11,7 @@ public class FileLoader<T> where T : class
     public FileLoader(string in_path)
     {
         m_path = in_path;
-        Debug.Log("creating file handle [" + in_path + "]");
+        // Debug.Log("creating file handle [" + in_path + "]");
     }
 
     public bool FileExists()
