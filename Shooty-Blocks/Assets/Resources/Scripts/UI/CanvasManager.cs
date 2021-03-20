@@ -160,7 +160,7 @@ public class CanvasManager : MonoBehaviour
         m_collectedCurrencyList = new List<int>();
         m_levelCompleteList.Clear();
 
-        for (int i = 1; i <= GameController.Instance.m_maxLevel; i++)
+        for (int i = 0; i <= GameController.Instance.m_maxLevel; i++)
         {
             int coinsCollected = GameController.Instance.CoinsCollectedInLevel(i);
 

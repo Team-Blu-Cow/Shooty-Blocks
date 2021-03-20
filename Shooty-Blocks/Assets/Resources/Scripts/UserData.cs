@@ -73,7 +73,7 @@ public class UserData
 
         if (m_gameFile.FileExists())
         {
-            if (m_gameFile.ReadData(out m_gameData))
+            if (!m_gameFile.ReadData(out m_gameData))
             {
                 Debug.Log("failed to read gamedata from disk");
             }
