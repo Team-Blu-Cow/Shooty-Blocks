@@ -22,4 +22,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d3e17072583a9d142af486115ca2c318, type: 2}
   - {fileID: 11400000, guid: f8dc9427d6644794ca9b88df17c36657, type: 2}
   - {fileID: 11400000, guid: f8dc9427d6644794ca9b88df17c36657, type: 2}
-  currencyCount: 5
+  - {fileID: 11400000, guid: 2d6530d44f534654b9377233fcb1c3e5, type: 2}
+  - {fileID: 11400000, guid: d989f7b7f0636214cb3a84cc74fe9933, type: 2}
+  - {fileID: 11400000, guid: c02816b90ae42ac4d825c7355853b91b, type: 2}
+  - {fileID: 11400000, guid: 238e69c934616d9488bf9354ecd6f3b9, type: 2}
+  - {fileID: 11400000, guid: e474b0f44cf1a3b41b0f5bb1367e57c2, type: 2}
+  currencyCount: 8
