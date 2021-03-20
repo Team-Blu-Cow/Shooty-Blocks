@@ -37,9 +37,9 @@ public class EndLevelTrigger : MonoBehaviour
             {
                 for (int i = 0;i< GameController.Instance.GetComponent<Blocks.BlockSpawner>().CurrencyCount;i++)
                 {
-                    levelSaveData.SetCoinCollected(i,true);
-                    GameController.Instance.userData.money += GameController.Instance.GetComponent<Blocks.BlockSpawner>().CurrencyCount;
+                    levelSaveData.SetCoinCollected(i,true);                   
                 }                
+                GameController.Instance.userData.money += GameController.Instance.GetComponent<Blocks.BlockSpawner>().CurrencyCount;
             }            
 
             if (levelSaveData != null)
