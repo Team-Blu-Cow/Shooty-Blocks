@@ -69,7 +69,7 @@ public class FileLoader<T> where T : class
 
     public bool DestroyDirectory(string dir)
     {
-        if (!System.IO.Directory.Exists(dir))
+        if (System.IO.Directory.Exists(dir))
         {
             System.IO.Directory.Delete(dir, true);
         }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace Blocks
 {
@@ -38,6 +39,11 @@ namespace Blocks
         private int m_seed;
         private int m_rowNum;
         [SerializeField] private int m_currencyCount;
+        public int CurrencyCount
+        {
+            get { return m_currencyCount; }
+        }
+
         [SerializeField] private List<int> m_currencyPositions;
 
         [SerializeField] private Camera m_camera;
@@ -63,6 +69,7 @@ namespace Blocks
 
         [Tooltip("The colors of the enemies")]
         [SerializeField] private Sprite[] colors;
+        [SerializeField] public Color[] textColors;
 
         private void Start()
         {
@@ -83,7 +90,7 @@ namespace Blocks
 
             if (level == null)
                 Debug.LogWarning("Failed to load level: " + levelID);
-
+            
             return level;
         }
 
@@ -127,7 +134,10 @@ namespace Blocks
                 }
             }
 
-            GenerateCurrencyPositions(level);
+            m_currencyCount = level.currencyCount;
+
+            if (GameController.Instance.userData.controlGroup)
+                GenerateCurrencyPositions(level);
         }
 
         // start spawning the blocks.
@@ -143,8 +153,6 @@ namespace Blocks
 
         private void GenerateCurrencyPositions(Level level)
         {
-            m_currencyCount = level.currencyCount;
-
             Random.InitState(m_seed);
 
             m_currencyPositions = new List<int>(m_currencyCount);
@@ -247,7 +255,9 @@ namespace Blocks
                             block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                             block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
                             block.GetComponentInChildren<Collider2D>().enabled = false;
-                            block.GetComponentInChildren<SpriteRenderer>().sprite = colors[Random.Range(0, 5)];
+                            int rand = Random.Range(0, 5);
+                            block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
+                            block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
                             SetHealth(block);
                             m_spawnedInstances.Add(block);
                         }
@@ -264,7 +274,9 @@ namespace Blocks
                             block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
                             block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
                             block.GetComponentInChildren<Collider2D>().enabled = false;
-                            block.GetComponentInChildren<SpriteRenderer>().sprite = colors[Random.Range(0, 5)];
+                            int rand = Random.Range(0, 5);
+                            block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
+                            block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
                             SetHealth(block);
                             m_spawnedInstances.Add(block);
                         }
