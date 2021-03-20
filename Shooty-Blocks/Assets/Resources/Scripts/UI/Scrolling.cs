@@ -12,6 +12,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     RectTransform m_rectTransform;
     bool pointerDown = false;
+    bool reset = false;
 
     private void Awake()
     {
@@ -58,15 +59,18 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             }
         }
 
-        if (!pointerDown && GetComponent<ScrollRect>().velocity == Vector2.zero)
+        if (!pointerDown && GetComponent<ScrollRect>().velocity == Vector2.zero && !reset)
         {
             SetLevels();
             GetComponent<ScrollRect>().velocity = Vector2.zero;
+            reset = true;
         }
     }
 
     void SetLevels()
     {
+        CanvasManager canvasManager = FindObjectOfType<CanvasManager>();
+
         int count = -2;
         m_rectTransform.localPosition = new Vector3(0, 0, 0);
 
@@ -78,11 +82,13 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             if (m_level + count > 0 && m_level+count <= GameController.Instance.m_maxLevel)
             {                
                 text.text = (m_level + count).ToString();
+                text.transform.parent.GetChild(1).gameObject.SetActive(canvasManager.LevelCompleteList[m_level + count]);
             }
             else
             {
                 text.transform.parent.GetComponent<Image>().enabled = false;
                 text.enabled = false;
+                text.transform.parent.GetChild(1).gameObject.SetActive(false);
             }
 
             count++;   
@@ -90,7 +96,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         GameController.Instance.m_level = m_level;
 
-        FindObjectOfType<CanvasManager>().SetLevelCurrency();
+        canvasManager.SetLevelCurrency();
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -101,5 +107,6 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public void OnPointerUp(PointerEventData eventData)
     {
         pointerDown = false;
+        reset = false;
     }
 }

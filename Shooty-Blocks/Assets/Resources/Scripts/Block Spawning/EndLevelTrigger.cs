@@ -33,7 +33,16 @@ public class EndLevelTrigger : MonoBehaviour
     {
         if(collision.CompareTag("Player"))
         {
-            if(levelSaveData != null)
+            if (!GameController.Instance.userData.controlGroup)
+            {
+                for (int i = 0;i< GameController.Instance.GetComponent<Blocks.BlockSpawner>().CurrencyCount;i++)
+                {
+                    levelSaveData.SetCoinCollected(i,true);                   
+                }                
+                GameController.Instance.userData.money += GameController.Instance.GetComponent<Blocks.BlockSpawner>().CurrencyCount;
+            }            
+
+            if (levelSaveData != null)
             {
                 levelSaveData.WriteToDisk();
             }

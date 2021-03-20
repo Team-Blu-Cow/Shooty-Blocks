@@ -20,7 +20,10 @@ public class UserData
     { get { return m_data.m_userId; } }
 
     public bool controlGroup
-    { get { return m_data.m_controlGroup; } }
+    { 
+      get { return m_data.m_controlGroup; } 
+      set { m_data.m_controlGroup = value; }
+    }
 
     public int money
     {
@@ -89,5 +92,10 @@ public class UserData
             m_data.m_controlGroup = true;
         }
         return WriteToDisk();
+    }
+
+    public void DestroyDirectory()
+    {
+        m_file.DestroyDirectory(GameController.Instance.applicationPath);
     }
 }

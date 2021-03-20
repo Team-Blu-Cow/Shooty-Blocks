@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using GameAnalyticsSDK;
 
 // Class to swap between the canvases that are active
@@ -20,8 +21,14 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI in_levelcurrencyCounter;
 
     [SerializeField] LevelLoader in_levelLoad;
+    [SerializeField] Toggle in_toggle;
 
     private List<int> m_collectedCurrencyList;
+    private List<bool> m_levelCompleteList = new List<bool>();
+    public List<bool> LevelCompleteList
+    {
+        get { return m_levelCompleteList; }
+    }
 
     private void Awake()
     {
@@ -33,22 +40,12 @@ public class CanvasManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_collectedCurrencyList = new List<int>();
-
-        for(int i = 0; i <= GameController.Instance.m_maxLevel; i++)
-        {
-            int coinsCollected = GameController.Instance.CoinsCollectedInLevel(i);
-
-            m_collectedCurrencyList.Add(coinsCollected);
-        }
-
-        in_upgradeCounter[0].text = GameController.Instance.userData.speedUpgrade.ToString();
-        in_upgradeCounter[1].text = GameController.Instance.userData.powerUpgrade.ToString();
+        ResetData();
 
         in_upgradeCosts[0].text = GameController.Instance.m_upgradeCost.ToString();
         in_upgradeCosts[1].text = GameController.Instance.m_upgradeCost.ToString();
 
-    CloseAll();
+        CloseAll();
         OpenMenu();
     }
 
@@ -140,5 +137,38 @@ public class CanvasManager : MonoBehaviour
     {
         GameController.Instance.UpgradeBulletPower();
         in_upgradeCounter[1].text = GameController.Instance.userData.powerUpgrade.ToString();
+    }
+
+    public void SetControlGroup(bool toggle)
+    {
+        GameController.Instance.userData.controlGroup = toggle;
+    }
+
+    public void DestroyGameData()
+    {
+        GameController.Instance.userData.DestroyDirectory();
+        GameController.Instance.userData = new UserData();
+        ResetData();
+    }
+
+    private void ResetData()
+    {
+        m_collectedCurrencyList = new List<int>();
+
+        for (int i = 0; i <= GameController.Instance.m_maxLevel; i++)
+        {
+            int coinsCollected = GameController.Instance.CoinsCollectedInLevel(i);
+
+            m_collectedCurrencyList.Add(coinsCollected);
+
+            bool levelHasBeenPlayed = false;
+            SaveData levelSaveData = new SaveData(i.ToString(), out levelHasBeenPlayed);
+            m_levelCompleteList.Add(levelSaveData.IsLevelComplete());
+        }
+
+        in_upgradeCounter[0].text = GameController.Instance.userData.speedUpgrade.ToString();
+        in_upgradeCounter[1].text = GameController.Instance.userData.powerUpgrade.ToString();
+
+        in_toggle.isOn = GameController.Instance.userData.controlGroup;
     }
 }

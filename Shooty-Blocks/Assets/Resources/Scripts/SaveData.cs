@@ -61,7 +61,9 @@ public class SaveData
     public bool IsLevelComplete()
     {
         System.Int64 one = 1;
-        return (m_data.m_coinData & (one << 63)) != 0;
+        System.Int64 result =  (one << 63);
+        bool test = (m_data.m_coinData & one) != 0;
+        return test;
     }
 
     // set state of 64th bit in coinData
