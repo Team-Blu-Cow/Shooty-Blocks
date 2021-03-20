@@ -43,8 +43,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             }
             else
             {
-                m_rectTransform.localPosition = new Vector3(-250, 0, 0);
-                GetComponent<ScrollRect>().velocity = Vector2.zero;
+                m_rectTransform.localPosition = new Vector3(-250, 0, 0);                
             }
 
         }
@@ -60,7 +59,6 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             else
             {
                 m_rectTransform.localPosition = new Vector3(250, 0, 0);
-                GetComponent<ScrollRect>().velocity = Vector2.zero;
             }
         }
 

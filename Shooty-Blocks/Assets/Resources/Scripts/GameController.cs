@@ -76,6 +76,13 @@ public class GameController : MonoBehaviour
     public int m_maxLevel;
     public LevelLoader m_levelLoad;
 
+    private bool m_paused;
+    public bool paused
+    {
+        set { m_paused = value; }
+        get { return m_paused; }
+    }
+
     // Start is called before the first frame update
     private void Start()
     {
