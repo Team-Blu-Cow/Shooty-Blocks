@@ -9,10 +9,9 @@ using TMPro;
 public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {       
     private int m_level;
-    private float m_timer;
 
     RectTransform m_rectTransform;
-    bool m_pointerDown = false;
+    bool pointerDown = false;
 
     private void Awake()
     {
@@ -28,20 +27,14 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     // Update is called once per frame
     void Update()
-    {
-        m_timer += Time.deltaTime;
-       
+    {        
         if (m_rectTransform.localPosition.x < -250)
         {
             if (m_level < GameController.Instance.m_maxLevel)
             {
-                if (m_timer > 0.5)
-                {
-                    m_level++;
-                    SetLevels();
-                    AudioManager.instance.Play("Scroll Right"); 
-                    m_timer = 0;
-                }
+                m_level++; 
+                SetLevels();
+                AudioManager.instance.Play("Scroll Right");
             }
             else
             {
@@ -54,13 +47,9 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             if (m_level > 1)
             {
-                if (m_timer > 0.5)
-                {
-                    m_level--;
-                    SetLevels();
-                    AudioManager.instance.Play("Scroll Left");
-                    m_timer = 0;
-                }
+                m_level--;
+                SetLevels();
+                AudioManager.instance.Play("Scroll Left");
             }
             else
             {
@@ -69,7 +58,7 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             }
         }
 
-        if (!m_pointerDown && GetComponent<ScrollRect>().velocity == Vector2.zero)
+        if (!pointerDown && GetComponent<ScrollRect>().velocity == Vector2.zero)
         {
             SetLevels();
             GetComponent<ScrollRect>().velocity = Vector2.zero;
@@ -106,11 +95,11 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        m_pointerDown = true;
+        pointerDown = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        m_pointerDown = false;
+        pointerDown = false;
     }
 }
