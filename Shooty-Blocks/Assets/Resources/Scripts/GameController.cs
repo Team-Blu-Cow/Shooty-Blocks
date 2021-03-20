@@ -134,7 +134,7 @@ public class GameController : MonoBehaviour
     {
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, "Level" + m_level);
         Blocks.BlockSpawner spawner = FindObjectOfType<Blocks.BlockSpawner>();
-
+        userData.WriteToDisk();
         spawner.SaveLevelData();
         spawner.DestroyAllLevelObjects();
     }

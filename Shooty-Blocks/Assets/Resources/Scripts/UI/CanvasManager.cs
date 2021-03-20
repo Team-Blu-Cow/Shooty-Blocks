@@ -9,22 +9,25 @@ public class CanvasManager : MonoBehaviour
 {
     // Canvases in the main menu
     [Header("Canvases")]
-    [SerializeField] Canvas in_options;
-    [SerializeField] Canvas in_upgrades;
-    [SerializeField] Canvas in_menu;
-    [SerializeField] Canvas in_menuSelect;
+    [SerializeField] private Canvas in_options;
+
+    [SerializeField] private Canvas in_upgrades;
+    [SerializeField] private Canvas in_menu;
+    [SerializeField] private Canvas in_menuSelect;
 
     [Header("Misc")]
-    [SerializeField] TMPro.TextMeshProUGUI[] in_currencyCounter;
-    [SerializeField] TMPro.TextMeshProUGUI[] in_upgradeCounter;
-    [SerializeField] TMPro.TextMeshProUGUI[] in_upgradeCosts;
-    [SerializeField] TMPro.TextMeshProUGUI in_levelcurrencyCounter;
+    [SerializeField] private TMPro.TextMeshProUGUI[] in_currencyCounter;
 
-    [SerializeField] LevelLoader in_levelLoad;
-    [SerializeField] Toggle in_toggle;
+    [SerializeField] private TMPro.TextMeshProUGUI[] in_upgradeCounter;
+    [SerializeField] private TMPro.TextMeshProUGUI[] in_upgradeCosts;
+    [SerializeField] private TMPro.TextMeshProUGUI in_levelcurrencyCounter;
+
+    [SerializeField] private LevelLoader in_levelLoad;
+    [SerializeField] private Toggle in_toggle;
 
     private List<int> m_collectedCurrencyList;
     private List<bool> m_levelCompleteList = new List<bool>();
+
     public List<bool> LevelCompleteList
     {
         get { return m_levelCompleteList; }
@@ -38,7 +41,7 @@ public class CanvasManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         ResetData();
 
@@ -62,7 +65,7 @@ public class CanvasManager : MonoBehaviour
 
     public void SetLevelCurrency()
     {
-        if(m_collectedCurrencyList != null)
+        if (m_collectedCurrencyList != null)
         {
             int coinsCollected = m_collectedCurrencyList[GameController.Instance.m_level];
 
@@ -72,7 +75,6 @@ public class CanvasManager : MonoBehaviour
 
             in_levelcurrencyCounter.text = text;
         }
-        
     }
 
     public void StartGame()
@@ -120,7 +122,7 @@ public class CanvasManager : MonoBehaviour
     }
 
     // Close all the canvases
-    void CloseAll()
+    private void CloseAll()
     {
         in_options.gameObject.SetActive(false);
         in_upgrades.gameObject.SetActive(false);
@@ -146,16 +148,19 @@ public class CanvasManager : MonoBehaviour
 
     public void DestroyGameData()
     {
-        GameController.Instance.userData.DestroyDirectory();
-        GameController.Instance.userData = new UserData();
+        // GameController.Instance.userData.DestroyDirectory();
+        // GameController.Instance.userData = new UserData();
+        GameController.Instance.userData.ClearAllData();
         ResetData();
+        in_levelLoad.SwitchScene("MainMenu");
     }
 
     private void ResetData()
     {
         m_collectedCurrencyList = new List<int>();
+        m_levelCompleteList.Clear();
 
-        for (int i = 0; i <= GameController.Instance.m_maxLevel; i++)
+        for (int i = 1; i <= GameController.Instance.m_maxLevel; i++)
         {
             int coinsCollected = GameController.Instance.CoinsCollectedInLevel(i);
 

@@ -8,54 +8,62 @@ public class UserData
     {
         public System.Int64 m_userId = 0;
         public bool m_controlGroup = false;
+    }
+
+    [System.Serializable]
+    protected class DiskGameData
+    {
         public int m_money = 0;
         public int m_speedUpgrades = 0; // Variable to display to player how many times firing speed has been upgraded
         public int m_powerUpgrades = 0; // Variable to display to player how many times firing power has been upgraded
     }
 
-    private DiskUserData m_data = null;
-    private FileLoader<DiskUserData> m_file;// = new FileLoader<DiskSaveData>("/savedata/userdata.sbl");
+    private DiskUserData m_userData = null;
+    private DiskGameData m_gameData = null;
+
+    private FileLoader<DiskUserData> m_userFile;
+    private FileLoader<DiskGameData> m_gameFile;
 
     public System.Int64 userId
-    { get { return m_data.m_userId; } }
+    { get { return m_userData.m_userId; } }
 
     public bool controlGroup
-    { 
-      get { return m_data.m_controlGroup; } 
-      set { m_data.m_controlGroup = value; }
+    {
+        get { return m_userData.m_controlGroup; }
+        set { m_userData.m_controlGroup = value; }
     }
 
     public int money
     {
-        get { return m_data.m_money; }
-        set { m_data.m_money = value; }
+        get { return m_gameData.m_money; }
+        set { m_gameData.m_money = value; }
     }
 
     public int speedUpgrade
     {
-        get { return m_data.m_speedUpgrades; }
-        set { m_data.m_speedUpgrades = value; }
+        get { return m_gameData.m_speedUpgrades; }
+        set { m_gameData.m_speedUpgrades = value; }
     }
 
     public int powerUpgrade
     {
-        get { return m_data.m_powerUpgrades; }
-        set { m_data.m_powerUpgrades = value; }
+        get { return m_gameData.m_powerUpgrades; }
+        set { m_gameData.m_powerUpgrades = value; }
     }
 
     // read data from disk if available
     // otherwise generate new data
     public UserData()
     {
-        m_file = new FileLoader<DiskUserData>(GameController.Instance.applicationPath + "/savedata/userdata.sbd");
-        m_file.CreateDirectory(GameController.Instance.applicationPath + "/savedata/");
+        m_userFile = new FileLoader<DiskUserData>(GameController.Instance.applicationPath + "/savedata/userdata.sbd");
+        m_gameFile = new FileLoader<DiskGameData>(GameController.Instance.applicationPath + "/savedata/gamedata.sbg");
 
-        if (m_file.FileExists())
+        m_userFile.CreateDirectory(GameController.Instance.applicationPath + "/savedata/");
+        if (m_userFile.FileExists())
         {
-            if (!ReadFromDisk())
+            if (!m_userFile.ReadData(out m_userData))
             {
                 Debug.Log("failed to read userdata from disk");
-                return;
             }
         }
         else
@@ -63,39 +71,62 @@ public class UserData
             GenerateNewData();
         }
 
+        if (m_gameFile.FileExists())
+        {
+            if (m_gameFile.ReadData(out m_gameData))
+            {
+                Debug.Log("failed to read gamedata from disk");
+            }
+        }
+        else
+        {
+            m_gameData = new DiskGameData();
+        }
+
         // write user id to console in hexadecimal
-        Debug.Log("user_id = " + m_data.m_userId.ToString("X"));
+        Debug.Log("user_id = " + m_userData.m_userId.ToString("X"));
     }
 
-    private bool ReadFromDisk()
-    {
-        return m_file.ReadData(out m_data);
-    }
+    //private bool ReadFromDisk()
+    //{
+    //    return m_userFile.ReadData(out m_userData);
+    //}
 
     public bool WriteToDisk()
     {
-        return m_file.WriteData(m_data);
+        bool r1 = m_userFile.WriteData(m_userData);
+        bool r2 = m_gameFile.WriteData(m_gameData);
+        return r1 && r2;
     }
 
     private bool GenerateNewData()
     {
-        m_data = new DiskUserData();
+        m_userData = new DiskUserData();
 
         // generate a pseudo random user id
         System.Int64 r1 = Random.Range(System.Int32.MinValue, System.Int32.MaxValue);
         System.Int64 r2 = Random.Range(System.Int32.MinValue, System.Int32.MaxValue);
-        m_data.m_userId = (r1 << 32) | r2;
+        m_userData.m_userId = (r1 << 32) | r2;
 
         // decide if user is in the control or test group
-        if (m_data.m_userId % 2 == 0)
+        if (m_userData.m_userId % 2 == 0)
         {
-            m_data.m_controlGroup = true;
+            m_userData.m_controlGroup = true;
         }
-        return WriteToDisk();
+        return m_userFile.WriteData(m_userData);
     }
 
-    public void DestroyDirectory()
+    public void ClearAllData(bool deleteUserId = false)
     {
-        m_file.DestroyDirectory(GameController.Instance.applicationPath);
+        m_userFile.DestroyDirectory(GameController.Instance.applicationPath + "/savedata/leveldata/");
+        m_gameFile.DeleteFile();
+        m_gameData = new DiskGameData();
+
+        if (deleteUserId)
+        {
+            m_userFile.DeleteFile();
+            m_userData = null;
+            GenerateNewData();
+        }
     }
 }
