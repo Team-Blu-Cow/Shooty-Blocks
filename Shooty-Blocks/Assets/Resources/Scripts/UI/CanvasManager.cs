@@ -160,14 +160,15 @@ public class CanvasManager : MonoBehaviour
             int coinsCollected = GameController.Instance.CoinsCollectedInLevel(i);
 
             m_collectedCurrencyList.Add(coinsCollected);
-
-            bool levelHasBeenPlayed = false;
-            SaveData levelSaveData = new SaveData(i.ToString(), out levelHasBeenPlayed);
+            SaveData levelSaveData = new SaveData(i.ToString(), out _);
             m_levelCompleteList.Add(levelSaveData.IsLevelComplete());
         }
 
         in_upgradeCounter[0].text = GameController.Instance.userData.speedUpgrade.ToString();
         in_upgradeCounter[1].text = GameController.Instance.userData.powerUpgrade.ToString();
+
+        GameController.Instance.firePower = 10 + GameController.Instance.userData.powerUpgrade * GameController.Instance.m_powerIncrease;
+        GameController.Instance.fireSpeed = 1 + GameController.Instance.userData.speedUpgrade * GameController.Instance.m_speedIncrease;
 
         in_toggle.isOn = GameController.Instance.userData.controlGroup;
     }
