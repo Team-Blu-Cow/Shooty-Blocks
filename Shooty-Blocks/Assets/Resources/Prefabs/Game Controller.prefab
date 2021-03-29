@@ -72,3 +72,9 @@ MonoBehaviour:
   m_blockSpacing: 1.15
   difficulty: 0
   colors: []
+  textColors:
+  - {r: 0.7372549, g: 0.7372549, b: 0.7372549, a: 1}
+  - {r: 0.58431375, g: 0.58431375, b: 0.7058824, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
