@@ -154,7 +154,7 @@ public class GameController : MonoBehaviour
 
         int coinsCollected = 0;
 
-        for(int i = 0; i < level.currencyCount; i++)
+        for(int i = 0; i < level.m_currencyCount; i++)
         {
             if(levelData.IsCoinCollected(i))
             {

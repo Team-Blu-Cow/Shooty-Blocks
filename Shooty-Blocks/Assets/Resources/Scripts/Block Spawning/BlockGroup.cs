@@ -63,6 +63,7 @@ namespace Blocks
     public class BlockGroup : ScriptableObject
     {
         [SerializeField, Range(1, BlockData.MaxRows)] public int m_height = 3;
+        [SerializeField, Range(-1, 1)] public float m_difficultyBalance = 0; 
         [SerializeField] public BlockGrid m_layout;
 
         public BlockGroup()
@@ -108,7 +109,7 @@ namespace Blocks
     // Unity inspector view.
 #if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(BlockGrid))]
-    public class BlockGroupEditor : PropertyDrawer
+    public class BlockGroupPropertyDrawer : PropertyDrawer
     {
         // custom style object for inspector
         private GUIStyle BlockColour = new GUIStyle

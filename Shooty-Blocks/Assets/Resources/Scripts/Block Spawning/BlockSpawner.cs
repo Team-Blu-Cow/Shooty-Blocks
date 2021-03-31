@@ -113,7 +113,7 @@ namespace Blocks
             m_level = new Queue<BlockRow>();
 
             // loop through each block group in level
-            foreach (BlockGroup group in level.level)
+            foreach (BlockGroup group in level.m_level)
             {
                 // loop through each row of block group
                 for (int i = group.height - 1; i >= 0; i--)
@@ -134,7 +134,7 @@ namespace Blocks
                 }
             }
 
-            m_currencyCount = level.currencyCount;
+            m_currencyCount = level.m_currencyCount;
 
             if (GameController.Instance.userData.controlGroup)
                 GenerateCurrencyPositions(level);
@@ -165,7 +165,7 @@ namespace Blocks
             List<int> usedPositions = new List<int>();
 
             int totalCount = 0;
-            foreach (BlockGroup group in level.level)
+            foreach (BlockGroup group in level.m_level)
             {
                 for (int i = group.height - 1; i >= 0; i--)
                 {
