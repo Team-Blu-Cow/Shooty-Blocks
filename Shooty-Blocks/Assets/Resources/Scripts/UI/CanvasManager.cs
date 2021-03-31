@@ -38,12 +38,13 @@ public class CanvasManager : MonoBehaviour
         // Init game analytics has to be done before any event calls
         GameAnalytics.Initialize();
         GameController.Instance.m_levelLoad = in_levelLoad;
+        ResetData();
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        ResetData();
+        
 
         in_upgradeCosts[0].text = GameController.Instance.m_upgradeCost.ToString();
         in_upgradeCosts[1].text = GameController.Instance.m_upgradeCost.ToString();
