@@ -543,6 +543,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Controller
       objectReference: {fileID: 0}
+    - target: {fileID: 8035841047959235799, guid: 3c8f8c79fe211af4dbb5cf558773b3c3, type: 3}
+      propertyPath: m_scrollNextPos
+      value: 250
+      objectReference: {fileID: 0}
     - target: {fileID: 8035841047959235816, guid: 3c8f8c79fe211af4dbb5cf558773b3c3, type: 3}
       propertyPath: m_RootOrder
       value: 1

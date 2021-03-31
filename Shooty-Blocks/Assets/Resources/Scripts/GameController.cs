@@ -74,6 +74,8 @@ public class GameController : MonoBehaviour
 
     public int m_level = 1;
     public int m_maxLevel;
+    public int m_scrollNextPos;
+
     public LevelLoader m_levelLoad;
 
     private bool m_paused;

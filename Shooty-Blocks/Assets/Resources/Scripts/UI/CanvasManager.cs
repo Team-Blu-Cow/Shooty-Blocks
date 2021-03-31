@@ -13,6 +13,8 @@ public class CanvasManager : MonoBehaviour
 
     [SerializeField] private Canvas in_upgrades;
     [SerializeField] private Canvas in_menu;
+    public Canvas Menu
+    { get {return in_menu;} }
     [SerializeField] private Canvas in_menuSelect;
 
     [Header("Misc")]
@@ -44,8 +46,6 @@ public class CanvasManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        
-
         in_upgradeCosts[0].text = GameController.Instance.m_upgradeCost.ToString();
         in_upgradeCosts[1].text = GameController.Instance.m_upgradeCost.ToString();
 

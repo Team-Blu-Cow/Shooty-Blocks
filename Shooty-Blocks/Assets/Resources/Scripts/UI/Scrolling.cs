@@ -65,21 +65,27 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        // TODO {@Jack} : Clear level info here
+        for (int i = 1; i < m_canvasManager.Menu.transform.GetChild(3).childCount; i++)
+        {
+            m_canvasManager.Menu.transform.GetChild(3).GetChild(i).gameObject.SetActive(false);
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        // TO DO {@Jack} : Show level info here
+        for (int i = 1; i < m_canvasManager.Menu.transform.GetChild(3).childCount; i++)
+        {
+            m_canvasManager.Menu.transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
+        }
 
-        if (m_rectTransform.localPosition.x < -150 && m_level < GameController.Instance.m_maxLevel )
+        if (m_rectTransform.localPosition.x < -GameController.Instance.m_scrollNextPos && m_level < GameController.Instance.m_maxLevel )
         {
             m_level++;
             SetLevels();
             AudioManager.instance.Play("Scroll Right");
 
         }
-        else if (m_rectTransform.localPosition.x > 150 && m_level > 1)
+        else if (m_rectTransform.localPosition.x > GameController.Instance.m_scrollNextPos && m_level > 1)
         {
             m_level--;
             SetLevels();
