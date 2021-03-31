@@ -59,11 +59,10 @@ namespace Blocks
 
     // BLOCK GROUP SCRIPTABLE OBJECT ****************************************************************************************************************
     // A scriptable object to store custom block group configurations.
-    [CreateAssetMenu(menuName = "My Assets/Block Group")]
+    [CreateAssetMenu(menuName = "My Assets/Block Group"), System.Serializable]
     public class BlockGroup : ScriptableObject
     {
         [SerializeField, Range(1, BlockData.MaxRows)] public int m_height = 3;
-        [SerializeField, Range(-1, 1)] public float m_difficultyBalance = 0; 
         [SerializeField] public BlockGrid m_layout;
 
         public BlockGroup()

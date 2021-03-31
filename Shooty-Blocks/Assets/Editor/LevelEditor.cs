@@ -9,7 +9,7 @@ public class LevelEditor : Editor
 {
     private SerializedProperty m_level;
     private SerializedProperty m_currencyCount;
-    private SerializedProperty m_test;
+    private SerializedProperty m_difficultyBalance;
 
     private int levelLength;
 
@@ -17,32 +17,20 @@ public class LevelEditor : Editor
     {
         m_level = serializedObject.FindProperty("m_level");
         m_currencyCount = serializedObject.FindProperty("m_currencyCount");
-        m_test = serializedObject.FindProperty("testString");
+        m_difficultyBalance = serializedObject.FindProperty("m_difficultyBalance");
 
         levelLength = m_level.arraySize;
     }
 
     public override void OnInspectorGUI()
     {
-        /*EditorGUILayout.PropertyField(m_height);
-
-        EditorGUILayout.PropertyField(m_layout);
-
-        Blocks.BlockGroup group = (Blocks.BlockGroup)target;
-
-        if (height != group.height)
-        {
-            group.height = m_height.intValue;
-            height = group.height;
-        }*/
-
         serializedObject.Update();
 
         EditorGUILayout.PropertyField(m_currencyCount);
-        EditorGUILayout.PropertyField(m_test);
+        EditorGUILayout.Space(10);
 
         levelLength = m_level.arraySize;
-        EditorList.Show(m_level, m_test);
+        EditorList.Show(m_level, m_difficultyBalance);
         
         serializedObject.ApplyModifiedProperties();
     }

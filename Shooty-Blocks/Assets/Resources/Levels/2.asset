@@ -12,15 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 137e2b49ba4c821479844a4087258c76, type: 3}
   m_Name: 2
   m_EditorClassIdentifier: 
-  level:
-  - {fileID: 11400000, guid: 8a4c5164999a22a499b0bc9aa74f7fc2, type: 2}
-  - {fileID: 11400000, guid: ed24087e2b7f6c24293f42a9bffc86a4, type: 2}
-  - {fileID: 11400000, guid: e474b0f44cf1a3b41b0f5bb1367e57c2, type: 2}
-  - {fileID: 11400000, guid: 42d7fa04510989841841b50d76295d35, type: 2}
-  - {fileID: 11400000, guid: 1c93b70f9821a7d4890ade8631a32e79, type: 2}
-  - {fileID: 11400000, guid: 240bb15faee133d4c939fac151acac50, type: 2}
-  - {fileID: 11400000, guid: 250dde9b990e5554ebb39352319ce8d1, type: 2}
-  - {fileID: 11400000, guid: 1c93b70f9821a7d4890ade8631a32e79, type: 2}
+  m_level:
   - {fileID: 11400000, guid: 6f28fd9acd117d340b5f2632d0901e56, type: 2}
-  - {fileID: 11400000, guid: 2d6530d44f534654b9377233fcb1c3e5, type: 2}
-  currencyCount: 6
+  m_currencyCount: 1
+  m_difficultyBalance: []
