@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc75e8ade8bafa94e9719dbddc87cab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test: 0
+  type: 0
   m_particleExplosion: {fileID: 2823956630728296022, guid: 4c8b0bc45db8c364b847714c58876a89, type: 3}
 --- !u!1 &2212004204743204487
 GameObject:
@@ -289,12 +289,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: a8f9786a4ac014d4186da1e91787c933, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0b578196649b7714d80a1ebe1c2868de, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.14, y: 2.76}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -339,7 +339,7 @@ PolygonCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 2.14, y: 2.76}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 2.14, y: 2.76}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

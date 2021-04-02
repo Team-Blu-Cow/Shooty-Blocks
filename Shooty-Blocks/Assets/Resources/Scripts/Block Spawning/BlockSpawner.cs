@@ -256,7 +256,7 @@ namespace Blocks
                             block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
                             block.GetComponentInChildren<Collider2D>().enabled = false;
                             int rand = Random.Range(0, 5);
-                            block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
+                            //block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
                             block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
                             SetHealth(block);
                             m_spawnedInstances.Add(block);
@@ -275,7 +275,7 @@ namespace Blocks
                             block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
                             block.GetComponentInChildren<Collider2D>().enabled = false;
                             int rand = Random.Range(0, 5);
-                            block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
+                            //block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
                             block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
                             SetHealth(block);
                             m_spawnedInstances.Add(block);
@@ -313,6 +313,7 @@ namespace Blocks
         
         private void SetHealth(GameObject block)
         {
+
             if (Random.Range(0, 5) != 0)
             {
                 block.GetComponent<Block>().hp = Random.Range(5 * (difficulty+1), (5 * (difficulty+1)) * 2) * ((block.GetComponent<Block>().type == BlockType.LARGE)?2:1);
@@ -322,6 +323,18 @@ namespace Blocks
                 block.GetComponent<Block>().hp = Random.Range((5 * (difficulty+1)) * 2, ((5 * (difficulty+1) * 2) * 2)) * ((block.GetComponent<Block>().type == BlockType.LARGE) ? 2 : 1);
             }
 
+            Color weakColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            Color strongColor = new Color(0.14f, 0.16f, 0.36f, 1.0f);
+            int maxHP = ((5 * (difficulty + 1) * 2) * 2) * ((block.GetComponent<Block>().type == BlockType.LARGE) ? 2 : 1);
+            float weighting = (float)block.GetComponent<Block>().hp / (float)maxHP;
+
+            Color blockColor = Color.white;
+            blockColor.r = Mathf.Lerp(weakColor.r, strongColor.r, weighting);
+            blockColor.g = Mathf.Lerp(weakColor.g, strongColor.g, weighting);
+            blockColor.b = Mathf.Lerp(weakColor.b, strongColor.b, weighting);
+
+            Debug.Log("Weighting: " + weighting);
+            block.GetComponentInChildren<SpriteRenderer>().color = blockColor;
         }
 
         private void SpawnLevelEnd()

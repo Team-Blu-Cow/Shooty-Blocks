@@ -16,6 +16,10 @@ public class Block : MonoBehaviour
     private Transform m_renderTransform;
     private Collider2D m_collider;
 
+    private Color weakColor; // Shows weakest color for the block
+    private Color strongColor; // Shows strongest color for the block
+    private float enemyColor = 0.0f; // Float value for the weighting of the enemy's color
+
     [SerializeField] private GameObject m_particleExplosion;
 
     public int hp
@@ -66,11 +70,29 @@ public class Block : MonoBehaviour
             Destroy(gameObject);
             return true;
         }
+
+        // TODO @Sandy This is quick solution, collapse to function, yessss? (Same block of code in block spawner when spawning block)
+        Color weakColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        Color strongColor = new Color(0.14f, 0.16f, 0.36f, 1.0f);
+        int maxHP = ((5 * (GameController.Instance.m_level + 1) * 2) * 2) * ((type == Blocks.BlockType.LARGE) ? 2 : 1);
+        float weighting = (float)hp / (float)maxHP;
+
+        Color blockColor = Color.white;
+        blockColor.r = Mathf.Lerp(weakColor.r, strongColor.r, weighting);
+        blockColor.g = Mathf.Lerp(weakColor.g, strongColor.g, weighting);
+        blockColor.b = Mathf.Lerp(weakColor.b, strongColor.b, weighting);
+
+        Debug.Log("Weighting: " + weighting);
+        GetComponentInChildren<SpriteRenderer>().color = blockColor;
+
         return false;
     }
 
     public void Awake()
     {
+        weakColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        strongColor = new Color(0.14f, 0.16f, 0.36f, 1.0f);
+
         m_text = GetComponentInChildren<TMPro.TextMeshPro>();
         m_renderTransform = GetComponentInChildren<SpriteRenderer>().transform;
         m_collider = GetComponentInChildren<Collider2D>();
