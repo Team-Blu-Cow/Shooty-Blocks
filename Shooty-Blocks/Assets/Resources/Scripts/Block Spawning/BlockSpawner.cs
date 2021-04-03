@@ -11,11 +11,13 @@ namespace Blocks
     {
         public BlockType[] blocks;
         public bool groupEnd;
+        [Range(-1, 1)] public float difficultyBalance;
 
         public BlockRow(int size)
         {
             blocks = new BlockType[size];
             groupEnd = false;
+            difficultyBalance = 0f;
         }
     }
 
@@ -26,26 +28,35 @@ namespace Blocks
         // a queue to store the rows of blocks to spawn
         private Queue<BlockRow> m_level;
 
-        // prefab for the block object
+        // loaded prefabs
         private GameObject in_blockPrefab;
-
         private GameObject in_currencyPrefab;
         private GameObject in_levelEndPrefab;
+
+        // reference to level save data
         private SaveData in_levelSaveData;
 
+        // scene and data containers for all spawned instances
         private GameObject m_spawnedInstanceContainer;
         private List<GameObject> m_spawnedInstances;
 
+        // seed used for random generation
         private int m_seed;
+
+        // count of current row being spawned
         private int m_rowNum;
+
+        // the amount of currency contained within the level
         [SerializeField] private int m_currencyCount;
         public int CurrencyCount
         {
             get { return m_currencyCount; }
         }
 
+        // list of positions currency will be spawned
         [SerializeField] private List<int> m_currencyPositions;
 
+        // the bounds of the viewport
         [SerializeField] private Camera m_camera;
         public Camera cameraBounds
         {
@@ -78,9 +89,6 @@ namespace Blocks
             in_currencyPrefab = Resources.Load<GameObject>("Prefabs/Currency Pickup");
             in_levelEndPrefab = Resources.Load<GameObject>("Prefabs/Level End Trigger");
             colors = Resources.LoadAll<Sprite>("Sprites/Enemies");
-
-            //BuildLevel(1);
-            //StartSpawning();
         }
 
         // load level data from Assets\Resources\Levels\[levelID]
@@ -101,18 +109,22 @@ namespace Blocks
             // load level from disk
             Level level = LoadLevel(levelID);
 
+            // initialize instance containers
             m_spawnedInstanceContainer = Instantiate(new GameObject(), Vector3.zero, Quaternion.identity);
             m_spawnedInstances = new List<GameObject>();
 
+            // load save data
             bool levelHasBeenPlayed = false;
             in_levelSaveData = new SaveData(levelID.ToString(), out levelHasBeenPlayed);
 
+            //set seed
             m_seed = levelID;
 
             // initialize queue
             m_level = new Queue<BlockRow>();
 
             // loop through each block group in level
+            int k = 0;
             foreach (BlockGroup group in level.m_level)
             {
                 // loop through each row of block group
@@ -124,6 +136,8 @@ namespace Blocks
                     for (int j = 0; j < BlockData.Columns; j++)
                         row.blocks[j] = group.m_layout.blocks[i * BlockData.Columns + j];
 
+                    row.difficultyBalance = level.m_difficultyBalance[k];
+
                     // check if this is the last row in the group.
                     // if true, set a flag to signify this
                     if (i == 0)
@@ -132,6 +146,7 @@ namespace Blocks
                     // push row into queue
                     m_level.Enqueue(row);
                 }
+                k++;
             }
 
             m_currencyCount = level.m_currencyCount;
@@ -151,19 +166,26 @@ namespace Blocks
             SpawnRow();
         }
 
+        // generate the positions of the currency objects
         private void GenerateCurrencyPositions(Level level)
         {
+            // init rng using seed
             Random.InitState(m_seed);
 
+            // initialize positions list
             m_currencyPositions = new List<int>(m_currencyCount);
 
+            // fill positions in list with dummy values
             for (int j = 0; j < m_currencyCount; j++)
             {
                 m_currencyPositions.Add(-1);
             }
 
+            // temp list to store used rows
             List<int> usedPositions = new List<int>();
 
+            // loop through all groups checking if they have a free space 
+            // for currency to spawn
             int totalCount = 0;
             foreach (BlockGroup group in level.m_level)
             {
@@ -173,10 +195,9 @@ namespace Blocks
                         usedPositions.Add(totalCount);
                     totalCount++;
                 }
-
-                //totalCount += group.height-1;
             }
 
+            // generate positions using the remaining available rows
             for (int i = 0; i < m_currencyCount; i++)
             {
                 int currencyLocation = Random.Range(0, m_level.Count);
@@ -216,12 +237,14 @@ namespace Blocks
             // get latest row from the queue
             BlockRow row = m_level.Dequeue();
 
+            // create list of all available spaces in this row
             List<int> availableSpaces = new List<int>();
             for (int i = 0; i < BlockData.Columns; i++)
             {
                 if (row.blocks[i] == BlockType.NONE)
                     availableSpaces.Add(i);
             }
+            // generate currency spawn position
             int currencySpace = 0;
             if (availableSpaces.Count > 0)
                 currencySpace = availableSpaces[Random.Range(0, availableSpaces.Count)];
@@ -242,43 +265,14 @@ namespace Blocks
                 Vector3 pos = m_camera.ViewportToWorldPoint(new Vector3(anchor + offset, 1.25f, 0));
                 pos = new Vector3(pos.x, pos.y, 0);
 
-                // instantiate new block as necessary
+                // instantiate new prefab
                 switch (row.blocks[i])
                 {
                     case BlockType.DEFAULT:
-                        {
-                            GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
-                            block.tag = "Enemy";
-                            block.transform.SetParent(m_spawnedInstanceContainer.transform);
-                            block.GetComponent<Block>().type = BlockType.DEFAULT;
-                            block.GetComponent<Block>().fallSpeed = m_fallSpeed;
-                            block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
-                            block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
-                            block.GetComponentInChildren<Collider2D>().enabled = false;
-                            int rand = Random.Range(0, 5);
-                            block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
-                            block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
-                            SetHealth(block);
-                            m_spawnedInstances.Add(block);
-                        }
-                        break;
-
                     case BlockType.LARGE:
                         {
-                            GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
-                            block.tag = "Enemy";
-                            block.transform.SetParent(m_spawnedInstanceContainer.transform);
-                            block.GetComponent<Block>().type = BlockType.LARGE;
-                            block.GetComponent<Block>().size = 0.8f;
-                            block.GetComponent<Block>().fallSpeed = m_fallSpeed;
-                            block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
-                            block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
-                            block.GetComponentInChildren<Collider2D>().enabled = false;
-                            int rand = Random.Range(0, 5);
-                            block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
-                            block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
-                            SetHealth(block);
-                            m_spawnedInstances.Add(block);
+                            GameObject block = CreateBlock(pos, row.blocks[i]);
+                            SetHealth(block, row.difficultyBalance, i);
                         }
                         break;
 
@@ -310,18 +304,74 @@ namespace Blocks
             // calculate the time to wait using the v = dt formula
             StartCoroutine(WaitToSpawnNextRow((m_blockSpacing / m_fallSpeed) * spacer));
         }
-        
-        private void SetHealth(GameObject block)
-        {
-            if (Random.Range(0, 5) != 0)
-            {
-                block.GetComponent<Block>().hp = Random.Range(5 * (difficulty+1), (5 * (difficulty+1)) * 2) * ((block.GetComponent<Block>().type == BlockType.LARGE)?2:1);
-            }
-            else
-            {
-                block.GetComponent<Block>().hp = Random.Range((5 * (difficulty+1)) * 2, ((5 * (difficulty+1) * 2) * 2)) * ((block.GetComponent<Block>().type == BlockType.LARGE) ? 2 : 1);
-            }
 
+        private GameObject CreateBlock(Vector3 pos, BlockType type)
+        {
+            // create instance of block prefab
+            GameObject block = Instantiate(in_blockPrefab, pos, Quaternion.identity);
+
+            // set object tag
+            block.tag = "Enemy";
+
+            // contain object within parent object to keep
+            // scene hierarchy tidy
+            block.transform.SetParent(m_spawnedInstanceContainer.transform);
+
+            // set type Dependant variables
+            block.GetComponent<Block>().type = type;
+            if(type == BlockType.LARGE) 
+                block.GetComponent<Block>().size = 0.8f;
+
+            // set universal variables
+            block.GetComponent<Block>().fallSpeed = m_fallSpeed;
+            block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
+            block.GetComponent<Block>().screenTop = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 1)).y;
+
+            // temporarily disable collider on block
+            block.GetComponentInChildren<Collider2D>().enabled = false;
+
+            //generate colors
+            // TODO: this needs to be re factored to fit new brief
+            int rand = Random.Range(0, 5);
+            block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
+            block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
+
+            // calculate blocks health based on difficulty
+            //SetHealth(block);
+
+            // add block to list of spawned instances
+            m_spawnedInstances.Add(block);
+
+            return block;
+        }
+        
+        private void SetHealth(GameObject block, float n, int pos)
+        {
+            int blockHp = 0;
+
+            
+
+
+            // calculate hp based on global difficulty
+            blockHp = Random.Range(5 * (difficulty + 1), (5 * (difficulty + 1)) * 2);
+
+            // calculate hp based on local row difficulty balance
+            Vector2 p1 = new Vector2(0, 0.5f);
+            Vector2 p2 = new Vector2(BlockData.Columns-1, 2);
+
+            float m = ((p2.y - p1.y) * n) / (p2.x - p1.x);
+            float b = (-0.75f * n) + (1 + (0.25f * Mathf.Abs(n)));
+
+            float difficultyMod = (m * pos) + b;
+            blockHp = Mathf.RoundToInt((float)blockHp * difficultyMod);
+
+            // scale hp based on block size
+            blockHp *= ((block.GetComponent<Block>().type == BlockType.LARGE) ? 2 : 1);
+
+            // randomly select blocks to have doubled hp
+            blockHp *= (Random.Range(0, 5) != 0) ? 1 : 2;
+
+            block.GetComponent<Block>().hp = blockHp;
         }
 
         private void SpawnLevelEnd()
