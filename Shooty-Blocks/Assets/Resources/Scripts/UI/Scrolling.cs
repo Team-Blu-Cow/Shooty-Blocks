@@ -46,13 +46,13 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             if (m_level + count > 0 && m_level+count <= GameController.Instance.m_maxLevel && m_canvasManager.LevelCompleteList.Count > m_level + count)
             {                
                 text.text = (m_level + count).ToString();
-                text.transform.parent.GetChild(1).gameObject.SetActive(m_canvasManager.LevelCompleteList[m_level + count]);
+                //text.transform.parent.GetChild(1).gameObject.SetActive(m_canvasManager.LevelCompleteList[m_level + count]); // Set complete level
             }
             else
             {
                 text.transform.parent.GetComponent<Image>().enabled = false;
                 text.enabled = false;
-                text.transform.parent.GetChild(1).gameObject.SetActive(false);
+                //text.transform.parent.GetChild(1).gameObject.SetActive(false);
             }
 
             count++;   

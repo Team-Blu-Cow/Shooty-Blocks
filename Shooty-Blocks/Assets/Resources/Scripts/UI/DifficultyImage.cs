@@ -21,15 +21,15 @@ public class DifficultyImage : MonoBehaviour
         
         if(power > avgBlock + 1)
         {
-            GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Menu/difficulty EASY");
+            GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Menu/old/difficulty EASY");
         }
         else if (power < (avgBlock + 1) && power > (avgBlock - 1))
         {
-            GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Menu/difficulty MEDIUM");
+            GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Menu/old/difficulty MEDIUM");
         }
         else if (power < avgBlock - 1)
         {
-            GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Menu/difficulty HARD");
+            GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Menu/old/difficulty HARD");
         }
     }
 }
