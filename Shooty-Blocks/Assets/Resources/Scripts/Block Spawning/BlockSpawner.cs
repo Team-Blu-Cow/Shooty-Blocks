@@ -356,6 +356,8 @@ namespace Blocks
             blockHp = Random.Range(5 * (difficulty + 1), (5 * (difficulty + 1)) * 2);
 
             // calculate hp based on local row difficulty balance
+            // go to https://www.desmos.com/calculator/l9fsmqno2w to
+            // play with the equation and see how it works
             Vector2 p1 = new Vector2(0, 0.5f);
             Vector2 p2 = new Vector2(BlockData.Columns-1, 2);
 
