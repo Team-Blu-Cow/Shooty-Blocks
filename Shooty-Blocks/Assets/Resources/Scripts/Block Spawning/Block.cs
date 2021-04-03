@@ -24,6 +24,11 @@ public class Block : MonoBehaviour
         get { return m_hp; }
     }
 
+    public string text
+    {
+        set { m_text.text = value; }
+    }
+
     public float size
     {
         set { Resize(value); }
@@ -57,6 +62,9 @@ public class Block : MonoBehaviour
     // returns true when block is dead
     public bool Damage(int damage)
     {
+        if (type == Blocks.BlockType.INDESTRUCTABLE)
+            return false;
+
         hp -= damage;
         if (hp <= 0)
         {

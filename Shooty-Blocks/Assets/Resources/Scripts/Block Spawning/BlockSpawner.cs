@@ -275,6 +275,11 @@ namespace Blocks
                             SetHealth(block, row.difficultyBalance, i);
                         }
                         break;
+                    case BlockType.INDESTRUCTABLE:
+                        {
+                            GameObject block = CreateBlock(pos, row.blocks[i]);
+                        }
+                        break;
 
                     case BlockType.NONE:
                         {
@@ -322,6 +327,9 @@ namespace Blocks
             if(type == BlockType.LARGE) 
                 block.GetComponent<Block>().size = 0.8f;
 
+            if (type == BlockType.INDESTRUCTABLE)
+                block.GetComponent<Block>().text = "\u221E";
+
             // set universal variables
             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
             block.GetComponent<Block>().screenBottom = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
@@ -336,9 +344,6 @@ namespace Blocks
             block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
             block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
 
-            // calculate blocks health based on difficulty
-            //SetHealth(block);
-
             // add block to list of spawned instances
             m_spawnedInstances.Add(block);
 
@@ -348,9 +353,6 @@ namespace Blocks
         private void SetHealth(GameObject block, float n, int pos)
         {
             int blockHp = 0;
-
-            
-
 
             // calculate hp based on global difficulty
             blockHp = Random.Range(5 * (difficulty + 1), (5 * (difficulty + 1)) * 2);

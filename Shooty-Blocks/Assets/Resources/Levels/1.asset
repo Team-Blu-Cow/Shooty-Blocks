@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: 1
   m_EditorClassIdentifier: 
   m_level:
+  - {fileID: 11400000, guid: f8dc9427d6644794ca9b88df17c36657, type: 2}
+  - {fileID: 11400000, guid: 240bb15faee133d4c939fac151acac50, type: 2}
   - {fileID: 11400000, guid: d3e17072583a9d142af486115ca2c318, type: 2}
   m_currencyCount: 1
   m_difficultyBalance:
+  - 0
+  - 0
   - 0

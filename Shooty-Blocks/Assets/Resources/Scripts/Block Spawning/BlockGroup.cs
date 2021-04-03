@@ -13,10 +13,11 @@ namespace Blocks
         NONE                    = 0,
         DEFAULT                 = 1,
         LARGE                   = 2,
+        INDESTRUCTABLE          = 3,
 
         // Inspector flags
-        DontRenderInInspector   = 3,
-        NumberOfTypes           = 4
+        DontRenderInInspector   = 4,
+        NumberOfTypes           = 5
     }
 
     // BLOCK GRID ARRAY *****************************************************************************************************************************
@@ -213,6 +214,10 @@ namespace Blocks
                 case (int)BlockType.LARGE:
                     EditorGUI.DrawRect(blockLarge, Color.red);
                     button = blockLarge_Type;
+                    break;
+
+                case (int)BlockType.INDESTRUCTABLE:
+                    EditorGUI.DrawRect(block, Color.black);
                     break;
 
                 case (int)BlockType.DontRenderInInspector:
