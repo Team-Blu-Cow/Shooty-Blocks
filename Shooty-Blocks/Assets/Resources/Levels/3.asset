@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 137e2b49ba4c821479844a4087258c76, type: 3}
-  m_Name: 1
+  m_Name: 3
   m_EditorClassIdentifier: 
   m_level:
-  - {fileID: 11400000, guid: 240bb15faee133d4c939fac151acac50, type: 2}
-  - {fileID: 11400000, guid: f8dc9427d6644794ca9b88df17c36657, type: 2}
-  - {fileID: 11400000, guid: e474b0f44cf1a3b41b0f5bb1367e57c2, type: 2}
-  - {fileID: 11400000, guid: 8d5aaeae48a9c154fbf5442059f1f555, type: 2}
-  - {fileID: 11400000, guid: 263803c31d92ee74ab5c04f081c5db66, type: 2}
+  - {fileID: 11400000, guid: 42d7fa04510989841841b50d76295d35, type: 2}
+  - {fileID: 11400000, guid: 66ac5a106b1f2634f8cf5b8c5878ea31, type: 2}
+  - {fileID: 11400000, guid: 6d1e3f1f4f33c09439d74b346bf960d9, type: 2}
+  - {fileID: 11400000, guid: f0681acad75729344808b35db33e69f9, type: 2}
+  - {fileID: 11400000, guid: bb893ab8bc0a5834fa17f1afebefe425, type: 2}
   - {fileID: 11400000, guid: 8a4c5164999a22a499b0bc9aa74f7fc2, type: 2}
-  m_currencyCount: 5
+  - {fileID: 11400000, guid: c4a53650a94ed2c45a158466240b4a62, type: 2}
+  m_currencyCount: 6
   m_difficultyBalance:
+  - 0
   - 0
   - 0
   - 0

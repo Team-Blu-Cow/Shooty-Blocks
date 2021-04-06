@@ -161,6 +161,8 @@ namespace Blocks
             if (m_level.Count <= 0)
                 return;
 
+            DestroyAllLevelObjects();
+
             m_rowNum = 0;
 
             SpawnRow();
@@ -355,7 +357,8 @@ namespace Blocks
             int blockHp = 0;
 
             // calculate hp based on global difficulty
-            blockHp = Random.Range(5 * (difficulty + 1), (5 * (difficulty + 1)) * 2);
+            //blockHp = Random.Range(5 * (difficulty + 1), (5 * (difficulty + 1)) * 2);
+            blockHp = Random.Range(5 * Mathf.RoundToInt(1+difficulty), (5 * Mathf.RoundToInt(1 + (difficulty * 0.75f))) * 2);
 
             // calculate hp based on local row difficulty balance
             // go to https://www.desmos.com/calculator/l9fsmqno2w to

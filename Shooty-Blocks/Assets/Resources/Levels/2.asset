@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 137e2b49ba4c821479844a4087258c76, type: 3}
+  m_Name: 2
+  m_EditorClassIdentifier: 
+  m_level:
+  - {fileID: 11400000, guid: ed24087e2b7f6c24293f42a9bffc86a4, type: 2}
+  - {fileID: 11400000, guid: 55690cc69c269bb42adbcc772be20478, type: 2}
+  - {fileID: 11400000, guid: 1c93b70f9821a7d4890ade8631a32e79, type: 2}
+  - {fileID: 11400000, guid: e57306fe81ca7f943a9e066d8eaa8911, type: 2}
+  - {fileID: 11400000, guid: fd44c02064f4a8d45ba1b71cb37ab020, type: 2}
+  - {fileID: 11400000, guid: 0af5d9493d46d4f478457599f976cfb5, type: 2}
+  - {fileID: 11400000, guid: bc7e6480c54f66a4ebd90fdd83dcf71c, type: 2}
+  - {fileID: 11400000, guid: 55690cc69c269bb42adbcc772be20478, type: 2}
+  - {fileID: 11400000, guid: 55690cc69c269bb42adbcc772be20478, type: 2}
+  m_currencyCount: 6
+  m_difficultyBalance:
+  - 0
+  - 0
+  - -0.618
+  - -0.145
+  - 0
+  - 0.366
+  - 0.366
+  - 0.366
+  - 0.366

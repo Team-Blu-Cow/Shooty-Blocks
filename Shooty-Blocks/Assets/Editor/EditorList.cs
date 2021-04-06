@@ -15,12 +15,17 @@ public static class EditorList
 
     public static void Show(SerializedProperty list, SerializedProperty difficultyBalance)
     {
+        if (list.arraySize > 0)
+            DrawListButtons(list, difficultyBalance);
+
         for (int i = list.arraySize-1; i >= 0; i--)
         {
             ShowElement(list, i, difficultyBalance);
         }
 
-        EditorGUILayout.BeginHorizontal();
+        DrawListButtons(list, difficultyBalance);
+
+        /*EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button(addButtonContent, EditorStyles.miniButton))
         {
             list.arraySize += 1;
@@ -35,6 +40,28 @@ public static class EditorList
             if (list.arraySize == oldSize)
             {
                 list.DeleteArrayElementAtIndex(list.arraySize-1);
+            }
+        }
+        EditorGUILayout.EndHorizontal();*/
+    }
+
+    private static void DrawListButtons(SerializedProperty list, SerializedProperty difficultyBalance)
+    {
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button(addButtonContent, EditorStyles.miniButton))
+        {
+            list.arraySize += 1;
+            difficultyBalance.arraySize += 1;
+        }
+
+        if (GUILayout.Button(removeButtonContent, EditorStyles.miniButton) && list.arraySize > 0)
+        {
+            int oldSize = list.arraySize;
+            difficultyBalance.DeleteArrayElementAtIndex(list.arraySize - 1);
+            list.DeleteArrayElementAtIndex(list.arraySize - 1);
+            if (list.arraySize == oldSize)
+            {
+                list.DeleteArrayElementAtIndex(list.arraySize - 1);
             }
         }
         EditorGUILayout.EndHorizontal();
