@@ -86,7 +86,8 @@ public class Block : MonoBehaviour
             m_collider.enabled = true;
         }
 
-        transform.position -= new Vector3(0, m_fallSpeed * Time.deltaTime, 0);
+        if (!GameController.Instance.paused)
+            transform.position -= new Vector3(0, m_fallSpeed * Time.deltaTime, 0);
 
         if (transform.position.y < m_screenBottom)
             OnReachBottom();

@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
         float fireTime = 1.0f / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
         m_timer += Time.deltaTime; // Time since last bullet was fired
 
-        if (m_timer > fireTime) // If it is time to fire
+        if (m_timer > fireTime && !GameController.Instance.paused) // If it is time to fire & not paused
         {
             AudioManager.instance.Play("Shoot");
             Instantiate(m_bullet, new Vector3(transform.position.x, (transform.position.y + 0.75f), 0), Quaternion.identity); // Spawn a bullet

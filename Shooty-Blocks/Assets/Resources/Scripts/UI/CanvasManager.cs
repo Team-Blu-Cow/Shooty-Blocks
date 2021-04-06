@@ -9,13 +9,14 @@ public class CanvasManager : MonoBehaviour
 {
     // Canvases in the main menu
     [Header("Canvases")]
-    [SerializeField] private Canvas in_options;
-
-    [SerializeField] private Canvas in_upgrades;
-    [SerializeField] private Canvas in_menu;
+    private Canvas m_options;
+    private Canvas m_upgrades;
+    private Canvas m_menu;
     public Canvas Menu
-    { get {return in_menu;} }
-    [SerializeField] private Canvas in_menuSelect;
+    { get {return m_menu;} }
+    private Canvas m_menuSelect;
+
+    private List<Canvas> canvases;
 
     [Header("Misc")]
     [SerializeField] private TMPro.TextMeshProUGUI[] in_currencyCounter;
@@ -41,7 +42,17 @@ public class CanvasManager : MonoBehaviour
         GameAnalytics.Initialize();
         GameController.Instance.m_levelLoad = in_levelLoad;
         ResetData();
-    }
+
+        foreach (Canvas canvas in GetComponentsInChildren<Canvas>())
+        {
+            canvases.Add(canvas);
+        }
+
+        m_options = canvases[0];
+        m_upgrades = canvases[1];
+        m_menu = canvases[2];    
+        m_menuSelect = canvases[3];
+}
 
     // Start is called before the first frame update
     private void Start()
@@ -87,13 +98,13 @@ public class CanvasManager : MonoBehaviour
     public void OpenMenu()
     {
         CloseAll();
-        in_menu.gameObject.SetActive(true);
+        m_menu.gameObject.SetActive(true);
     }
 
     public void ToggleUpgrades()
     {
         // Get if the upgrades are already open or not
-        bool open = in_upgrades.isActiveAndEnabled;
+        bool open = m_upgrades.isActiveAndEnabled;
 
         CloseAll();
         if (open)
@@ -102,14 +113,14 @@ public class CanvasManager : MonoBehaviour
         }
         else
         {
-            in_upgrades.gameObject.SetActive(true);
+            m_upgrades.gameObject.SetActive(true);
         }
     }
 
     public void ToggleOptions()
     {
         // Get if the options are already open or not
-        bool open = in_options.isActiveAndEnabled;
+        bool open = m_options.isActiveAndEnabled;
 
         CloseAll();
         if (open)
@@ -118,16 +129,16 @@ public class CanvasManager : MonoBehaviour
         }
         else
         {
-            in_options.gameObject.SetActive(true);
+            m_options.gameObject.SetActive(true);
         }
     }
 
     // Close all the canvases
     private void CloseAll()
     {
-        in_options.gameObject.SetActive(false);
-        in_upgrades.gameObject.SetActive(false);
-        in_menu.gameObject.SetActive(false);
+        m_options.gameObject.SetActive(false);
+        m_upgrades.gameObject.SetActive(false);
+        m_menu.gameObject.SetActive(false);
     }
 
     public void OnSpeedUpgrade()
