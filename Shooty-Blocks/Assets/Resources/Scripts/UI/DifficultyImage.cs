@@ -15,8 +15,18 @@ public class DifficultyImage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int power = m_gameController.overallPower;
-        int levelNum = m_gameController.m_level;      
+        int power;
+        int levelNum;
+        if (m_gameController)
+        {
+            power = m_gameController.overallPower;
+            levelNum = m_gameController.m_level;
+        }
+        else
+        {
+            power = 0;
+            levelNum = 0;
+        }  
         int avgBlock = (int)Mathf.Lerp(5 * (levelNum), (5 * levelNum) * 2, 0.5f); 
         
         if(power > avgBlock + 1)
