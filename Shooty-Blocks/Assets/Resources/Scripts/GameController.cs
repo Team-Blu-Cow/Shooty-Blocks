@@ -81,6 +81,13 @@ public class GameController : MonoBehaviour
     public delegate void FreezeDelegate(bool state);
     public event FreezeDelegate freezeDelegate;
 
+    public void FreezeButtonPress(bool state)
+    {
+        //Debug.Log("state = " + state);
+
+        freezeDelegate?.Invoke(state);
+    }
+
     public bool paused
     {
         set { m_paused = value; }

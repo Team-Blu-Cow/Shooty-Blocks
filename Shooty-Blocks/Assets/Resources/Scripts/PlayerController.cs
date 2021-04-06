@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     private bool m_clicked = false; // This varuable tracks PC controls, to move left click and drag
     private float m_timer; // Timer for firing bullets
 
+    private bool m_frozen;
+
     private TMPro.TextMeshPro m_text;
 
     private void Awake()
@@ -30,6 +32,7 @@ public class PlayerController : MonoBehaviour
         m_inputManager.BasicKBM.FingerTouch.performed += ctx => OnFingerPos(Vector2.zero);
 
         m_text = GetComponentInChildren<TMPro.TextMeshPro>();
+        m_frozen = false;
     }
 
     private void OnEnable()
@@ -49,11 +52,16 @@ public class PlayerController : MonoBehaviour
         m_firingSpeed = GameController.Instance.fireSpeed;
         //m_text.text = (m_gameManager.GetComponent<GameController>().m_speedUpgrades + m_gameManager.GetComponent<GameController>().m_powerUpgrades).ToString();
         m_text.text = m_firingPower.ToString();
+
+        GameController.Instance.freezeDelegate += OnLevelFreeze;
     }
 
     // Update is called once per frame
     private void Update()
     {
+        if (m_frozen)
+            return;
+
         // Debug.Log("Firing speed: " + m_firingSpeed);
         // Debug.Log("Firing power: " + m_firingPower);
         float fireTime = 1.0f / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
@@ -62,7 +70,8 @@ public class PlayerController : MonoBehaviour
         if (m_timer > fireTime) // If it is time to fire
         {
             AudioManager.instance.Play("Shoot");
-            Instantiate(m_bullet, new Vector3(transform.position.x, (transform.position.y + 0.75f), 0), Quaternion.identity); // Spawn a bullet
+            GameObject bullet = Instantiate(m_bullet, new Vector3(transform.position.x, (transform.position.y + 0.75f), 0), Quaternion.identity); // Spawn a bullet
+            GameController.Instance.freezeDelegate += bullet.GetComponent<Bullet>().OnLevelFreeze;
             m_timer = 0.0f; // Make timer back to 0 for next bullet to be fired
         }
 
@@ -151,5 +160,15 @@ public class PlayerController : MonoBehaviour
             GameController.Instance.ExitLevel();
             GameController.Instance.m_levelLoad.SwitchScene("MainMenu");
         }
+    }
+
+    public void OnLevelFreeze(bool state)
+    {
+        m_frozen = state;
+    }
+
+    public void OnDestroy()
+    {
+        GameController.Instance.freezeDelegate -= OnLevelFreeze;
     }
 }

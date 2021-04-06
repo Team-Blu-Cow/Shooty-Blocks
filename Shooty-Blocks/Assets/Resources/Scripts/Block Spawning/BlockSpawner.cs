@@ -46,6 +46,9 @@ namespace Blocks
         // count of current row being spawned
         private int m_rowNum;
 
+        // flag to store whether the level has been frozen
+        private bool m_frozen;
+
         // the amount of currency contained within the level
         [SerializeField] private int m_currencyCount;
         public int CurrencyCount
@@ -82,6 +85,11 @@ namespace Blocks
         [SerializeField] private Sprite[] colors;
         [SerializeField] public Color[] textColors;
 
+        public void OnLevelFreeze(bool state)
+        {
+            m_frozen = state;
+        }
+
         private void Start()
         {
             in_blockPrefab = Resources.Load<GameObject>("Prefabs/Block");
@@ -89,6 +97,8 @@ namespace Blocks
             in_currencyPrefab = Resources.Load<GameObject>("Prefabs/Currency Pickup");
             in_levelEndPrefab = Resources.Load<GameObject>("Prefabs/Level End Trigger");
             colors = Resources.LoadAll<Sprite>("Sprites/Enemies");
+            m_frozen = false;
+            GameController.Instance.freezeDelegate += OnLevelFreeze;
         }
 
         // load level data from Assets\Resources\Levels\[levelID]
@@ -216,7 +226,19 @@ namespace Blocks
 
         private IEnumerator WaitToSpawnNextRow(float time)
         {
-            yield return new WaitForSeconds(time);
+            float timeVal = 0f;
+
+            while(true)
+            {
+                if (!m_frozen)
+                    timeVal += Time.deltaTime;
+
+                if (timeVal >= time)
+                    break;
+
+               yield return null;
+            }
+
             if (m_level.Count <= 0)
             {
                 SpawnLevelEnd();
@@ -226,7 +248,6 @@ namespace Blocks
                 m_rowNum++;
                 SpawnRow();
             }
-            
         }
 
         // a function to spawn a row of blocks
@@ -352,6 +373,12 @@ namespace Blocks
             // temporarily disable collider on block
             block.GetComponentInChildren<Collider2D>().enabled = false;
 
+            // instantiate block with correct freeze value
+            block.GetComponent<Block>().frozen = m_frozen;
+
+            // listen for freeze event
+            GameController.Instance.freezeDelegate += block.GetComponent<Block>().OnLevelFreeze;
+
             // add block to list of spawned instances
             m_spawnedInstances.Add(block);
 
@@ -429,6 +456,11 @@ namespace Blocks
         public void SaveLevelData()
         {
             in_levelSaveData.WriteToDisk();
+        }
+
+        private void OnDestroy()
+        {
+            GameController.Instance.freezeDelegate -= OnLevelFreeze;
         }
     }
 }
