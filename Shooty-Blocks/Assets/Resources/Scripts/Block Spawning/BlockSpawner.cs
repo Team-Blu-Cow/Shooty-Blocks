@@ -279,7 +279,7 @@ namespace Blocks
                         break;
                     case BlockType.INDESTRUCTABLE:
                         {
-                            GameObject block = CreateBlock(pos, row.blocks[i]);
+                            CreateBlock(pos, row.blocks[i]);
                         }
                         break;
 
@@ -330,7 +330,19 @@ namespace Blocks
                 block.GetComponent<Block>().size = 0.8f;
 
             if (type == BlockType.INDESTRUCTABLE)
+            {
                 block.GetComponent<Block>().text = "\u221E";
+                block.GetComponentInChildren<SpriteRenderer>().sprite = colors[0];
+                block.GetComponentInChildren<TextMeshPro>().color = Color.white;
+            }
+            else
+            {
+                //generate colors
+                // TODO: this needs to be re factored to fit new brief
+                int rand = Random.Range(1, colors.Length-1);
+                block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
+                block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
+            }
 
             // set universal variables
             block.GetComponent<Block>().fallSpeed = m_fallSpeed;
@@ -340,31 +352,24 @@ namespace Blocks
             // temporarily disable collider on block
             block.GetComponentInChildren<Collider2D>().enabled = false;
 
-            //generate colors
-            // TODO: this needs to be re factored to fit new brief
-            int rand = Random.Range(0, 5);
-            block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
-            block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
-
             // add block to list of spawned instances
             m_spawnedInstances.Add(block);
 
             return block;
         }
-        
+
         private void SetHealth(GameObject block, float n, int pos)
         {
-            int blockHp = 0;
+            int blockHp;
 
             // calculate hp based on global difficulty
-            //blockHp = Random.Range(5 * (difficulty + 1), (5 * (difficulty + 1)) * 2);
-            blockHp = Random.Range(5 * Mathf.RoundToInt(1+difficulty), (5 * Mathf.RoundToInt(1 + (difficulty * 0.75f))) * 2);
+            blockHp = Random.Range(5 * Mathf.RoundToInt(1 + difficulty), (5 * Mathf.RoundToInt(1 + (difficulty * 0.75f))) * 2);
 
             // calculate hp based on local row difficulty balance
-            // go to https://www.desmos.com/calculator/l9fsmqno2w to
-            // play with the equation and see how it works
+            // go to https://www.desmos.com/calculator/l9fsmqno2w 
+            // to play with the equation and see how it works
             Vector2 p1 = new Vector2(0, 0.5f);
-            Vector2 p2 = new Vector2(BlockData.Columns-1, 2);
+            Vector2 p2 = new Vector2(BlockData.Columns - 1, 2);
 
             float m = ((p2.y - p1.y) * n) / (p2.x - p1.x);
             float b = (-0.75f * n) + (1 + (0.25f * Mathf.Abs(n)));
@@ -411,7 +416,6 @@ namespace Blocks
                             break;
                     }
                 }
-
             }
         }
 

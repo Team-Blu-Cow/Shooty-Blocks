@@ -77,6 +77,10 @@ public class GameController : MonoBehaviour
     public LevelLoader m_levelLoad;
 
     private bool m_paused;
+
+    public delegate void FreezeDelegate(bool state);
+    public event FreezeDelegate freezeDelegate;
+
     public bool paused
     {
         set { m_paused = value; }
@@ -108,7 +112,6 @@ public class GameController : MonoBehaviour
             userData.speedUpgrade++; // Increment the amount of speed upgrades the ship has
             userData.money -= m_upgradeCost;
             userData.WriteToDisk();
-            
         }
     }
 
@@ -134,7 +137,7 @@ public class GameController : MonoBehaviour
     {
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, "Level" + m_level);
         Blocks.BlockSpawner spawner = FindObjectOfType<Blocks.BlockSpawner>();
-        userData.WriteToDisk();
+        //userData.WriteToDisk();
         spawner.EndLevel();
         //spawner.SaveLevelData();
         //spawner.DestroyAllLevelObjects();
@@ -144,9 +147,6 @@ public class GameController : MonoBehaviour
     {
         bool output;
         SaveData levelData = new SaveData(levelID.ToString(), out output);
-
-        //if (!output)
-        //    return -1;
 
         Blocks.Level level = Blocks.BlockSpawner.LoadLevel(levelID);
 
