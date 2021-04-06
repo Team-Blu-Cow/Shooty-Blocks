@@ -33,13 +33,4 @@ namespace Blocks
             m_difficultyBalance.RemoveAt(index);
         }
     }
-
-#if UNITY_EDITOR
-    /*[CustomPropertyDrawer(typeof(Level))]
-    public class LevelPropertyDrawer : PropertyDrawer
-    {
-        
-    }*/
-
-#endif
 }
