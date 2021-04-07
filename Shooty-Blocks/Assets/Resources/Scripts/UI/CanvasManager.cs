@@ -16,7 +16,7 @@ public class CanvasManager : MonoBehaviour
     { get {return m_menu;} }
     private Canvas m_menuSelect;
 
-    private List<Canvas> canvases;
+    private List<Canvas> canvases = new List<Canvas>();
 
     [Header("Misc")]
     [SerializeField] private TMPro.TextMeshProUGUI[] in_currencyCounter;
