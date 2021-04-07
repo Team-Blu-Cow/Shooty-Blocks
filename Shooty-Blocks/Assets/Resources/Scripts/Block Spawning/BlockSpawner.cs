@@ -411,6 +411,8 @@ namespace Blocks
             blockHp *= (Random.Range(0, 5) != 0) ? 1 : 2;
 
             block.GetComponent<Block>().hp = blockHp;
+
+            block.GetComponent<Block>().ChangeColor();
         }
 
         private void SpawnLevelEnd()
