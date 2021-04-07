@@ -9,11 +9,10 @@ using TMPro;
 public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {       
     private int m_level;
-    private float m_timer;
 
     RectTransform m_rectTransform;
-    bool m_pointerDown = false;
-    bool m_reset = false;
+
+    CanvasManager m_canvasManager;
 
     private void Awake()
     {
@@ -24,56 +23,17 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     // Start is called before the first frame update
     void Start()
     {        
-        SetLevels();
+       m_canvasManager = FindObjectOfType<CanvasManager>();
+       SetLevels();
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_timer += Time.deltaTime;
-
-        if (m_rectTransform.localPosition.x < -250)
-        {
-            if (m_level < GameController.Instance.m_maxLevel && m_timer > 0.5)
-            {
-                m_level++;
-                SetLevels();
-                AudioManager.instance.Play("Scroll Right");
-                m_timer = 0;                
-            }
-            else
-            {
-                m_rectTransform.localPosition = new Vector3(-250, 0, 0);                
-            }
-
-        }
-        else if (m_rectTransform.localPosition.x > 250)
-        {
-            if (m_level > 1 && m_timer > 0.5)
-            {
-                m_level--;
-                SetLevels();
-                AudioManager.instance.Play("Scroll Left");
-                m_timer = 0;                
-            }
-            else
-            {
-                m_rectTransform.localPosition = new Vector3(250, 0, 0);
-            }
-        }
-
-        if (!m_pointerDown && GetComponent<ScrollRect>().velocity == Vector2.zero && !m_reset)
-        {
-            SetLevels();
-            GetComponent<ScrollRect>().velocity = Vector2.zero;
-            m_reset = true;
-        }
     }
 
     void SetLevels()
     {
-        CanvasManager canvasManager = FindObjectOfType<CanvasManager>();
-
         int count = -2;
         m_rectTransform.localPosition = new Vector3(0, 0, 0);
 
@@ -82,34 +42,74 @@ public class Scrolling : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             text.transform.parent.GetComponent<Image>().enabled = true;
             text.enabled = true;
 
-            if (m_level + count > 0 && m_level+count <= GameController.Instance.m_maxLevel && canvasManager.LevelCompleteList.Count > m_level + count)
+            if (m_level + count > 0 && m_level+count <= GameController.Instance.m_maxLevel && m_canvasManager.LevelCompleteList.Count > m_level + count)
             {                
                 text.text = (m_level + count).ToString();
-                text.transform.parent.GetChild(1).gameObject.SetActive(canvasManager.LevelCompleteList[m_level + count]);
             }
             else
             {
                 text.transform.parent.GetComponent<Image>().enabled = false;
                 text.enabled = false;
-                text.transform.parent.GetChild(1).gameObject.SetActive(false);
             }
 
             count++;   
         }
 
         GameController.Instance.m_level = m_level;
+        
+        if (m_canvasManager.LevelCompleteList[m_level])
+        {
+            m_canvasManager.Menu.transform.GetChild(3).GetChild(3).GetComponent<TextMeshProUGUI>().text = "COMPLETE";
+            m_canvasManager.Menu.transform.GetChild(3).GetChild(3).GetComponent<TextMeshProUGUI>().color = new Color(0.75f,1,0.43f,1);
+        }
+        else
+        {
+            m_canvasManager.Menu.transform.GetChild(3).GetChild(3).GetComponent<TextMeshProUGUI>().text = "INCOMPLETE";
+            m_canvasManager.Menu.transform.GetChild(3).GetChild(3).GetComponent<TextMeshProUGUI>().color = new Color(0.7f, 0.12f, 0.16f, 1);
+        }
 
-        canvasManager.SetLevelCurrency();
+        m_canvasManager.SetLevelCurrency();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        m_pointerDown = true;
+        if (m_canvasManager.Menu)
+        {
+            for (int i = 1; i < m_canvasManager.Menu.transform.GetChild(3).childCount; i++)
+            {
+                m_canvasManager.Menu.transform.GetChild(3).GetChild(i).gameObject.SetActive(false);
+            }
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
-    {
-        m_pointerDown = false;
-        m_reset = false;
+    { 
+        if (m_canvasManager.Menu)
+        {
+            for (int i = 1; i < m_canvasManager.Menu.transform.GetChild(3).childCount; i++)
+            {
+                m_canvasManager.Menu.transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
+            }
+        }
+
+        float centreTime = 0.25f;
+
+        if (m_rectTransform.localPosition.x < -GameController.Instance.m_scrollNextPos && m_level < GameController.Instance.m_maxLevel )
+        {
+            m_level++;
+            LeanTween.moveLocalX(gameObject, -450, centreTime).setOnComplete(SetLevels);
+            AudioManager.instance.Play("Scroll Right");
+
+        }
+        else if (m_rectTransform.localPosition.x > GameController.Instance.m_scrollNextPos && m_level > 1)
+        {
+            m_level--;
+            LeanTween.moveLocalX(gameObject, 450, centreTime).setOnComplete(SetLevels);
+            AudioManager.instance.Play("Scroll Left");
+        }
+        else
+        {
+            LeanTween.moveLocalX(gameObject, 0, centreTime);
+        }            
     }
 }
