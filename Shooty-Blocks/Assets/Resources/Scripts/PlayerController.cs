@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
     [HideInInspector] public MasterInput m_inputManager;
 
+    public static event Action m_PlayerHasDied;
+
     [Header("Player Upgrade Variables")]
     private int m_firingPower = 0; // How strong each bullet is
+
     private float m_firingSpeed = 0; // How often a bullet is fired per second
     [SerializeField] [Range(1, 3)] private float m_movementSpeed = 1.5f;
 
@@ -20,6 +25,8 @@ public class PlayerController : MonoBehaviour
 
     private TMPro.TextMeshPro m_text;
 
+    private bool dead = false;
+
     private void Awake()
     {
         m_inputManager = new MasterInput();
@@ -30,6 +37,7 @@ public class PlayerController : MonoBehaviour
         m_inputManager.BasicKBM.FingerTouch.performed += ctx => OnFingerPos(Vector2.zero);
 
         m_text = GetComponentInChildren<TMPro.TextMeshPro>();
+        initFadeOut();
     }
 
     private void OnEnable()
@@ -54,41 +62,44 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        // Debug.Log("Firing speed: " + m_firingSpeed);
-        // Debug.Log("Firing power: " + m_firingPower);
-        float fireTime = 1.0f / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
-        m_timer += Time.deltaTime; // Time since last bullet was fired
+        if (!dead)
+        {
+            // Debug.Log("Firing speed: " + m_firingSpeed);
+            // Debug.Log("Firing power: " + m_firingPower);
+            float fireTime = 1.0f / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
+            m_timer += Time.deltaTime; // Time since last bullet was fired
 
-        if (m_timer > fireTime) // If it is time to fire
-        {
-            AudioManager.instance.Play("Shoot");
-            Instantiate(m_bullet, new Vector3(transform.position.x, (transform.position.y + 0.75f), 0), Quaternion.identity); // Spawn a bullet
-            m_timer = 0.0f; // Make timer back to 0 for next bullet to be fired
-        }
+            if (m_timer > fireTime) // If it is time to fire
+            {
+                AudioManager.instance.Play("Shoot");
+                Instantiate(m_bullet, new Vector3(transform.position.x, (transform.position.y + 0.75f), 0), Quaternion.identity); // Spawn a bullet
+                m_timer = 0.0f; // Make timer back to 0 for next bullet to be fired
+            }
 
-        if (Input.touchCount > 0) // If there is a finger touching the screen
-        {
-            Touch touch = Input.GetTouch(0); // Get the touch of the first finger
-            Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
-            transform.position = new Vector3(touchPos.x, transform.position.y, transform.position.z); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
-        }
-        else if (m_clicked == false) // If there is no finger movement or pc movement then
-        {
-            rb.velocity = Vector2.zero; // Set the velocity to be zero
-        }
+            if (Input.touchCount > 0) // If there is a finger touching the screen
+            {
+                Touch touch = Input.GetTouch(0); // Get the touch of the first finger
+                Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+                transform.position = new Vector3(touchPos.x, transform.position.y, transform.position.z); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
+            }
+            else if (m_clicked == false) // If there is no finger movement or pc movement then
+            {
+                rb.velocity = Vector2.zero; // Set the velocity to be zero
+            }
 
-        if (m_clicked == true) // If left mouse is held down
-        {
-            rb.velocity -= (rb.velocity / 2); // Slow down the velocity. This is so that the player doesn't slide about the place
-        }
+            if (m_clicked == true) // If left mouse is held down
+            {
+                rb.velocity -= (rb.velocity / 2); // Slow down the velocity. This is so that the player doesn't slide about the place
+            }
 
-        if (transform.position.x < -3)
-        {
-            transform.position = new Vector3(-2.25f, transform.position.y, transform.position.z);
-        }
-        else if (transform.position.x > 3)
-        {
-            transform.position = new Vector3(2.25f, transform.position.y, transform.position.z);
+            if (transform.position.x < -3)
+            {
+                transform.position = new Vector3(-2.25f, transform.position.y, transform.position.z);
+            }
+            else if (transform.position.x > 3)
+            {
+                transform.position = new Vector3(2.25f, transform.position.y, transform.position.z);
+            }
         }
     }
 
@@ -147,9 +158,87 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            
-            GameController.Instance.ExitLevel();
-            GameController.Instance.m_levelLoad.SwitchScene("MainMenu");
+            DeathSequence(collision.gameObject);
         }
+    }
+
+    private void DeathSequence(GameObject block)
+    {
+        if (!dead)
+        {
+            StartCoroutine(DeathAnimation(block));
+        }
+    }
+
+    private void initFadeOut()
+    {
+        float vertExtent = Camera.main.orthographicSize; // get the camera size in world space
+        float horzExtent = vertExtent * Screen.width / Screen.height;
+
+        GameObject BlackBackground = GameObject.Instantiate(new GameObject(), Vector3.zero, Quaternion.identity); // create a new object at origin
+        BlackBackground.name = "Fadeout";
+        SpriteRenderer SpriteRef = BlackBackground.AddComponent<SpriteRenderer>(); // create and reference a spriterenderer
+        SpriteRef.sortingOrder = 999; // move sorting order to max to display infront of all sprites
+        SpriteRef.sprite = Resources.Load<Sprite>("Sprites/Background/star_bg");
+        SpriteRef.color = new Color(0, 0, 0, 0);
+        SpriteRef.size = new Vector2(horzExtent, vertExtent);
+    }
+
+    private IEnumerator DeathAnimation(GameObject block)
+    {
+        GetComponent<SpriteRenderer>().sortingOrder = 1000; // move the player and the colided block infront of the fadeout BG
+
+        block.GetComponent<SpriteRenderer>().sortingOrder = 1000;
+
+        //// WARNING // YOU // ENTERED // DA // MAF // ZONE //
+        //float xDist = transform.position.x - block.transform.position.x; // - is left + is right
+        //float yDist = transform.position.y - block.transform.position.y; // - is down + is up
+        //Vector2 playerToBlockOffset = new Vector2(transform.position.x + (xDist / 2), transform.position.y + (yDist / 2));
+        //
+        ////Vector2 localOrigin = new Vector2(xDist / 2, yDist / 2);
+        //
+        //float hyp = Vector3.Distance(transform.position, block.transform.position);
+        //// WARNING // YOU // ENTERED // DA // MAF // ZONE //
+        dead = true;
+        GameObject BBref = GameObject.Find("Fadeout");
+        SpriteRenderer SpriteRef = BBref.GetComponent<SpriteRenderer>();
+        float safeGuard = 0f;
+        float opacity = SpriteRef.color.a;
+
+        float currentTime = 0;
+        while (currentTime < 1) // fade the background to black
+        {
+            currentTime += Time.deltaTime;
+            safeGuard += Time.deltaTime;
+            SpriteRef.color = new Color(0, 0, 0, currentTime / 1);
+
+            yield return null;
+        }
+        GameController.Instance.ExitLevel(); // updates anylitics and cleans the blocks in the scene
+        GameController.Instance.m_levelLoad.SwitchScene("MainMenu");
+        yield break;
+
+        //AudioManager.instance.Play(name);
+        //float currentTime = 0;
+        //float start = 0f;
+        //
+        //loopSource.volume = start;
+        //yield return new WaitForSeconds(leadInTime);
+        //
+        //while (currentTime < 1)
+        //{
+        //    currentTime += Time.deltaTime;
+        //    if (start != null)
+        //    {
+        //        startSource.volume = Mathf.Lerp(start, 1f, currentTime / 1);
+        //    }
+        //    loopSource.volume = Mathf.Lerp(start, 1f, currentTime / 1);
+        //    if (end != null)
+        //    {
+        //        endSource.volume = Mathf.Lerp(start, 1f, currentTime / 1);
+        //    }
+        //    yield return null;
+        //}
+        //yield break;
     }
 }

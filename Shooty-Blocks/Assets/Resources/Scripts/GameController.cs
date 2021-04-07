@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour
     // make game controller a singleton
     private static GameController _Instance;
 
+    private PlayerController m_player;
+
     public static GameController Instance
     { get { return _Instance; } }
 
@@ -67,8 +69,10 @@ public class GameController : MonoBehaviour
     }
 
     public int m_upgradeCost;
+
     [Tooltip("the amount the player's firing speed increases by every upgrade")]
     public float m_speedIncrease;
+
     [Tooltip("the amount the player's bullet damage increases by every upgrade")]
     public int m_powerIncrease;
 
@@ -77,6 +81,7 @@ public class GameController : MonoBehaviour
     public LevelLoader m_levelLoad;
 
     private bool m_paused;
+
     public bool paused
     {
         set { m_paused = value; }
@@ -90,8 +95,8 @@ public class GameController : MonoBehaviour
         m_levelLoad = FindObjectOfType<LevelLoader>();
         m_userData = new UserData();
 
-        m_playerPower += userData.powerUpgrade*m_powerIncrease;
-        m_playerSpeed += userData.speedUpgrade*m_speedIncrease;
+        m_playerPower += userData.powerUpgrade * m_powerIncrease;
+        m_playerSpeed += userData.speedUpgrade * m_speedIncrease;
     }
 
     // Update is called once per frame
@@ -103,12 +108,11 @@ public class GameController : MonoBehaviour
     public void UpgradeBulletSpeed()
     {
         if (userData.money >= m_upgradeCost)
-        {        
+        {
             m_playerSpeed += m_speedIncrease;
             userData.speedUpgrade++; // Increment the amount of speed upgrades the ship has
             userData.money -= m_upgradeCost;
             userData.WriteToDisk();
-            
         }
     }
 
@@ -154,9 +158,9 @@ public class GameController : MonoBehaviour
 
         int coinsCollected = 0;
 
-        for(int i = 0; i < level.currencyCount; i++)
+        for (int i = 0; i < level.currencyCount; i++)
         {
-            if(levelData.IsCoinCollected(i))
+            if (levelData.IsCoinCollected(i))
             {
                 coinsCollected++;
             }
