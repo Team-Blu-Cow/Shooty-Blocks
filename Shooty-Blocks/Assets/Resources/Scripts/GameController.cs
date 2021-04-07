@@ -82,6 +82,16 @@ public class GameController : MonoBehaviour
 
     private bool m_paused;
 
+    public delegate void FreezeDelegate(bool state);
+    public event FreezeDelegate freezeDelegate;
+
+    public void FreezeButtonPress(bool state)
+    {
+        //Debug.Log("state = " + state);
+
+        freezeDelegate?.Invoke(state);
+    }
+
     public bool paused
     {
         set { m_paused = value; }
@@ -138,18 +148,16 @@ public class GameController : MonoBehaviour
     {
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, "Level" + m_level);
         Blocks.BlockSpawner spawner = FindObjectOfType<Blocks.BlockSpawner>();
-        userData.WriteToDisk();
-        spawner.SaveLevelData();
-        spawner.DestroyAllLevelObjects();
+        //userData.WriteToDisk();
+        spawner.EndLevel();
+        //spawner.SaveLevelData();
+        //spawner.DestroyAllLevelObjects();
     }
 
     public int CoinsCollectedInLevel(int levelID)
     {
         bool output;
         SaveData levelData = new SaveData(levelID.ToString(), out output);
-
-        //if (!output)
-        //    return -1;
 
         Blocks.Level level = Blocks.BlockSpawner.LoadLevel(levelID);
 
@@ -158,7 +166,7 @@ public class GameController : MonoBehaviour
 
         int coinsCollected = 0;
 
-        for (int i = 0; i < level.currencyCount; i++)
+        for(int i = 0; i < level.m_currencyCount; i++)
         {
             if (levelData.IsCoinCollected(i))
             {

@@ -6,12 +6,29 @@ public class Bullet : MonoBehaviour
 {
     private Rigidbody2D rb;
     private GameObject player;
+    private bool frozen;
+    private Vector2 vel = new Vector2(0.0f, 10.0f);
+
+    public void OnLevelFreeze(bool state)
+    {
+        frozen = state;
+        if (state == true)
+            rb.velocity = Vector2.zero;
+        else
+            rb.velocity = vel;
+    }
+
+    private void OnDestroy()
+    {
+        GameController.Instance.freezeDelegate -= OnLevelFreeze;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody2D>(); // Get rigidbody of game object
-        rb.velocity = new Vector2(0.0f, 10.0f); // Set the velocity to travel up 10 units in the y-axis every second
+        rb.velocity = vel; // Set the velocity to travel up 10 units in the y-axis every second
     }
 
     // Update is called once per frame

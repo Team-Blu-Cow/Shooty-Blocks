@@ -11,6 +11,8 @@ public class Block : MonoBehaviour
     private int m_hp = 0;
     private float m_screenBottom;
     private float m_screenTop;
+    private bool m_frozen;
+    private bool m_onscreen;
 
     private TMPro.TextMeshPro m_text;
     private Transform m_renderTransform;
@@ -22,6 +24,11 @@ public class Block : MonoBehaviour
     {
         set { m_hp = value; m_text.text = value.ToString(); }
         get { return m_hp; }
+    }
+
+    public string text
+    {
+        set { m_text.text = value; }
     }
 
     public float size
@@ -45,6 +52,12 @@ public class Block : MonoBehaviour
         set { m_screenTop = value; }
     }
 
+    public bool frozen
+    {
+        set { m_frozen = value; }
+    }
+
+
     private void Resize(float in_scale)
     {
         m_renderTransform.localScale = new Vector3(in_scale, in_scale, in_scale);
@@ -54,9 +67,17 @@ public class Block : MonoBehaviour
         textTransform.localPosition = new Vector3(1, -0.8f, 0);
     }
 
+    public void OnLevelFreeze(bool state)
+    {
+        m_frozen = state;
+    }
+
     // returns true when block is dead
     public bool Damage(int damage)
     {
+        if (type == Blocks.BlockType.INDESTRUCTABLE)
+            return false;
+
         hp -= damage;
         if (hp <= 0)
         {
@@ -77,13 +98,18 @@ public class Block : MonoBehaviour
         m_collider.enabled = false;
         m_hp = Random.Range(2, 5);
         m_text.text = m_hp.ToString();
+        m_onscreen = false;
     }
 
     private void Update()
     {
-        if (m_collider.enabled == false && transform.position.y < m_screenTop + ((type == Blocks.BlockType.LARGE)? 2 : 1))
+        if (m_frozen == true)
+            return;
+
+        if (m_onscreen == false && m_collider.enabled == false && transform.position.y < m_screenTop + ((type == Blocks.BlockType.LARGE)? 2 : 1))
         {
             m_collider.enabled = true;
+            m_onscreen = true;
         }
 
         transform.position -= new Vector3(0, m_fallSpeed * Time.deltaTime, 0);
@@ -102,5 +128,10 @@ public class Block : MonoBehaviour
         Destroy(m_renderTransform.gameObject);
         Destroy(m_text.gameObject);
         Destroy(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        GameController.Instance.freezeDelegate -= OnLevelFreeze;
     }
 }

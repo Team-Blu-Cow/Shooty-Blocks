@@ -71,7 +71,7 @@ public class CanvasManager : MonoBehaviour
 
             Blocks.Level level = Blocks.BlockSpawner.LoadLevel(GameController.Instance.m_level);
 
-            string text = (level != null && coinsCollected >= 0) ? coinsCollected.ToString() + "/" + level.currencyCount.ToString() : "???";
+            string text = (level != null && coinsCollected >= 0) ? coinsCollected.ToString() + "/" + level.m_currencyCount.ToString() : "???";
 
             in_levelcurrencyCounter.text = text;
         }

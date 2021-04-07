@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     private bool m_clicked = false; // This varuable tracks PC controls, to move left click and drag
     private float m_timer; // Timer for firing bullets
 
+    private bool m_frozen;
+
     private TMPro.TextMeshPro m_text;
 
     private bool dead = false;
@@ -38,6 +40,7 @@ public class PlayerController : MonoBehaviour
 
         m_text = GetComponentInChildren<TMPro.TextMeshPro>();
         initFadeOut();
+        m_frozen = false;
     }
 
     private void OnEnable()
@@ -57,50 +60,53 @@ public class PlayerController : MonoBehaviour
         m_firingSpeed = GameController.Instance.fireSpeed;
         //m_text.text = (m_gameManager.GetComponent<GameController>().m_speedUpgrades + m_gameManager.GetComponent<GameController>().m_powerUpgrades).ToString();
         m_text.text = m_firingPower.ToString();
+
+        GameController.Instance.freezeDelegate += OnLevelFreeze;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (!dead)
+        if (dead || m_frozen)
+            return;
+
+        // Debug.Log("Firing speed: " + m_firingSpeed);
+        // Debug.Log("Firing power: " + m_firingPower);
+        float fireTime = 1.0f / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
+        m_timer += Time.deltaTime; // Time since last bullet was fired
+
+        if (m_timer > fireTime) // If it is time to fire
         {
-            // Debug.Log("Firing speed: " + m_firingSpeed);
-            // Debug.Log("Firing power: " + m_firingPower);
-            float fireTime = 1.0f / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
-            m_timer += Time.deltaTime; // Time since last bullet was fired
-
-            if (m_timer > fireTime) // If it is time to fire
-            {
-                AudioManager.instance.Play("Shoot");
-                Instantiate(m_bullet, new Vector3(transform.position.x, (transform.position.y + 0.75f), 0), Quaternion.identity); // Spawn a bullet
-                m_timer = 0.0f; // Make timer back to 0 for next bullet to be fired
-            }
-
-            if (Input.touchCount > 0) // If there is a finger touching the screen
-            {
-                Touch touch = Input.GetTouch(0); // Get the touch of the first finger
-                Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
-                transform.position = new Vector3(touchPos.x, transform.position.y, transform.position.z); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
-            }
-            else if (m_clicked == false) // If there is no finger movement or pc movement then
-            {
-                rb.velocity = Vector2.zero; // Set the velocity to be zero
-            }
-
-            if (m_clicked == true) // If left mouse is held down
-            {
-                rb.velocity -= (rb.velocity / 2); // Slow down the velocity. This is so that the player doesn't slide about the place
-            }
-
-            if (transform.position.x < -3)
-            {
-                transform.position = new Vector3(-2.25f, transform.position.y, transform.position.z);
-            }
-            else if (transform.position.x > 3)
-            {
-                transform.position = new Vector3(2.25f, transform.position.y, transform.position.z);
-            }
+            AudioManager.instance.Play("Shoot");
+            GameObject bullet = Instantiate(m_bullet, new Vector3(transform.position.x, (transform.position.y + 0.75f), 0), Quaternion.identity); // Spawn a bullet
+            GameController.Instance.freezeDelegate += bullet.GetComponent<Bullet>().OnLevelFreeze;
+            m_timer = 0.0f; // Make timer back to 0 for next bullet to be fired
         }
+
+        if (Input.touchCount > 0) // If there is a finger touching the screen
+        {
+            Touch touch = Input.GetTouch(0); // Get the touch of the first finger
+            Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+            transform.position = new Vector3(touchPos.x, transform.position.y, transform.position.z); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
+        }
+        else if (m_clicked == false) // If there is no finger movement or pc movement then
+        {
+            rb.velocity = Vector2.zero; // Set the velocity to be zero
+        }
+
+        if (m_clicked == true) // If left mouse is held down
+        {
+            rb.velocity -= (rb.velocity / 2); // Slow down the velocity. This is so that the player doesn't slide about the place
+        }
+
+        if (transform.position.x < -3)
+        {
+            transform.position = new Vector3(-2.25f, transform.position.y, transform.position.z);
+        }
+        else if (transform.position.x > 3)
+		{
+			transform.position = new Vector3(2.25f, transform.position.y, transform.position.z);
+		}
     }
 
     private Queue<Vector2> m_mousePos = new Queue<Vector2>(); // Queue for recent and last pointer positions (Mouse)
@@ -240,5 +246,15 @@ public class PlayerController : MonoBehaviour
         //    yield return null;
         //}
         //yield break;
+	}
+	
+    public void OnLevelFreeze(bool state)
+    {
+        m_frozen = state;
+    }
+
+    public void OnDestroy()
+    {
+        GameController.Instance.freezeDelegate -= OnLevelFreeze;
     }
 }
