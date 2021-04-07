@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class Block : MonoBehaviour
 {
@@ -15,10 +16,6 @@ public class Block : MonoBehaviour
     private TMPro.TextMeshPro m_text;
     private Transform m_renderTransform;
     private Collider2D m_collider;
-
-    private Color weakColor; // Shows weakest color for the block
-    private Color strongColor; // Shows strongest color for the block
-    private float enemyColor = 0.0f; // Float value for the weighting of the enemy's color
 
     [SerializeField] private GameObject m_particleExplosion;
 
@@ -72,26 +69,42 @@ public class Block : MonoBehaviour
         }
 
         // TODO @Sandy This is quick solution, collapse to function, yessss? (Same block of code in block spawner when spawning block)
-        Color weakColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        Color strongColor = new Color(0.14f, 0.16f, 0.36f, 1.0f);
-        int maxHP = ((5 * (GameController.Instance.m_level + 1) * 2) * 2) * ((type == Blocks.BlockType.LARGE) ? 2 : 1);
-        float weighting = (float)hp / (float)maxHP;
-
-        Color blockColor = Color.white;
-        blockColor.r = Mathf.Lerp(weakColor.r, strongColor.r, weighting);
-        blockColor.g = Mathf.Lerp(weakColor.g, strongColor.g, weighting);
-        blockColor.b = Mathf.Lerp(weakColor.b, strongColor.b, weighting);
-
-        Debug.Log("Weighting: " + weighting);
-        GetComponentInChildren<SpriteRenderer>().color = blockColor;
+        ChangeColor();
 
         return false;
     }
 
+    public void ChangeColor()
+    {
+        int maxHP = ((5 * (GameController.Instance.m_level + 1) * 2) * 2) * ((type == Blocks.BlockType.LARGE) ? 2 : 1);
+        float weighting = (float)hp / (float)maxHP;
+
+        Color bWeakColor = new Color(0.6f, 0.7f, 0.96f, 1.0f);
+        Color bStrongColor = new Color(0.14f, 0.16f, 0.36f, 1.0f);
+
+        Color blockColor = Color.white;
+        blockColor.r = Mathf.Lerp(bWeakColor.r, bStrongColor.r, weighting);
+        blockColor.g = Mathf.Lerp(bWeakColor.g, bStrongColor.g, weighting);
+        blockColor.b = Mathf.Lerp(bWeakColor.b, bStrongColor.b, weighting);
+
+        GetComponentInChildren<SpriteRenderer>().color = blockColor;
+
+        Color tWeakColor = new Color(0.8f, 0.8f, 0.8f, 1.0f);
+        Color tStrongColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+        Color textColor = Color.white;
+        textColor.r = Mathf.Lerp(tWeakColor.r, tStrongColor.r, weighting);
+        textColor.g = Mathf.Lerp(tWeakColor.g, tStrongColor.g, weighting);
+        textColor.b = Mathf.Lerp(tWeakColor.b, tStrongColor.b, weighting);
+
+        GetComponentInChildren<TextMeshPro>().color = textColor;
+
+
+
+    }
+
     public void Awake()
     {
-        weakColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        strongColor = new Color(0.14f, 0.16f, 0.36f, 1.0f);
 
         m_text = GetComponentInChildren<TMPro.TextMeshPro>();
         m_renderTransform = GetComponentInChildren<SpriteRenderer>().transform;
