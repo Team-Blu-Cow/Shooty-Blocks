@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Upgrade Variables")]
     private int m_firingPower = 0; // How strong each bullet is
     private float m_firingSpeed = 0; // How often a bullet is fired per second
-    [SerializeField] [Range(100, 500)] private float m_movementSpeed = 10.0f;
+    [SerializeField] [Range(100, 500)] private float m_movementSpeed = 0.0f;
 
     [Header("Projectile Prefab")]
     [SerializeField] private GameObject m_bullet; // Unfortunately, this is click and drag for inspector, This tells what projectile should be fired
@@ -54,8 +54,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        // Debug.Log("Firing speed: " + m_firingSpeed);
-        // Debug.Log("Firing power: " + m_firingPower);
         float fireTime = 1.0f / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
         m_timer += Time.deltaTime; // Time since last bullet was fired
 
@@ -69,9 +67,10 @@ public class PlayerController : MonoBehaviour
         if (Input.touchCount > 0) // If there is a finger touching the screen
         {
             Touch touch = Input.GetTouch(0); // Get the touch of the first finger
-            Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
-            //transform.position = new Vector3(touchPos.x, transform.position.y, transform.position.z); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
             rb.velocity = new Vector2(touch.deltaPosition.x, 0);
+
+            //Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+            //transform.position = new Vector3(touchPos.x, transform.position.y, transform.position.z); // Set the velocity to be the difference in distance of the finger positions (past and current frame)           
         }
         else if (m_clicked == false) // If there is no finger movement or pc movement then
         {
@@ -84,6 +83,7 @@ public class PlayerController : MonoBehaviour
             rb.velocity -= (rb.velocity / 2); // Slow down the velocity. This is so that the player doesn't slide about the place
         }
 
+        // These if statements make sure the player does not go off screen
         if (transform.position.x < -2.51)
         {
             transform.position = new Vector3(-2.5f, transform.position.y, transform.position.z);
@@ -97,7 +97,6 @@ public class PlayerController : MonoBehaviour
     private Queue<Vector2> m_mousePos = new Queue<Vector2>(); // Queue for recent and last pointer positions (Mouse)
     private Vector2 recentPos = Vector2.zero;
     private Vector2 pastPos = Vector2.zero;
-
     private void OnMousePos(Vector2 in_mousePos)
     {
         m_mousePos.Enqueue(in_mousePos); // Add most recent pos to queue
@@ -110,12 +109,12 @@ public class PlayerController : MonoBehaviour
         if (m_clicked == true) // If player is clicking right now
         {
             Vector2 diff = pastPos - recentPos; // Calculate difference in positions
-            Debug.Log("Velocity = " + diff + " (Player Controller Line 112)");
             rb.velocity = new Vector2(diff.x * m_movementSpeed, 0); // Set velocity to what the difference was in positions (divided by a half to slow down movement)
             //transform.position = new Vector3(transform.position.x + diff.x, transform.position.y, transform.position.z);
         }
     }
 
+    // TODO @Sandy with matthew's new button stuff figure out movement as it doesn't work. The function below might work?
     private Queue<Vector2> m_fingerPos = new Queue<Vector2>(); // Queue for recent and last pointer position (Touch)
     private void OnFingerPos(Vector2 in_fingerPos) // This function is same as above, but for touch controls.
     {
