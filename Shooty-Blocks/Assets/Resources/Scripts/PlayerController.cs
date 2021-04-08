@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
         m_inputManager.BasicKBM.LClick.performed += ctx => OnMouseLeftClick();
         m_inputManager.BasicKBM.LClick.canceled += ctx => StopMouseLeftClick();
         m_inputManager.BasicKBM.MousePos.performed += ctx => OnMousePos(ctx.ReadValue<Vector2>());
-        m_inputManager.BasicKBM.FingerTouch.performed += ctx => OnFingerPos(Vector2.zero);
+        m_inputManager.BasicKBM.FingerTouch.performed += ctx => OnFingerPos(ctx);
 
         m_text = GetComponentInChildren<TMPro.TextMeshPro>();
         initFadeOut();
@@ -58,7 +58,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         m_firingPower = GameController.Instance.firePower;
         m_firingSpeed = GameController.Instance.fireSpeed;
-        //m_text.text = (m_gameManager.GetComponent<GameController>().m_speedUpgrades + m_gameManager.GetComponent<GameController>().m_powerUpgrades).ToString();
         m_text.text = m_firingPower.ToString();
 
         GameController.Instance.freezeDelegate += OnLevelFreeze;
@@ -70,8 +69,6 @@ public class PlayerController : MonoBehaviour
         if (dead || m_frozen)
             return;
 
-        // Debug.Log("Firing speed: " + m_firingSpeed);
-        // Debug.Log("Firing power: " + m_firingPower);
         float fireTime = 1.0f / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
         m_timer += Time.deltaTime; // Time since last bullet was fired
 
@@ -83,24 +80,28 @@ public class PlayerController : MonoBehaviour
             m_timer = 0.0f; // Make timer back to 0 for next bullet to be fired
         }
 
-        if (Input.touchCount > 0) // If there is a finger touching the screen
-        {
-            Touch touch = Input.GetTouch(0); // Get the touch of the first finger
-            rb.velocity = new Vector2(touch.deltaPosition.x, 0);
-
-            //Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
-            //transform.position = new Vector3(touchPos.x, transform.position.y, transform.position.z); // Set the velocity to be the difference in distance of the finger positions (past and current frame)           
-        }
-        else if (m_clicked == false) // If there is no finger movement or pc movement then
-        {
-            rb.velocity = Vector2.zero; // Set the velocity to be zero
-        }
-
-        if (m_clicked == true) // If left mouse is held down
-        {
-            // Essentially drag
-            rb.velocity -= (rb.velocity / 2); // Slow down the velocity. This is so that the player doesn't slide about the place
-        }
+        //if (rb != null)
+        //{
+        //    if (Input.touchCount > 0) // If there is a finger touching the screen
+        //    {
+        //        Debug.Log("update touch");
+        //        Touch touch = Input.GetTouch(0); // Get the touch of the first finger
+        //        rb.velocity = new Vector2(touch.deltaPosition.x, 0);
+        //
+        //        //Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+        //        //transform.position = new Vector3(touchPos.x, transform.position.y, transform.position.z); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
+        //    }
+        //    else if (m_clicked == false) // If there is no finger movement or pc movement then
+        //    {
+        //        rb.velocity = Vector2.zero; // Set the velocity to be zero
+        //    }
+        //
+        //    if (m_clicked == true) // If left mouse is held down
+        //    {
+        //        // Essentially drag
+        //        rb.velocity -= (rb.velocity / 2); // Slow down the velocity. This is so that the player doesn't slide about the place
+        //    }
+        //}
 
         // These if statements make sure the player does not go off screen
         if (transform.position.x < -2.51)
@@ -116,8 +117,10 @@ public class PlayerController : MonoBehaviour
     private Queue<Vector2> m_mousePos = new Queue<Vector2>(); // Queue for recent and last pointer positions (Mouse)
     private Vector2 recentPos = Vector2.zero;
     private Vector2 pastPos = Vector2.zero;
+
     private void OnMousePos(Vector2 in_mousePos)
     {
+        return;
         m_mousePos.Enqueue(in_mousePos); // Add most recent pos to queue
         if (m_mousePos.Count > 1) // If the queue's size is greater than 1. This if statement is here so that there is no error in first frame of game
         {
@@ -129,24 +132,17 @@ public class PlayerController : MonoBehaviour
         {
             Vector2 diff = pastPos - recentPos; // Calculate difference in positions
             rb.velocity = new Vector2(diff.x * m_movementSpeed, 0); // Set velocity to what the difference was in positions (divided by a half to slow down movement)
-            //transform.position = new Vector3(transform.position.x + diff.x, transform.position.y, transform.position.z);
+                                                                    //transform.position = new Vector3(transform.position.x + diff.x, transform.position.y, transform.position.z);
         }
     }
 
     // TODO @Sandy with matthew's new button stuff figure out movement as it doesn't work. The function below might work?
     private Queue<Vector2> m_fingerPos = new Queue<Vector2>(); // Queue for recent and last pointer position (Touch)
-    private void OnFingerPos(Vector2 in_fingerPos) // This function is same as above, but for touch controls.
-    {
-        Debug.Log("Finger Touch");
-        //m_fingerPos.Enqueue(in_fingerPos);
-        //if (m_fingerPos.Count > 1)
-        //{
-        //    recentPos = m_fingerPos.Dequeue();
-        //    pastPos = m_fingerPos.Dequeue();
-        //}
 
-        //Vector2 diff = pastPos - recentPos;
-        //rb.velocity = new Vector2(diff.x / 2, 0);
+    private void OnFingerPos(InputAction.CallbackContext in_context) // This function is same as above, but for touch controls.
+    {
+        float delta_x = m_inputManager.BasicKBM.FingerTouch.ReadValue<Vector2>().x;
+        rb.velocity = new Vector2(delta_x / 2, 0);
     }
 
     private void OnMouseLeftClick()
@@ -246,8 +242,8 @@ public class PlayerController : MonoBehaviour
         //    yield return null;
         //}
         //yield break;
-	}
-	
+    }
+
     public void OnLevelFreeze(bool state)
     {
         m_frozen = state;

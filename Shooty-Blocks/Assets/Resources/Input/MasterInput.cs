@@ -54,7 +54,7 @@ public class @MasterInput : IInputActionCollection, IDisposable
                     ""name"": ""FingerTouch"",
                     ""type"": ""PassThrough"",
                     ""id"": ""eea460ac-2550-4b3d-8a42-c48888338393"",
-                    ""expectedControlType"": ""Touch"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -202,6 +202,17 @@ public class @MasterInput : IInputActionCollection, IDisposable
                     ""action"": ""Directions"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""85476d0f-ffeb-496e-b229-c9402069cde3"",
+                    ""path"": ""<Touchscreen>/primaryTouch/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FingerTouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
