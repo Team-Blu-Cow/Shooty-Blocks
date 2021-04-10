@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(touch.deltaPosition.x, 0);
 
             //Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
-            //transform.position = new Vector3(touchPos.x, transform.position.y, transform.position.z); // Set the velocity to be the difference in distance of the finger positions (past and current frame)           
+            //transform.position = new Vector3(touchPos.x, transform.position.y, transform.position.z); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
         }
         else if (m_clicked == false) // If there is no finger movement or pc movement then
         {
@@ -116,6 +116,7 @@ public class PlayerController : MonoBehaviour
     private Queue<Vector2> m_mousePos = new Queue<Vector2>(); // Queue for recent and last pointer positions (Mouse)
     private Vector2 recentPos = Vector2.zero;
     private Vector2 pastPos = Vector2.zero;
+
     private void OnMousePos(Vector2 in_mousePos)
     {
         m_mousePos.Enqueue(in_mousePos); // Add most recent pos to queue
@@ -135,6 +136,7 @@ public class PlayerController : MonoBehaviour
 
     // TODO @Sandy with matthew's new button stuff figure out movement as it doesn't work. The function below might work?
     private Queue<Vector2> m_fingerPos = new Queue<Vector2>(); // Queue for recent and last pointer position (Touch)
+
     private void OnFingerPos(Vector2 in_fingerPos) // This function is same as above, but for touch controls.
     {
         Debug.Log("Finger Touch");
@@ -172,6 +174,12 @@ public class PlayerController : MonoBehaviour
     {
         if (!dead)
         {
+            GameController.Instance.FreezeButtonPress(true);
+            AudioManager.instance.Stop("Main Loop");
+            GetComponent<SpriteRenderer>().sortingOrder = 1000; // move the player and the collided block infront of the fadeout BG
+            block.GetComponent<SpriteRenderer>().sortingOrder = 1000;
+            dead = true;
+
             StartCoroutine(DeathAnimation(block));
         }
     }
@@ -192,46 +200,42 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator DeathAnimation(GameObject block)
     {
-        //GameController.Instance.FreezeDelegate?.Invoke(True);
-
-        GetComponent<SpriteRenderer>().sortingOrder = 1000; // move the player and the collided block infront of the fadeout BG
-        block.GetComponent<SpriteRenderer>().sortingOrder = 1000;
-
         float xDist = transform.position.x - block.transform.position.x; // - is left + is right
         float yDist = transform.position.y - block.transform.position.y; // - is down + is up
-        Vector2 localOrigin = new Vector2(transform.position.x + (xDist / 2), transform.position.y + (yDist / 2)); // point between the two colliders
+        Vector2 localOrigin = new Vector2(transform.position.x - (xDist / 2), transform.position.y + (yDist / 2)); // point between the two colliders
 
-        dead = true;
         GameObject BBref = GameObject.Find("Fadeout");
         GameObject CamRef = GameObject.Find("Main Camera");
         SpriteRenderer SpriteRef = BBref.GetComponent<SpriteRenderer>();
 
         AudioManager.instance.FadeIn("Main Loop");
 
-        float currentTime = 0;
-        while (currentTime < 1) // fade the background to black
+        float currentTime = 0f;
+        while (currentTime < 1f) // fade the background to black
         {
             currentTime += Time.deltaTime;
 
-            SpriteRef.color = new Color(0, 0, 0, currentTime / 1);
+            SpriteRef.color = new Color(currentTime / 1f, 0, 0, currentTime / 1f);
 
             yield return null;
         }
 
-        currentTime = 0;
+        currentTime = 0f;
 
-        while (currentTime < 3) // move to camera to impact point over 3 seconds
+        while (currentTime < 3f) // move to camera to impact point over 3 seconds
         {
             currentTime += Time.deltaTime;
-            CamRef.transform.position = Vector3.Lerp(CamRef.transform.position, new Vector3(localOrigin.x, localOrigin.y, -10f), currentTime / 3);
+            CamRef.transform.position = Vector3.Lerp(CamRef.transform.position, new Vector3(localOrigin.x, localOrigin.y, -10f), Time.deltaTime);
             yield return null;
         }
 
+        GameController.Instance.FreezeButtonPress(true);
         GameController.Instance.ExitLevel(); // updates anylitics and cleans the blocks in the scene
         GameController.Instance.m_levelLoad.SwitchScene("MainMenu");
+
         yield break;
-	}
-	
+    }
+
     public void OnLevelFreeze(bool state)
     {
         m_frozen = state;
