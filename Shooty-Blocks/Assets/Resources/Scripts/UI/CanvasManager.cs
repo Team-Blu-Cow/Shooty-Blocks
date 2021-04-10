@@ -10,10 +10,13 @@ public class CanvasManager : MonoBehaviour
     // Canvases in the main menu
     [Header("Canvases")]
     private Canvas m_options;
+
     private Canvas m_upgrades;
     private Canvas m_menu;
+
     public Canvas Menu
-    { get {return m_menu;} }
+    { get { return m_menu; } }
+
     private Canvas m_menuSelect;
 
     private List<Canvas> canvases = new List<Canvas>();
@@ -50,9 +53,16 @@ public class CanvasManager : MonoBehaviour
 
         m_options = canvases[0];
         m_upgrades = canvases[1];
-        m_menu = canvases[2];    
+        m_menu = canvases[2];
         m_menuSelect = canvases[3];
-}
+
+        GameObject.Find("MasterVolume").GetComponent<Slider>().value = GameController.Instance.userData.masterVolume;
+        AudioManager.instance.setVolume("Master Volume", GameController.Instance.userData.masterVolume);
+        GameObject.Find("SFXVolume").GetComponent<Slider>().value = GameController.Instance.userData.sfxVolume;
+        AudioManager.instance.setVolume("SFX Volume", GameController.Instance.userData.sfxVolume);
+        GameObject.Find("MusicVolume").GetComponent<Slider>().value = GameController.Instance.userData.musicVolume;
+        AudioManager.instance.setVolume("Music Volume", GameController.Instance.userData.musicVolume);
+    }
 
     // Start is called before the first frame update
     private void Start()

@@ -129,6 +129,11 @@ public class UserData
         System.Int64 r2 = Random.Range(System.Int32.MinValue, System.Int32.MaxValue);
         m_userData.m_userId = (r1 << 32) | r2;
 
+        // sets default volume
+        m_userData.m_masterVolume = 0.5f;
+        m_userData.m_musicVolume = 0.5f;
+        m_userData.m_sfxVolume = 0.5f;
+
         // decide if user is in the control or test group
         if (m_userData.m_userId % 2 == 0)
         {

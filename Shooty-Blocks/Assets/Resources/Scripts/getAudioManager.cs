@@ -31,16 +31,22 @@ public class getAudioManager : MonoBehaviour
 
     public void setMusicVolume(float in_vol)
     {
+        GameController.Instance.userData.musicVolume = in_vol;
         AudioManager.instance.setVolume("Music Volume", in_vol);
+        GameController.Instance.userData.WriteToDisk();
     }
 
     public void setMasterVolume(float in_vol)
     {
+        GameController.Instance.userData.masterVolume = in_vol;
         AudioManager.instance.setVolume("Master Volume", in_vol);
+        GameController.Instance.userData.WriteToDisk();
     }
 
     public void setSFXVolume(float in_vol)
     {
+        GameController.Instance.userData.sfxVolume = in_vol;
         AudioManager.instance.setVolume("SFX Volume", in_vol);
+        GameController.Instance.userData.WriteToDisk();
     }
 }
