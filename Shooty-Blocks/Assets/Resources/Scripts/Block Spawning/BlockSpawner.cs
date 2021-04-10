@@ -30,6 +30,7 @@ namespace Blocks
 
         // loaded prefabs
         private GameObject in_blockPrefab;
+
         private GameObject in_currencyPrefab;
         private GameObject in_levelEndPrefab;
 
@@ -38,6 +39,7 @@ namespace Blocks
 
         // scene and data containers for all spawned instances
         private GameObject m_spawnedInstanceContainer;
+
         private List<GameObject> m_spawnedInstances;
 
         // seed used for random generation
@@ -51,6 +53,7 @@ namespace Blocks
 
         // the amount of currency contained within the level
         [SerializeField] private int m_currencyCount;
+
         public int CurrencyCount
         {
             get { return m_currencyCount; }
@@ -61,11 +64,12 @@ namespace Blocks
 
         // the bounds of the viewport
         [SerializeField] private Camera m_camera;
+
         public Camera cameraBounds
         {
-            get{return m_camera;}
-            set{m_camera = value;}
-        } 
+            get { return m_camera; }
+            set { m_camera = value; }
+        }
 
         // public alterable variables
         [Tooltip("The speed at which the blocks fall")]
@@ -79,11 +83,18 @@ namespace Blocks
 
         [Tooltip("The difficulty of the level")]
         [SerializeField] [Range(0, 10)] private int difficulty;
+
         private GameObject player;
 
         [Tooltip("The colors of the enemies")]
         [SerializeField] private Sprite[] colors;
+
         [SerializeField] public Color[] textColors;
+
+        public void RemoveBlockFromList(GameObject in_block)
+        {
+            m_spawnedInstances.Remove(in_block);
+        }
 
         public void OnLevelFreeze(bool state)
         {
@@ -108,7 +119,7 @@ namespace Blocks
 
             if (level == null)
                 Debug.LogWarning("Failed to load level: " + levelID);
-            
+
             return level;
         }
 
@@ -196,7 +207,7 @@ namespace Blocks
             // temp list to store used rows
             List<int> usedPositions = new List<int>();
 
-            // loop through all groups checking if they have a free space 
+            // loop through all groups checking if they have a free space
             // for currency to spawn
             int totalCount = 0;
             foreach (BlockGroup group in level.m_level)
@@ -228,7 +239,7 @@ namespace Blocks
         {
             float timeVal = 0f;
 
-            while(true)
+            while (true)
             {
                 if (!m_frozen)
                     timeVal += Time.deltaTime;
@@ -236,7 +247,7 @@ namespace Blocks
                 if (timeVal >= time)
                     break;
 
-               yield return null;
+                yield return null;
             }
 
             if (m_level.Count <= 0)
@@ -298,6 +309,7 @@ namespace Blocks
                             SetHealth(block, row.difficultyBalance, i);
                         }
                         break;
+
                     case BlockType.INDESTRUCTABLE:
                         {
                             CreateBlock(pos, row.blocks[i]);
@@ -347,7 +359,7 @@ namespace Blocks
 
             // set type Dependant variables
             block.GetComponent<Block>().type = type;
-            if(type == BlockType.LARGE) 
+            if (type == BlockType.LARGE)
                 block.GetComponent<Block>().size = 0.8f;
 
             if (type == BlockType.INDESTRUCTABLE)
@@ -360,7 +372,7 @@ namespace Blocks
             {
                 //generate colors
                 // TODO: this needs to be re factored to fit new brief
-                int rand = Random.Range(1, colors.Length-1);
+                int rand = Random.Range(1, colors.Length - 1);
                 block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
                 block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
             }
@@ -393,7 +405,7 @@ namespace Blocks
             blockHp = Random.Range(5 * Mathf.RoundToInt(1 + difficulty), (5 * Mathf.RoundToInt(1 + (difficulty * 0.75f))) * 2);
 
             // calculate hp based on local row difficulty balance
-            // go to https://www.desmos.com/calculator/l9fsmqno2w 
+            // go to https://www.desmos.com/calculator/l9fsmqno2w
             // to play with the equation and see how it works
             Vector2 p1 = new Vector2(0, 0.5f);
             Vector2 p2 = new Vector2(BlockData.Columns - 1, 2);
@@ -418,19 +430,19 @@ namespace Blocks
         private void SpawnLevelEnd()
         {
             // convert the screen space coordinate to world space
-            Vector3 pos = m_camera.ViewportToWorldPoint(new Vector3(0.5f,1.1f, 0));
+            Vector3 pos = m_camera.ViewportToWorldPoint(new Vector3(0.5f, 1.1f, 0));
             pos = new Vector3(pos.x, pos.y, 0);
 
             GameObject endLevelTrigger = Instantiate(in_levelEndPrefab, pos, Quaternion.identity);
             endLevelTrigger.GetComponent<EndLevelTrigger>().fallSpeed = m_fallSpeed;
             endLevelTrigger.GetComponent<EndLevelTrigger>().screenHeight = m_camera.ViewportToWorldPoint(new Vector3(1, 0, 1)).y;
             endLevelTrigger.GetComponent<EndLevelTrigger>().blockSpawner = this;
-            endLevelTrigger.GetComponent<EndLevelTrigger>().levelSaveData = in_levelSaveData; 
+            endLevelTrigger.GetComponent<EndLevelTrigger>().levelSaveData = in_levelSaveData;
         }
 
         public void DestroyAllLevelObjects()
         {
-            foreach(GameObject obj in m_spawnedInstances)
+            foreach (GameObject obj in m_spawnedInstances)
             {
                 if (obj != null)
                 {
@@ -451,8 +463,15 @@ namespace Blocks
         public void EndLevel()
         {
             DestroyAllLevelObjects();
+            //StartCoroutine(cleanBlocks());
             in_levelSaveData.WriteToDisk();
             GameController.Instance.userData.WriteToDisk();
+        }
+
+        private IEnumerator cleanBlocks()
+        {
+            yield return new WaitForSeconds(1);
+            DestroyAllLevelObjects();
         }
 
         public void SaveLevelData()

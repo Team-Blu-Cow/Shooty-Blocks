@@ -85,6 +85,7 @@ public class GameController : MonoBehaviour
     private bool m_paused;
 
     public delegate void FreezeDelegate(bool state);
+
     public event FreezeDelegate freezeDelegate;
 
     public void FreezeButtonPress(bool state)
@@ -168,7 +169,7 @@ public class GameController : MonoBehaviour
 
         int coinsCollected = 0;
 
-        for(int i = 0; i < level.m_currencyCount; i++)
+        for (int i = 0; i < level.m_currencyCount; i++)
         {
             if (levelData.IsCoinCollected(i))
             {

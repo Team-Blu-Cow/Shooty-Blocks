@@ -67,7 +67,10 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         if (dead || m_frozen)
+        {
+            rb.velocity = Vector2.zero;
             return;
+        }
 
         float fireTime = 1.0f / m_firingSpeed; // Turns the firing power into a measure of time for how often a bullet should be fired
         m_timer += Time.deltaTime; // Time since last bullet was fired
@@ -116,7 +119,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnMousePos(Vector2 in_mousePos)
     {
-        return;
+        if (dead || m_frozen)
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
         m_mousePos.Enqueue(in_mousePos); // Add most recent pos to queue
         if (m_mousePos.Count > 1) // If the queue's size is greater than 1. This if statement is here so that there is no error in first frame of game
         {
@@ -135,9 +142,13 @@ public class PlayerController : MonoBehaviour
     // TODO @Sandy with matthew's new button stuff figure out movement as it doesn't work. The function below might work?
     private Queue<Vector2> m_fingerPos = new Queue<Vector2>(); // Queue for recent and last pointer position (Touch)
 
-
     private void OnFingerPos(InputAction.CallbackContext in_context) // This function is same as above, but for touch controls.
     {
+        if (dead || m_frozen)
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
         float delta_x = m_inputManager.BasicKBM.FingerTouch.ReadValue<Vector2>().x;
         rb.velocity = new Vector2(delta_x / 2, 0);
     }
@@ -220,9 +231,13 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
+        FindObjectOfType<Blocks.BlockSpawner>().RemoveBlockFromList(block.transform.parent.gameObject);
         GameController.Instance.FreezeButtonPress(true);
         GameController.Instance.ExitLevel(); // updates anylitics and cleans the blocks in the scene
         GameController.Instance.m_levelLoad.SwitchScene("MainMenu");
+
+        yield return new WaitForSeconds(1);
+        block.GetComponentInParent<Block>().DestroyFamily();
 
         yield break;
     }
