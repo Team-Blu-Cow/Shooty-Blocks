@@ -192,60 +192,44 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator DeathAnimation(GameObject block)
     {
-        GetComponent<SpriteRenderer>().sortingOrder = 1000; // move the player and the colided block infront of the fadeout BG
+        //GameController.Instance.FreezeDelegate?.Invoke(True);
 
+        GetComponent<SpriteRenderer>().sortingOrder = 1000; // move the player and the collided block infront of the fadeout BG
         block.GetComponent<SpriteRenderer>().sortingOrder = 1000;
 
-        //// WARNING // YOU // ENTERED // DA // MAF // ZONE //
-        //float xDist = transform.position.x - block.transform.position.x; // - is left + is right
-        //float yDist = transform.position.y - block.transform.position.y; // - is down + is up
-        //Vector2 playerToBlockOffset = new Vector2(transform.position.x + (xDist / 2), transform.position.y + (yDist / 2));
-        //
-        ////Vector2 localOrigin = new Vector2(xDist / 2, yDist / 2);
-        //
-        //float hyp = Vector3.Distance(transform.position, block.transform.position);
-        //// WARNING // YOU // ENTERED // DA // MAF // ZONE //
+        float xDist = transform.position.x - block.transform.position.x; // - is left + is right
+        float yDist = transform.position.y - block.transform.position.y; // - is down + is up
+        Vector2 localOrigin = new Vector2(transform.position.x + (xDist / 2), transform.position.y + (yDist / 2)); // point between the two colliders
+
         dead = true;
         GameObject BBref = GameObject.Find("Fadeout");
+        GameObject CamRef = GameObject.Find("Main Camera");
         SpriteRenderer SpriteRef = BBref.GetComponent<SpriteRenderer>();
-        float safeGuard = 0f;
-        float opacity = SpriteRef.color.a;
+
+        AudioManager.instance.FadeIn("Main Loop");
 
         float currentTime = 0;
         while (currentTime < 1) // fade the background to black
         {
             currentTime += Time.deltaTime;
-            safeGuard += Time.deltaTime;
+
             SpriteRef.color = new Color(0, 0, 0, currentTime / 1);
 
             yield return null;
         }
+
+        currentTime = 0;
+
+        while (currentTime < 3) // move to camera to impact point over 3 seconds
+        {
+            currentTime += Time.deltaTime;
+            CamRef.transform.position = Vector3.Lerp(CamRef.transform.position, new Vector3(localOrigin.x, localOrigin.y, -10f), currentTime / 3);
+            yield return null;
+        }
+
         GameController.Instance.ExitLevel(); // updates anylitics and cleans the blocks in the scene
         GameController.Instance.m_levelLoad.SwitchScene("MainMenu");
         yield break;
-
-        //AudioManager.instance.Play(name);
-        //float currentTime = 0;
-        //float start = 0f;
-        //
-        //loopSource.volume = start;
-        //yield return new WaitForSeconds(leadInTime);
-        //
-        //while (currentTime < 1)
-        //{
-        //    currentTime += Time.deltaTime;
-        //    if (start != null)
-        //    {
-        //        startSource.volume = Mathf.Lerp(start, 1f, currentTime / 1);
-        //    }
-        //    loopSource.volume = Mathf.Lerp(start, 1f, currentTime / 1);
-        //    if (end != null)
-        //    {
-        //        endSource.volume = Mathf.Lerp(start, 1f, currentTime / 1);
-        //    }
-        //    yield return null;
-        //}
-        //yield break;
 	}
 	
     public void OnLevelFreeze(bool state)
