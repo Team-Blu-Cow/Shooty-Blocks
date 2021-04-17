@@ -96,8 +96,13 @@ public class Block : MonoBehaviour
 
     public void ChangeColor()
     {
-        int maxHP = ((5 * (GameController.Instance.m_level + 1) * 2) * 2); // Figure out the highest amount of hp a block could have
-        float weighting = (float)hp / (float)maxHP; // Figure out what the block's hp is compared to the max hp it could have
+        float maxHP = ((5 * (GameController.Instance.m_level + 1) * 2) * 1.5f); // Figure out the highest amount of hp a block could have
+        float weighting = (float)hp / maxHP; // Figure out what the block's hp is compared to the max hp it could have
+        
+        if(weighting > 1)
+        {
+            weighting = 1;
+        }
 
         Color bWeakColor = new Color(0.6f, 0.7f, 0.96f, 1.0f); // Create color for a block with not a lot of health (sprite)
         Color bStrongColor = new Color(0.14f, 0.16f, 0.36f, 1.0f); // Create a color for a block with a lot of health (sprite)
