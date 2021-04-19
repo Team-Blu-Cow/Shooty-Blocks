@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(Blocks.BlockGroup))]
+[CustomEditor(typeof(Blocks.BlockGroup)), CanEditMultipleObjects]
 public class BlockGroupEditor : Editor
 {
     private SerializedProperty m_height;

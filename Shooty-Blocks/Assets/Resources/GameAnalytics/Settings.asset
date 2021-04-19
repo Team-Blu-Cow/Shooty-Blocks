@@ -27,26 +27,32 @@ MonoBehaviour:
   CustomArea: 
   gameKey:
   - 231ec9191ae86cd5f26eb27143e3899e
-  - 231ec9191ae86cd5f26eb27143e3899
+  - 
+  - c057b33e48daa71107d6e4f548298e54
   secretKey:
   - 8ee159176330d1961341280ae784ef5bd961fc0d
-  - 8ee159176330d1961341280ae784ef5bd961fc0
+  - 
+  - 1ab6879443b440d72f64aaee54c157d14756575a
   Build:
   - 0.1
   - 0.1
+  - 0.1
   SelectedPlatformOrganization:
-  - 
-  - 
+  - TeamBluCow
+  - TeamBluCow
+  - TeamBluCow
   SelectedPlatformStudio:
-  - 
-  - 
+  - TeamBluCow
+  - TeamBluCow
+  - TeamBluCow
   SelectedPlatformGame:
-  - 
-  - 
-  SelectedPlatformGameID: ffffffffffffffff
-  SelectedOrganization: 0000000000000000
-  SelectedStudio: 0000000000000000
-  SelectedGame: 0000000000000000
+  - ShootyBlocks
+  - ShootyBlocks
+  - ShootyBlocks
+  SelectedPlatformGameID: 451302000019020000190200
+  SelectedOrganization: 010000000100000001000000
+  SelectedStudio: 010000000100000001000000
+  SelectedGame: 010000000000000001000000
   NewVersion: 
   Changes: 
   SignUpOpen: 1
@@ -71,7 +77,7 @@ MonoBehaviour:
   ResourceCurrencies:
   - Coins
   LastCreatedGamePlatform: -1
-  Platforms: 0b00000008000000
+  Platforms: 0b0000000800000002000000
   CurrentInspectorState: 1
   ClosedHints: 
   DisplayHints: 0
@@ -98,7 +104,7 @@ MonoBehaviour:
   IncludeGooglePlay: 1
   FpsCriticalThreshold: 20
   FpsCirticalSubmitInterval: 1
-  PlatformFoldOut: 0101
+  PlatformFoldOut: 010001
   CustomDimensions01FoldOut: 0
   CustomDimensions02FoldOut: 0
   CustomDimensions03FoldOut: 0

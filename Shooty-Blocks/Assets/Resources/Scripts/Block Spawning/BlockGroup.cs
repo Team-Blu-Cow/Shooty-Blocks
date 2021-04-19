@@ -13,10 +13,11 @@ namespace Blocks
         NONE                    = 0,
         DEFAULT                 = 1,
         LARGE                   = 2,
+        INDESTRUCTABLE          = 3,
 
         // Inspector flags
-        DontRenderInInspector   = 3,
-        NumberOfTypes           = 4
+        DontRenderInInspector   = 4,
+        NumberOfTypes           = 5
     }
 
     // BLOCK GRID ARRAY *****************************************************************************************************************************
@@ -59,7 +60,7 @@ namespace Blocks
 
     // BLOCK GROUP SCRIPTABLE OBJECT ****************************************************************************************************************
     // A scriptable object to store custom block group configurations.
-    [CreateAssetMenu(menuName = "My Assets/Block Group")]
+    [CreateAssetMenu(menuName = "Levels/Block Group"), System.Serializable]
     public class BlockGroup : ScriptableObject
     {
         [SerializeField, Range(1, BlockData.MaxRows)] public int m_height = 3;
@@ -108,7 +109,7 @@ namespace Blocks
     // Unity inspector view.
 #if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(BlockGrid))]
-    public class BlockGroupEditor : PropertyDrawer
+    public class BlockGroupPropertyDrawer : PropertyDrawer
     {
         // custom style object for inspector
         private GUIStyle BlockColour = new GUIStyle
@@ -197,9 +198,10 @@ namespace Blocks
             // initialize scoped members
             Rect button = block_Type;
             bool renderButton = true;
-            
+
             // draw correctly coloured rectangle for block
             // depending on its value
+            BlockColour.fontSize = Mathf.RoundToInt(EditorGUIUtility.currentViewWidth / 35f);
             switch (property.enumValueIndex)
             {
                 case (int)BlockType.NONE:
@@ -212,7 +214,13 @@ namespace Blocks
 
                 case (int)BlockType.LARGE:
                     EditorGUI.DrawRect(blockLarge, Color.red);
+                    BlockColour.fontSize = Mathf.RoundToInt(EditorGUIUtility.currentViewWidth / 20f);
                     button = blockLarge_Type;
+                    break;
+
+                case (int)BlockType.INDESTRUCTABLE:
+                    EditorGUI.DrawRect(block, Color.black);
+                    BlockColour.fontSize = Mathf.RoundToInt(EditorGUIUtility.currentViewWidth/55f);
                     break;
 
                 case (int)BlockType.DontRenderInInspector:

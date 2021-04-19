@@ -33,7 +33,7 @@ public class EndLevelTrigger : MonoBehaviour
     {
         if(collision.CompareTag("Player"))
         {
-            if (!GameController.Instance.userData.controlGroup)
+            if (!GameController.Instance.userData.controlGroup && GameController.Instance.CoinsCollectedInLevel(GameController.Instance.m_level) != GameController.Instance.GetComponent<Blocks.BlockSpawner>().CurrencyCount)
             {
                 for (int i = 0;i< GameController.Instance.GetComponent<Blocks.BlockSpawner>().CurrencyCount;i++)
                 {
