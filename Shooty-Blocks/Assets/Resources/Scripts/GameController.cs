@@ -88,6 +88,7 @@ public class GameController : MonoBehaviour
     public LevelLoader m_levelLoad;
 
     private bool m_paused;
+    private bool m_inLevel = false;
 
     public delegate void FreezeDelegate(bool state);
 
@@ -104,6 +105,12 @@ public class GameController : MonoBehaviour
     {
         set { m_paused = value; }
         get { return m_paused; }
+    }
+
+    public bool inLevel
+    {
+        set { m_inLevel = value; }
+        get { return m_inLevel; }
     }
 
     // Start is called before the first frame update

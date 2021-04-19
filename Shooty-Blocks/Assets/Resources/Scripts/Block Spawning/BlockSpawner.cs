@@ -238,6 +238,7 @@ namespace Blocks
         private IEnumerator WaitToSpawnNextRow(float time)
         {
             float timeVal = 0f;
+            bool stillInLevel = true;
 
             while (true)
             {
@@ -247,14 +248,20 @@ namespace Blocks
                 if (timeVal >= time)
                     break;
 
+                if (GameController.Instance.inLevel != true)
+                {
+                    stillInLevel = false;
+                    yield break;
+                }
+
                 yield return null;
             }
 
-            if (m_level.Count <= 0)
+            if (stillInLevel == true && m_level.Count <= 0)
             {
                 SpawnLevelEnd();
             }
-            else
+            else if (stillInLevel == true)
             {
                 m_rowNum++;
                 SpawnRow();

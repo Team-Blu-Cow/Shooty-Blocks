@@ -30,6 +30,9 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        GameController.Instance.inLevel = true;
+        GameController.Instance.FreezeButtonPress(false);
+
         m_inputManager = new MasterInput();
 
         m_inputManager.BasicKBM.LClick.performed += ctx => OnMouseLeftClick();
@@ -257,7 +260,6 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(0.8f); // scuffed audio timing, dont worry about it
         block.GetComponentInParent<Block>().DestroyFamily();
-
         yield break;
     }
 
@@ -269,5 +271,6 @@ public class PlayerController : MonoBehaviour
     public void OnDestroy()
     {
         GameController.Instance.freezeDelegate -= OnLevelFreeze;
+        GameController.Instance.inLevel = false;
     }
 }

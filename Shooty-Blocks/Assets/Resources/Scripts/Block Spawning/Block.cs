@@ -58,7 +58,6 @@ public class Block : MonoBehaviour
         set { m_frozen = value; }
     }
 
-
     private void Resize(float in_scale)
     {
         m_renderTransform.localScale = new Vector3(in_scale, in_scale, in_scale);
@@ -98,8 +97,8 @@ public class Block : MonoBehaviour
     {
         float maxHP = ((5 * (GameController.Instance.m_level + 1) * 2) * 1.5f); // Figure out the highest amount of hp a block could have
         float weighting = (float)hp / maxHP; // Figure out what the block's hp is compared to the max hp it could have
-        
-        if(weighting > 1)
+
+        if (weighting > 1)
         {
             weighting = 1;
         }
@@ -107,7 +106,7 @@ public class Block : MonoBehaviour
         Color bWeakColor = new Color(0.6f, 0.7f, 0.96f, 1.0f); // Create color for a block with not a lot of health (sprite)
         Color bStrongColor = new Color(0.14f, 0.16f, 0.36f, 1.0f); // Create a color for a block with a lot of health (sprite)
 
-        Color blockColor = Color.white; // Create color for block to change to 
+        Color blockColor = Color.white; // Create color for block to change to
         blockColor.r = Mathf.Lerp(bWeakColor.r, bStrongColor.r, weighting); // Lerp with strong and weak color to get the sprite's color
         blockColor.g = Mathf.Lerp(bWeakColor.g, bStrongColor.g, weighting); // Lerp with strong and weak color to get the sprite's color
         blockColor.b = Mathf.Lerp(bWeakColor.b, bStrongColor.b, weighting); // Lerp with strong and weak color to get the sprite's color
@@ -123,12 +122,10 @@ public class Block : MonoBehaviour
         textColor.b = Mathf.Lerp(tWeakColor.b, tStrongColor.b, weighting); // Lerp with strong and weak color to get the text's color
 
         GetComponentInChildren<TextMeshPro>().color = textColor; // Set the text color to be the lerped calues calculated above
-
     }
 
     public void Awake()
     {
-
         m_text = GetComponentInChildren<TMPro.TextMeshPro>();
         m_renderTransform = GetComponentInChildren<SpriteRenderer>().transform;
         m_collider = GetComponentInChildren<Collider2D>();
@@ -143,7 +140,7 @@ public class Block : MonoBehaviour
         if (m_frozen == true)
             return;
 
-        if (m_onscreen == false && m_collider.enabled == false && transform.position.y < m_screenTop + ((type == Blocks.BlockType.LARGE)? 2 : 1))
+        if (m_onscreen == false && m_collider.enabled == false && transform.position.y < m_screenTop + ((type == Blocks.BlockType.LARGE) ? 2 : 1))
         {
             m_collider.enabled = true;
             m_onscreen = true;
