@@ -29,15 +29,15 @@ public class DifficultyImage : MonoBehaviour
         }  
         int avgBlock = (int)Mathf.Lerp(5 * (levelNum), (5 * levelNum) * 2, 0.5f); // Figure out average block health
 		
-        if(power > avgBlock + 3) // If the player's overall power is better than average hp of a block then display that this level is easy
+        if(power > avgBlock + 2) // If the player's overall power is better than average hp of a block then display that this level is easy
         {
             GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Menu/old/difficulty EASY");
         }
-        else if (power < (avgBlock + 3) && power > (avgBlock - 5)) // If the player's overall power is equal to the average hp of a block then display that the level is of medium difficulty
+        else if (power < (avgBlock + 2) && power > (avgBlock - 2)) // If the player's overall power is equal to the average hp of a block then display that the level is of medium difficulty
         {
             GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Menu/old/difficulty MEDIUM");
         }
-        else if (power < avgBlock - 5) // If the player's overall power is less than the average hp of a block then display that the level is going to be hard
+        else if (power < avgBlock - 2) // If the player's overall power is less than the average hp of a block then display that the level is going to be hard
         {
             GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Menu/old/difficulty HARD");
         }
