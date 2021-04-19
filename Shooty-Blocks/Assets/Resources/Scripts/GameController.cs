@@ -11,7 +11,12 @@ public class GameController : MonoBehaviour
     private PlayerController m_player;
 
     public static GameController Instance
-    { get { return _Instance; } }
+    {
+        get
+        {
+            return _Instance;
+        }
+    }
 
     private void Awake()
     {

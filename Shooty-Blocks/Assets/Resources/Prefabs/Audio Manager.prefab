@@ -91,4 +91,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 9252897afafaabd4d995a0e7a1d23b69, type: 3}
     source: {fileID: 0}
     group: {fileID: -8029715838587287798, guid: e5e3f74c58d3a6846a2e7322ecc48801, type: 2}
+  - name: Death
+    loops: 0
+    volume: 1
+    clip: {fileID: 8300000, guid: 9d2390f852da92b4ba9099dc6df89875, type: 3}
+    source: {fileID: 0}
+    group: {fileID: -8029715838587287798, guid: e5e3f74c58d3a6846a2e7322ecc48801, type: 2}
   currentlyPlaying: []

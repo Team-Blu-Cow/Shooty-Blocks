@@ -150,6 +150,19 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void FadeOutDistort(string in_name)
+    {
+        Music m = Array.Find(music, sounds => sounds.name == in_name);
+        if (m != null)
+        {
+            StartChildCoroutine(m.FadeOutDistort());
+
+            currentlyPlaying.Remove(in_name);
+            return;
+        }
+        Debug.LogWarning("Sound clip doesnt exist");
+    }
+
     public void FadeIn(string in_name)
     {
         Music m = Array.Find(music, sounds => sounds.name == in_name);
