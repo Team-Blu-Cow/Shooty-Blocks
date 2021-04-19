@@ -215,24 +215,10 @@ public class PlayerController : MonoBehaviour
         {
             currentTime += Time.deltaTime;
 
-            SpriteRef.color = new Color(currentTime / 1f, 0, 0, currentTime / 1f);
+            SpriteRef.color = new Color(0, 0, 0, currentTime / 1f);
 
             yield return null;
         }
-
-        currentTime = 0f;
-
-        while (currentTime < 3f) // move to camera to impact point over 3 seconds
-        {
-            currentTime += Time.deltaTime;
-            CamRef.transform.position = Vector3.Lerp(CamRef.transform.position, new Vector3(localOrigin.x, localOrigin.y, -10f), Time.deltaTime);
-            yield return null;
-        }
-
-        //FindObjectOfType<Blocks.BlockSpawner>().RemoveBlockFromList(block.transform.parent.gameObject);
-        //GameController.Instance.FreezeButtonPress(true);
-        //GameController.Instance.ExitLevel(); // updates anylitics and cleans the blocks in the scene
-        //GameController.Instance.m_levelLoad.SwitchScene("MainMenu");
 
         currentTime = 0f;
         Vector2 to = CamRef.transform.position;
@@ -263,7 +249,6 @@ public class PlayerController : MonoBehaviour
         AudioManager.instance.Play("Death");
 
         yield return new WaitForSeconds(2); // scuffed audio timing, dont worry about it
-        // TODO @not Adam: make player explode thanks :)
 
         FindObjectOfType<Blocks.BlockSpawner>().RemoveBlockFromList(block.transform.parent.gameObject);
         GameController.Instance.FreezeButtonPress(true);
