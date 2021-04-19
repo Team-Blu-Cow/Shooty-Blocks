@@ -99,6 +99,47 @@ public class Music
         }
     }
 
+    public IEnumerator FadeOutDistort()
+    {
+        {
+            float currentTime = 0;
+            float start = loopSource.volume;
+            float startPitch = loopSource.pitch;
+
+            while (currentTime < 1)
+            {
+                currentTime += Time.deltaTime;
+                if (start != null)
+                {
+                    startSource.volume = Mathf.Lerp(start, 0f, currentTime / 1);
+                    startSource.pitch = Mathf.Lerp(startPitch, -1f, currentTime / 1);
+                }
+                loopSource.volume = Mathf.Lerp(start, 0f, currentTime / 1);
+                loopSource.pitch = Mathf.Lerp(startPitch, -1f, currentTime / 1);
+                if (end != null)
+                {
+                    endSource.volume = Mathf.Lerp(start, 0f, currentTime / 1);
+                    endSource.pitch = Mathf.Lerp(startPitch, -1f, currentTime / 1);
+                }
+                yield return null;
+            }
+            Stop();
+            if (start != null)
+            {
+                startSource.volume = 1f;
+                startSource.pitch = startPitch;
+            }
+            loopSource.volume = 1f;
+            loopSource.pitch = startPitch;
+            if (end != null)
+            {
+                endSource.volume = 1f;
+                endSource.pitch = startPitch;
+            }
+            yield break;
+        }
+    }
+
     public IEnumerator FadeIn()
     {
         {

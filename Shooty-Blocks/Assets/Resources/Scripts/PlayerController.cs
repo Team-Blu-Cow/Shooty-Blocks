@@ -16,8 +16,7 @@ public class PlayerController : MonoBehaviour
     private float m_firingSpeed = 0; // How often a bullet is fired per second
     [SerializeField] [Range(1, 3)] private float m_movementSpeed = 1.5f;
 
-    [Header("Projectile Prefab")]
-    [SerializeField] private GameObject m_bullet; // Unfortunately, this is click and drag for inspector, This tells what projectile should be fired
+    private GameObject m_bullet;
 
     private Rigidbody2D rb;
     private bool m_clicked = false; // This varuable tracks PC controls, to move left click and drag
@@ -52,6 +51,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        m_bullet = Resources.Load<GameObject>("Prefabs/Bullet");
         rb = GetComponent<Rigidbody2D>();
         m_firingPower = GameController.Instance.firePower;
         m_firingSpeed = GameController.Instance.fireSpeed;
@@ -166,6 +166,15 @@ public class PlayerController : MonoBehaviour
     {
         if (!dead)
         {
+<<<<<<< Updated upstream
+=======
+            GameController.Instance.FreezeButtonPress(true);
+            AudioManager.instance.FadeOutDistort("Main Loop");
+            GetComponent<SpriteRenderer>().sortingOrder = 1000; // move the player and the collided block infront of the fadeout BG
+            block.GetComponent<SpriteRenderer>().sortingOrder = 1000;
+            dead = true;
+
+>>>>>>> Stashed changes
             StartCoroutine(DeathAnimation(block));
         }
     }
@@ -186,10 +195,14 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator DeathAnimation(GameObject block)
     {
+<<<<<<< Updated upstream
         //GameController.Instance.FreezeDelegate?.Invoke(True);
 
         GetComponent<SpriteRenderer>().sortingOrder = 1000; // move the player and the collided block infront of the fadeout BG
         block.GetComponent<SpriteRenderer>().sortingOrder = 1000;
+=======
+        // Im so sorry to who ever needs to figure out what this does.
+>>>>>>> Stashed changes
 
         float xDist = transform.position.x - block.transform.position.x; // - is left + is right
         float yDist = transform.position.y - block.transform.position.y; // - is down + is up
@@ -200,10 +213,15 @@ public class PlayerController : MonoBehaviour
         GameObject CamRef = GameObject.Find("Main Camera");
         SpriteRenderer SpriteRef = BBref.GetComponent<SpriteRenderer>();
 
+<<<<<<< Updated upstream
         AudioManager.instance.FadeIn("Main Loop");
 
         float currentTime = 0;
         while (currentTime < 1) // fade the background to black
+=======
+        float currentTime = 0f;
+        while (currentTime < 1f) // fade the background to black
+>>>>>>> Stashed changes
         {
             currentTime += Time.deltaTime;
 
@@ -212,6 +230,7 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
+<<<<<<< Updated upstream
         currentTime = 0;
 
         while (currentTime < 3) // move to camera to impact point over 3 seconds
@@ -223,6 +242,47 @@ public class PlayerController : MonoBehaviour
 
         GameController.Instance.ExitLevel(); // updates anylitics and cleans the blocks in the scene
         GameController.Instance.m_levelLoad.SwitchScene("MainMenu");
+=======
+        currentTime = 0f;
+        Vector2 to = CamRef.transform.position;
+
+        yield return new WaitForSeconds(0.1f);
+
+        bool playedAudio = false;
+        while (currentTime < 2f) // move to camera to impact point over 3 seconds
+        {
+            currentTime += Time.deltaTime;
+            CamRef.transform.position = Vector3.Lerp(to, new Vector3(localOrigin.x, localOrigin.y, -10f), currentTime / 2f);
+
+            if (currentTime > 1 && !playedAudio)
+            {
+                playedAudio = true;
+
+                AudioManager.instance.FadeIn("Main Loop");
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.2f);
+
+        GetComponent<SpriteRenderer>().sortingOrder = 1;
+        GameObject explosion = GameObject.Instantiate((Resources.Load<GameObject>("Prefabs/Block Explosion")), transform);
+        explosion.GetComponent<ParticleSystemRenderer>().sortingOrder = 1000;
+        AudioManager.instance.Play("Death");
+
+        yield return new WaitForSeconds(2); // scuffed audio timing, dont worry about it
+        // TODO @not Adam: make player explode thanks :)
+
+        FindObjectOfType<Blocks.BlockSpawner>().RemoveBlockFromList(block.transform.parent.gameObject);
+        GameController.Instance.FreezeButtonPress(true);
+        GameController.Instance.ExitLevel(); // updates anylitics and cleans the blocks in the scene
+        GameController.Instance.m_levelLoad.SwitchScene("MainMenu");
+
+        yield return new WaitForSeconds(0.8f); // scuffed audio timing, dont worry about it
+        block.GetComponentInParent<Block>().DestroyFamily();
+
+>>>>>>> Stashed changes
         yield break;
     }
 }
