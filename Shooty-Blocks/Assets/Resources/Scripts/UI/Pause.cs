@@ -7,6 +7,7 @@ public class Pause : MonoBehaviour
     public void PauseGame()
     {
         GameController.Instance.paused = true;
+        GameController.Instance.FreezeButtonPress(true);
         transform.GetChild(1).gameObject.SetActive(true);
         GetComponentInChildren<Button>().interactable = false;
     }
@@ -14,6 +15,7 @@ public class Pause : MonoBehaviour
     public void ResumeGame()
     {
         GameController.Instance.paused = false;
+        GameController.Instance.FreezeButtonPress(false);
         transform.GetChild(1).gameObject.SetActive(false);
         GetComponentInChildren<Button>().interactable = true;
     }
