@@ -86,25 +86,6 @@ public class PlayerController : MonoBehaviour
             m_timer = 0.0f; // Make timer back to 0 for next bullet to be fired
         }
 
-        if (Input.touchCount > 0) // If there is a finger touching the screen
-        {
-            Touch touch = Input.GetTouch(0); // Get the touch of the first finger
-            rb.velocity = new Vector2(touch.deltaPosition.x, 0);
-
-            //Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
-            //transform.position = new Vector3(touchPos.x, transform.position.y, transform.position.z); // Set the velocity to be the difference in distance of the finger positions (past and current frame)
-        }
-        else if (m_clicked == false) // If there is no finger movement or pc movement then
-        {
-            rb.velocity = Vector2.zero; // Set the velocity to be zero
-        }
-
-        if (m_clicked == true) // If left mouse is held down
-        {
-            // Essentially drag
-            rb.velocity -= (rb.velocity / 2); // Slow down the velocity. This is so that the player doesn't slide about the place
-        }
-
         // These if statements make sure the player does not go off screen
         if (transform.position.x < -2.51)
         {
