@@ -8,6 +8,9 @@ public class UserData
     {
         public System.Int64 m_userId = 0;
         public bool m_controlGroup = false;
+        public float m_masterVolume = 1f;
+        public float m_musicVolume = 1f;
+        public float m_sfxVolume = 1f;
     }
 
     [System.Serializable]
@@ -49,6 +52,24 @@ public class UserData
     {
         get { return m_gameData.m_powerUpgrades; }
         set { m_gameData.m_powerUpgrades = value; }
+    }
+
+    public float masterVolume
+    {
+        get { return m_userData.m_masterVolume; }
+        set { m_userData.m_masterVolume = value; }
+    }
+
+    public float musicVolume
+    {
+        get { return m_userData.m_musicVolume; }
+        set { m_userData.m_musicVolume = value; }
+    }
+
+    public float sfxVolume
+    {
+        get { return m_userData.m_sfxVolume; }
+        set { m_userData.m_sfxVolume = value; }
     }
 
     // read data from disk if available
@@ -107,6 +128,11 @@ public class UserData
         System.Int64 r1 = Random.Range(System.Int32.MinValue, System.Int32.MaxValue);
         System.Int64 r2 = Random.Range(System.Int32.MinValue, System.Int32.MaxValue);
         m_userData.m_userId = (r1 << 32) | r2;
+
+        // sets default volume
+        m_userData.m_masterVolume = 0.5f;
+        m_userData.m_musicVolume = 0.5f;
+        m_userData.m_sfxVolume = 0.5f;
 
         // decide if user is in the control or test group
         if (m_userData.m_userId % 2 == 0)

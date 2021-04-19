@@ -1373,7 +1373,7 @@ GameObject:
   - component: {fileID: 371977497}
   - component: {fileID: 371977498}
   m_Layer: 0
-  m_Name: 'MusicVolume '
+  m_Name: MusicVolume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5145,11 +5145,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26fe76ab8decbc14789aa9fcb1e6ae7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  in_options: {fileID: 491931281}
-  in_upgrades: {fileID: 1897202524}
-  in_menu: {fileID: 1265769142}
-  in_menuSelect: {fileID: 773218617}
-  canvases: []
   in_currencyCounter:
   - {fileID: 2122868679}
   - {fileID: 1883588669}
