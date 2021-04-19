@@ -372,9 +372,10 @@ namespace Blocks
             {
                 //generate colors
                 // TODO: this needs to be re factored to fit new brief
-                int rand = Random.Range(1, colors.Length - 1);
-                block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
-                block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
+
+                //int rand = Random.Range(1, colors.Length-1);
+                //block.GetComponentInChildren<SpriteRenderer>().sprite = colors[rand];
+                //block.GetComponentInChildren<TextMeshPro>().color = textColors[rand];
             }
 
             // set universal variables
